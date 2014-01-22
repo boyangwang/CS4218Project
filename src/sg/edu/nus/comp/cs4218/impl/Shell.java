@@ -2,7 +2,7 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
-import sg.edu.nus.comp.cs4218.impl.fileutils.PWDTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
 /**
  * The Shell is used to interpret and execute user's
@@ -14,7 +14,7 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		if(commandline.startsWith("pwd")){
-			return new PWDTool();
+			return new PwdTool();
 		} else {
 			//TODO Implement all other tools
 			System.err.println("Cannot parse " + commandline);
