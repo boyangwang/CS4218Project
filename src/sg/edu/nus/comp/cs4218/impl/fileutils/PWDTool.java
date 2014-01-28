@@ -6,8 +6,8 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
 
-public class PWDTool extends ATool implements IPwdTool{
-	public PWDTool() {
+public class PwdTool extends ATool implements IPwdTool{
+	public PwdTool() {
 		super(null);
 	}
 
@@ -26,6 +26,4 @@ public class PWDTool extends ATool implements IPwdTool{
 	public String execute(File workingDir, String stdin) {
 		return getStringForDirectory(workingDir);
 	}
-
-
 }
