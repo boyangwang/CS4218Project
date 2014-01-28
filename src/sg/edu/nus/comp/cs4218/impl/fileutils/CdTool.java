@@ -108,7 +108,7 @@ public class CdTool extends ATool implements ICdTool {
             statusError();
             return nothing;
         } else {
-            Shell.instance().changeWorkingDirectory(candidateDir);
+        	 Shell.instance().changeWorkingDirectory(candidateDir);
         }
 
         statusSuccess();
