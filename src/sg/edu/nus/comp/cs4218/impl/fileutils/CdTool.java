@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.File;
 
@@ -14,7 +15,6 @@ import java.io.File;
  * Created by cgcai on 22/1/14.
  */
 public class CdTool extends ATool implements ICdTool {
-
     /**
      * Constructor
      *
@@ -22,6 +22,14 @@ public class CdTool extends ATool implements ICdTool {
      */
     public CdTool(String[] arguments) {
         super(arguments);
+    }
+
+    private void statusError() {
+        setStatusCode(1);
+    }
+
+    private void statusSuccess() {
+        setStatusCode(0);
     }
 
     /**
@@ -89,8 +97,23 @@ public class CdTool extends ATool implements ICdTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        // TODO: how to mutate the state of the shell?
-        
-        return "";
+        final String nothing = "";
+
+        if (this.args.length < 1) {
+            statusError();
+            return nothing;
+        }
+
+        String candidatePath = this.args[0];
+        File candidateDir = changeDirectory(candidatePath);
+        if (candidateDir == null) {
+            statusError();
+            return nothing;
+        } else {
+            Shell.instance().changeWorkingDirectory(candidateDir);
+        }
+
+        statusSuccess();
+        return nothing;
     }
 }
