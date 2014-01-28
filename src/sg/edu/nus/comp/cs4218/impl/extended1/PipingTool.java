@@ -8,6 +8,10 @@ import java.io.File;
  * Created by boyang on 1/22/14.
  */
 public class PipingTool implements IPipingTool {
+	private int statusCode = 0;
+	private File workingDir = null;
+	private String stdin = "";
+	
     /**
      * Pipe the stdout of *from* to stdin of *to*
      *
@@ -17,21 +21,24 @@ public class PipingTool implements IPipingTool {
      */
     @Override
     public String pipe(ITool from, ITool to) {
+    	
         return null;
     }
 
     @Override
     public String pipe(String stdout, ITool to) {
-        return null;
+        String output = to.execute(this.workingDir, stdout);
+    	return output;
     }
 
     @Override
     public String execute(File workingDir, String stdin) {
+    	
         return null;
     }
 
     @Override
     public int getStatusCode() {
-        return 0;
+        return this.statusCode;
     }
 }
