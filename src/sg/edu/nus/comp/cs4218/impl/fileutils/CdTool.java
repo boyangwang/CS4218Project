@@ -11,8 +11,6 @@ import java.io.File;
  *
  * Usage: cd directory
  * Extra parameters are ignored.
- *
- * Created by cgcai on 22/1/14.
  */
 public class CdTool extends ATool implements ICdTool {
     /**

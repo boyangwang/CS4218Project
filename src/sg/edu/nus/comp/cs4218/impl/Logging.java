@@ -4,8 +4,6 @@ package sg.edu.nus.comp.cs4218.impl;
  * A basic logger.
  *
  * ...because log4j also cannot =[
- *
- * Created by cgcai on 28/1/14.
  */
 public class Logging {
     /**
