@@ -82,7 +82,7 @@ public class Shell implements IShell {
 
 	@Override
 	public ITool parse(String commandline) {
-		if(commandline.startsWith("pwd")){
+		if(commandline.trim().startsWith("pwd")){
 			return new PwdTool();
 		} else {
 			//TODO Implement all other tools
