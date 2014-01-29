@@ -45,6 +45,7 @@ tmp/
 local.properties
 .settings/
 .loadpath
+.classpath
 
 # External tool builders
 .externalToolBuilders/
@@ -63,3 +64,6 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+#Eclim
+*__eclim_temp*
