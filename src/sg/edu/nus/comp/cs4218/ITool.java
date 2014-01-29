@@ -18,7 +18,7 @@ public interface ITool {
      *
      * @return Contents of stdin as a String.
      */
-    public String getStdIn();
+    public String getStdin();
 
     /**
      * After execution, returns the status of the tool.

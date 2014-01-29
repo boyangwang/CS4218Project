@@ -33,14 +33,14 @@ public class PipingTool implements IPipingTool {
 	
     @Override
     public String pipe(ITool from, ITool to) {
-    	String outputOfFrom = from.execute(getWorkingDir(), PipingTool.EMPTY_STDIN);
+    	String outputOfFrom = from.execute(shell, getWorkingDir(), PipingTool.EMPTY_STDIN);
     	
         return pipe(outputOfFrom, to);
     }
 
     @Override
     public String pipe(String stdout, ITool to) {
-        String output = to.execute(getWorkingDir(), stdout);
+        String output = to.execute(shell, getWorkingDir(), stdout);
         
     	return output;
     }

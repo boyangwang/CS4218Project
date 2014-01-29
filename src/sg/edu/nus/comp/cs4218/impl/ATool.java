@@ -2,8 +2,11 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import java.io.File;
 
+import sg.edu.nus.comp.cs4218.IShell;
+
 public abstract class ATool {
 	protected String[] args;
+	protected String stdin;
 	private int statusCode = 0;
 	
 	/**
@@ -11,8 +14,9 @@ public abstract class ATool {
      *
 	 * @param arguments Arguments the tool is going to be executed with.
 	 */
-	public ATool(String[] arguments){
+	public ATool(String[] arguments, String stdin){
 		this.args = arguments;
+		this.stdin = stdin;
 	}
 	
 	/**
@@ -22,14 +26,14 @@ public abstract class ATool {
 	 * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
 	 * @return Output on stdout
 	 */
-	public abstract String execute(File workingDir, String stdin);
+	public abstract String execute(IShell shell, File workingDir, String stdin);
 
     /**
      * Returns the contents of this ATool's stdin.
      *
      * @return Contents of stdin as a String.
      */
-    public abstract String getStdIn();
+    public abstract String getStdin();
 	
 	/**
 	 * After execution returns the status of the tool
