@@ -8,6 +8,7 @@ public abstract class ATool {
 	
 	/**
 	 * Constructor
+     *
 	 * @param arguments Arguments the tool is going to be executed with.
 	 */
 	public ATool(String[] arguments){
@@ -16,7 +17,8 @@ public abstract class ATool {
 	
 	/**
 	 * Executes the tool with args provided in the constructor
-	 * TODO Use interface methods when implementing execute!
+     *
+     * @param workingDir The current working directory.
 	 * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
 	 * @return Output on stdout
 	 */
@@ -24,6 +26,7 @@ public abstract class ATool {
 	
 	/**
 	 * After execution returns the status of the tool
+     *
 	 * @return Returns 0 if executed properly
 	 */
 	public int getStatusCode(){
@@ -32,6 +35,7 @@ public abstract class ATool {
 	
 	/**
 	 * Set the status code during or after execution of the tool
+     *
 	 * @param statusCode 0 if executed normally. Otherwise, see http://tldp.org/LDP/abs/html/exitcodes.html#EXITCODESREF
 	 */
 	protected void setStatusCode(int statusCode){

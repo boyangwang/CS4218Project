@@ -24,6 +24,7 @@ public class PwdTool extends ATool implements IPwdTool{
 
 	@Override
 	public String execute(File workingDir, String stdin) {
+		//TODO: check Thread.currentThread().interrupted() regularly and gracefully end;						
 		return getStringForDirectory(workingDir);
 	}
 }
