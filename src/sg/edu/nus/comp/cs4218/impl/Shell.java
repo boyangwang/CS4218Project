@@ -4,7 +4,10 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * The Shell is used to interpret and execute user's
@@ -12,13 +15,32 @@ import java.io.File;
  * instance can be implemented in Java
  */
 public class Shell implements IShell {
+	/**
+	 * TaskExecution Thread
+	 */
+	private static class TaskExecution implements Runnable{
+		ITool _tool;
+		File _cwd;
+		String _stdin;
+		public TaskExecution(ITool tool, File cwd, String stdin){
+			_tool = tool;
+			_cwd = cwd;
+			_stdin = stdin;			
+		}		
+		@Override
+		public void run() {	
+				System.out.println(_tool.execute(_cwd, _stdin));										
+		}
+	}
+	
     /**
      * Code for instance stuff.
      */
-    private File cwd = null;
-
+    private File cwd = null;    
     private Shell() {
-        // TODO: Initialise instance variables.
+        // TODO: Initialise instance variables.    	
+    	String userDir = System.getProperty("user.dir");
+    	cwd = new File(userDir);
     }
 
     /**
@@ -29,9 +51,32 @@ public class Shell implements IShell {
      * 4. Execute the command and its arguments on the newly created thread. Exit with the status code of the executed command
      * 5. In the instance, wait for the thread to complete execution
      * 6. Report the exit status of the command to the user
-     */
-    public void run() {
-
+     */    
+	public void run() {
+    	Shell shell = Shell.instance();    		
+		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));		
+		Thread runningThread = null;
+		
+    	while(true){
+    		try {    						
+				String cmd=buffer.readLine();
+				if(cmd.trim().equals("ctrl-z")){
+					if (null != runningThread && runningThread.isAlive()){
+						shell.stop(runningThread);
+					}	
+				}else{
+					ITool tool = shell.parse(cmd);
+					if ((null == runningThread || !runningThread.isAlive()) && tool!=null){
+						runningThread = (Thread) shell.execute(tool);
+						//while(runningThread.isAlive()){}
+					}
+				}				
+					
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 
 	@Override
@@ -47,13 +92,19 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
-		// TODO Implement
-		return null;
+		// TODO fix stdin, do piping
+		Thread t = new Thread(new TaskExecution(tool, cwd, ""));
+		t.start();
+		return t;
 	}
 
 	@Override
 	public void stop(Runnable toolExecution) {
 		//TODO Implement
+		if (toolExecution instanceof Thread){
+			Thread t = (Thread) toolExecution;
+			t.interrupt();
+		}
 	}
 
     /**
