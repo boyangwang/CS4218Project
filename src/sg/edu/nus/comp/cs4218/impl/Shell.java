@@ -68,12 +68,11 @@ public class Shell implements IShell {
 					ITool tool = shell.parse(cmd);
 					if ((null == runningThread || !runningThread.isAlive()) && tool!=null){
 						runningThread = (Thread) shell.execute(tool);
-						//while(runningThread.isAlive()){}
+
 					}
 				}				
 					
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     	}
@@ -92,7 +91,7 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
-		// TODO fix stdin, do piping
+		// TODO stdin, do piping
 		Thread t = new Thread(new TaskExecution(tool, cwd, ""));
 		t.start();
 		return t;
@@ -100,7 +99,6 @@ public class Shell implements IShell {
 
 	@Override
 	public void stop(Runnable toolExecution) {
-		//TODO Implement
 		if (toolExecution instanceof Thread){
 			Thread t = (Thread) toolExecution;
 			t.interrupt();
