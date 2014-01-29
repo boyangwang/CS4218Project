@@ -23,6 +23,13 @@ public abstract class ATool {
 	 * @return Output on stdout
 	 */
 	public abstract String execute(File workingDir, String stdin);
+
+    /**
+     * Returns the contents of this ATool's stdin.
+     *
+     * @return Contents of stdin as a String.
+     */
+    public abstract String getStdIn();
 	
 	/**
 	 * After execution returns the status of the tool
