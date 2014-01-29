@@ -28,8 +28,9 @@ public class Shell implements IShell {
 			_stdin = stdin;			
 		}		
 		@Override
-		public void run() {	
-				System.out.println(_tool.execute(_cwd, _stdin));										
+		public void run() {			
+			System.out.println(_tool.execute(_cwd, _stdin));
+			System.out.print(_cwd.getAbsolutePath() + "> ");
 		}
 	}
 	
@@ -56,7 +57,7 @@ public class Shell implements IShell {
     	Shell shell = Shell.instance();    		
 		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));		
 		Thread runningThread = null;
-		
+		System.out.print(cwd.getAbsolutePath() + "> ");
     	while(true){
     		try {    						
 				String cmd=buffer.readLine().trim();
@@ -68,7 +69,8 @@ public class Shell implements IShell {
 					ITool tool = shell.parse(cmd);
 					if ((null == runningThread || !runningThread.isAlive()) && tool!=null){
 						runningThread = (Thread) shell.execute(tool);
-
+					}else{
+						System.out.print(cwd.getAbsolutePath() + "> ");
 					}
 				}				
 					
