@@ -59,7 +59,7 @@ public class Shell implements IShell {
 		
     	while(true){
     		try {    						
-				String cmd=buffer.readLine();
+				String cmd=buffer.readLine().trim();
 				if(cmd.trim().equals("ctrl-z")){
 					if (null != runningThread && runningThread.isAlive()){
 						shell.stop(runningThread);
