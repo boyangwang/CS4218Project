@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
@@ -18,8 +19,8 @@ public class CdTool extends ATool implements ICdTool {
      *
      * @param arguments Arguments the tool is going to be executed with.
      */
-    public CdTool(String[] arguments) {
-        super(arguments);
+    public CdTool(String[] arguments, String stdin) {
+        super(arguments, stdin);
     }
 
     private void statusError() {
@@ -94,7 +95,7 @@ public class CdTool extends ATool implements ICdTool {
      * @return An empty string (no output is produced).
      */
     @Override
-    public String execute(File workingDir, String stdin) {
+    public String execute(IShell shell, File workingDir, String stdin) {
         final String nothing = "";
 
         if (this.args.length < 1) {
@@ -114,4 +115,10 @@ public class CdTool extends ATool implements ICdTool {
         statusSuccess();
         return nothing;
     }
+
+	@Override
+	public String getStdin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -11,17 +11,14 @@ import java.io.File;
  */
 public class PipingTool extends ATool implements IPipingTool {
 	
-	public PipingTool(String[] arguments) {
-		super(arguments);
+	public PipingTool(String[] arguments, String stdin) {
+		super(arguments, stdin);
 		// TODO Auto-generated constructor stub
 	}
-
-	public static final String EMPTY_STDIN = null;
 	
 	private int statusCode;
 	private String stdin;
-	
-	private IShell shell = null;
+	private IShell shell;
 	
     /**
      * Pipe the stdout of *from* to stdin of *to*
@@ -30,16 +27,13 @@ public class PipingTool extends ATool implements IPipingTool {
      * @param from
      * @param to
      * @return The stdout of *to*
-     */
-	
-    @Override
-    /**
      * Currently the method is not in complete form
      * 
      * And it's not used by system execution
      */
+	@Override
     public String pipe(ITool from, ITool to) {
-    	String outputOfFrom = from.execute(shell, getWorkingDir(), PipingTool.EMPTY_STDIN);
+    	String outputOfFrom = from.execute(shell, getWorkingDir(), from.getStdin());
     	
         return pipe(outputOfFrom, to);
     }
@@ -52,27 +46,25 @@ public class PipingTool extends ATool implements IPipingTool {
     }
     
     @Override
-    public String execute(File workingDir, String stdin) {
+    public String execute(IShell shell, File workingDir, String stdin) {
     	this.stdin = stdin;
     
         return null;
     }
     
-    
-    public String execute(File workingDir, String stdin, IShell shell) {
-    	this.stdin = stdin;
-    
-        return null;
-    }
-
-    
-    
+	@Override
+	public String getStdin() {
+		return stdin;
+	}
+        
     @Override
     public int getStatusCode() {
         return this.statusCode;
     }
     
+    
     // Stub functions for the time being
+    
     private ITool parseStub(String stdin) {
     	return null;
     }
@@ -84,4 +76,6 @@ public class PipingTool extends ATool implements IPipingTool {
     private File getWorkingDir() {
     	return null;
     }
+
+
 }

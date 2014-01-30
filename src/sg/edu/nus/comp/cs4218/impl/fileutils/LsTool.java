@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
+import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -23,8 +24,8 @@ public class LsTool extends ATool implements ILsTool {
      *
      * @param arguments Arguments the tool is going to be executed with.
      */
-    public LsTool(String[] arguments) {
-        super(arguments);
+    public LsTool(String[] arguments, String stdin) {
+        super(arguments, stdin);
     }
 
     /**
@@ -35,7 +36,7 @@ public class LsTool extends ATool implements ILsTool {
      * @return Output on stdout
      */
     @Override
-    public String execute(File workingDir, String stdin) {
+    public String execute(IShell shell, File workingDir, String stdin) {
         if (this.args.length < 1) {
             return listDirectory(workingDir);
         } else {
@@ -87,4 +88,10 @@ public class LsTool extends ATool implements ILsTool {
     private void statusSuccess() {
         this.setStatusCode(0);
     }
+
+	@Override
+	public String getStdin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

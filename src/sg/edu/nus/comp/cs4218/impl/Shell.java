@@ -22,14 +22,16 @@ public class Shell implements IShell {
 		ITool _tool;
 		File _cwd;
 		String _stdin;
-		public TaskExecution(ITool tool, File cwd, String stdin){
+		IShell _shell;
+		public TaskExecution(IShell shell, ITool tool, File cwd, String stdin){
+			_shell = shell;
 			_tool = tool;
 			_cwd = cwd;
 			_stdin = stdin;			
 		}		
 		@Override
 		public void run() {			
-			System.out.println(_tool.execute(_cwd, _stdin));
+			System.out.println(_tool.execute(_shell, _cwd, _stdin));
 			System.out.print(_cwd.getAbsolutePath() + "> ");
 		}
 	}
@@ -83,7 +85,7 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		if(commandline.trim().startsWith("pwd")){
-			return new PwdTool();
+			return new PwdTool(null, "");
 		} else {
 			//TODO Implement all other tools
 			Logging.logger().writeLog(Logging.Error, "Cannot parse " + commandline);
@@ -94,7 +96,7 @@ public class Shell implements IShell {
     @Override
 	public Runnable execute(ITool tool) {
 		// TODO stdin, do piping
-		Thread t = new Thread(new TaskExecution(tool, cwd, ""));
+		Thread t = new Thread(new TaskExecution(this, tool, cwd, ""));
 		t.start();
 		return t;
 	}
