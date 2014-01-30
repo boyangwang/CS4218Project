@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 /**
  * The Shell is used to interpret and execute user's
@@ -25,16 +27,33 @@ public class Shell implements IShell {
 		File _cwd;
 		String _stdin;
 		IShell _shell;
-		public TaskExecution(IShell shell, ITool tool, File cwd, String stdin){
+		OutputStream _stdout;
+		public TaskExecution(IShell shell, ITool tool, File cwd, String stdin, OutputStream stdout){
 			_shell = shell;
 			_tool = tool;
 			_cwd = cwd;
-			_stdin = stdin;			
+			_stdin = stdin;
+			_stdout = stdout;
 		}		
 		@Override
 		public void run() {			
-			System.out.println(_tool.execute(_shell, _cwd, _stdin));
+			handleOutput(_tool.execute(_shell, _cwd, _stdin));
 			System.out.print(_cwd.getAbsolutePath() + "> ");
+			
+		}
+		
+		public void handleOutput(String output) {
+			if (_stdout instanceof PrintStream) {
+				((PrintStream)_stdout).println(output);
+			}
+			else {
+				try {
+					_stdout.write(output.getBytes());
+				}
+				catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -69,7 +88,7 @@ public class Shell implements IShell {
 					if (null != runningThread && runningThread.isAlive()){
 						shell.stop(runningThread);
 					}	
-				}else{
+				} else {
 					ITool tool = shell.parse(cmd);
 					if ((null == runningThread || !runningThread.isAlive()) && tool!=null){
 						runningThread = (Thread) shell.execute(tool);
@@ -104,7 +123,14 @@ public class Shell implements IShell {
     @Override
 	public Runnable execute(ITool tool) {
 		// TODO stdin, do piping
-		Thread t = new Thread(new TaskExecution(this, tool, cwd, ""));
+		Thread t;
+		if (!(tool instanceof IPipingTool)) {
+			t = new Thread(new TaskExecution(this, tool, cwd, "", System.out));
+		}
+		else {
+			t = new Thread(new TaskExecution(this, tool, cwd, "", ((IPipingTool)tool).getOutputStream()));
+		}
+		
 		t.start();
 		return t;
 	}

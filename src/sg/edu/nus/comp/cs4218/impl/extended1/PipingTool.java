@@ -4,7 +4,9 @@ import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.OutputStream;
 
 /**
  * Created by boyang on 1/22/14.
@@ -12,9 +14,12 @@ import java.io.File;
 public class PipingTool extends ATool implements IPipingTool {
 	
 	private IShell shell;
+	private OutputStream pipeOutputStream;
 	
 	public PipingTool(String[] arguments, String stdin) {
 		super(arguments, stdin);	
+		
+		this.pipeOutputStream = new ByteArrayOutputStream();
 	}
 	
     /**
@@ -55,6 +60,10 @@ public class PipingTool extends ATool implements IPipingTool {
     	this.stdin = stdin;
     
         return null;
+    }
+    
+    public OutputStream getOutputStream() {
+    	return pipeOutputStream;
     }
     
     /**
