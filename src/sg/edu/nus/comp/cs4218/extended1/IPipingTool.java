@@ -21,4 +21,6 @@ public interface IPipingTool extends ITool{
 	 */
 	String pipe(ITool from, ITool to);
 	String pipe(String stdout, ITool to);
+	
+	
 }

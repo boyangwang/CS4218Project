@@ -2,6 +2,8 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
 import java.io.BufferedReader;
@@ -84,6 +86,12 @@ public class Shell implements IShell {
 
 	@Override
 	public ITool parse(String commandline) {
+		// at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
+		if (isContainsPipeOperator(commandline)) {
+			IPipingTool pipingTool = new PipingTool(null, commandline);
+			return pipingTool;
+		}
+		
 		if(commandline.trim().startsWith("pwd")){
 			return new PwdTool(null, "");
 		} else {
@@ -120,6 +128,7 @@ public class Shell implements IShell {
         this.cwd = newDirectory;
     }
 
+    
     /**
      * Code for static stuff.
      */
@@ -141,4 +150,16 @@ public class Shell implements IShell {
         }
         return self;
     }
+    
+    /**
+	 * Parse inputString and returns true if the control should be 
+	 * passed to PipingTool
+	 * 
+	 * @param inputString the user input string
+	 * @return true if the control should be passed to PipingTool
+	 */
+	public static boolean isContainsPipeOperator(String inputString) {
+		return inputString.contains("|");
+	}
+	
 }

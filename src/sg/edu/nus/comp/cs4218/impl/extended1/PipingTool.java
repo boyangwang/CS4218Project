@@ -11,40 +11,45 @@ import java.io.File;
  */
 public class PipingTool extends ATool implements IPipingTool {
 	
-	public PipingTool(String[] arguments, String stdin) {
-		super(arguments, stdin);
-		// TODO Auto-generated constructor stub
-	}
-	
-	private int statusCode;
-	private String stdin;
 	private IShell shell;
+	
+	public PipingTool(String[] arguments, String stdin) {
+		super(arguments, stdin);	
+	}
 	
     /**
      * Pipe the stdout of *from* to stdin of *to*
-     * 
+     * Currently the method is not in complete form
+     * And it's not used by system execution
      * 
      * @param from
      * @param to
-     * @return The stdout of *to*
-     * Currently the method is not in complete form
-     * 
-     * And it's not used by system execution
+     * @return The stdout of *to* 
      */
 	@Override
     public String pipe(ITool from, ITool to) {
-    	String outputOfFrom = from.execute(shell, getWorkingDir(), from.getStdin());
+    	String outputOfFrom = from.execute(shell, getWorkingDirStub(), from.getStdin());
     	
         return pipe(outputOfFrom, to);
     }
-
+	
+	/**
+     * Pipe the stdout to stdin of *to*
+     * 
+     * @param stdout
+     * @param to
+     * @return The stdout of *to* 
+     */
     @Override
     public String pipe(String stdout, ITool to) {
-        String output = to.execute(shell, getWorkingDir(), stdout);
+        String output = to.execute(shell, getWorkingDirStub(), stdout);
         
     	return output;
     }
     
+    /**
+     * 
+     */
     @Override
     public String execute(IShell shell, File workingDir, String stdin) {
     	this.stdin = stdin;
@@ -52,16 +57,13 @@ public class PipingTool extends ATool implements IPipingTool {
         return null;
     }
     
+    /**
+     * stdin getter
+     */
 	@Override
 	public String getStdin() {
 		return stdin;
 	}
-        
-    @Override
-    public int getStatusCode() {
-        return this.statusCode;
-    }
-    
     
     // Stub functions for the time being
     
@@ -73,9 +75,7 @@ public class PipingTool extends ATool implements IPipingTool {
     	return null;
     }
     
-    private File getWorkingDir() {
+    private File getWorkingDirStub() {
     	return null;
     }
-
-
 }

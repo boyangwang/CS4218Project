@@ -33,4 +33,5 @@ public interface IShell {
      * @param newDirectory
      */
     public void changeWorkingDirectory(File newDirectory);
+    
 }

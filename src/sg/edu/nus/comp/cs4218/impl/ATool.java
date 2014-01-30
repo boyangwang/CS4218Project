@@ -7,7 +7,7 @@ import sg.edu.nus.comp.cs4218.IShell;
 public abstract class ATool {
 	protected String[] args;
 	protected String stdin;
-	private int statusCode = 0;
+	protected int statusCode = 0;
 	
 	/**
 	 * Constructor
