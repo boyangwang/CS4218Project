@@ -23,10 +23,9 @@ public abstract class ATool {
 	 * Executes the tool with args provided in the constructor
      *
      * @param workingDir The current working directory.
-	 * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
 	 * @return Output on stdout
 	 */
-	public abstract String execute(IShell shell, File workingDir, String stdin);
+	public abstract String execute(IShell shell, File workingDir);
 
     /**
      * Returns the contents of this ATool's stdin.
