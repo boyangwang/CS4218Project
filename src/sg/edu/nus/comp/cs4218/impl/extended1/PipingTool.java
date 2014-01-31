@@ -33,9 +33,7 @@ public class PipingTool extends ATool implements IPipingTool {
      */
 	@Override
     public String pipe(ITool from, ITool to) {
-    	String outputOfFrom = from.execute(shell, getWorkingDirStub(), from.getStdin());
-    	
-        return pipe(outputOfFrom, to);
+        return pipe(from.execute(shell, getWorkingDirStub()), to);
     }
 	
 	/**
@@ -47,8 +45,8 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String pipe(String stdout, ITool to) {
-        String output = to.execute(shell, getWorkingDirStub(), stdout);
-        
+        String output = to.execute(shell, getWorkingDirStub());
+
     	return output;
     }
     
@@ -56,9 +54,7 @@ public class PipingTool extends ATool implements IPipingTool {
      * 
      */
     @Override
-    public String execute(IShell shell, File workingDir, String stdin) {
-    	this.stdin = stdin;
-    
+    public String execute(IShell shell, File workingDir) {
         return null;
     }
     
