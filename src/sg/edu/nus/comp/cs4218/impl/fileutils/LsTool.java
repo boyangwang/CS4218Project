@@ -32,11 +32,10 @@ public class LsTool extends ATool implements ILsTool {
      * Executes the tool with args provided in the constructor
      *
      * @param workingDir The current working directory.
-     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
      * @return Output on stdout
      */
     @Override
-    public String execute(IShell shell, File workingDir, String stdin) {
+    public String execute(IShell shell, File workingDir) {
         if (this.args.length < 1) {
             return listDirectory(workingDir);
         } else {
@@ -76,9 +75,32 @@ public class LsTool extends ATool implements ILsTool {
         return getStringForFiles(getFiles(wd));
     }
 
-    private boolean validDirectory(File directory) {
-        // TODO: check whether given directory is valid.
-        return false;
+    private boolean validDirectory(File candidate) {
+        /**
+         * Checks for the following conditions:
+         * - File does not exist.
+         * - Not a directory.
+         * - Directory not readable.
+         * - File Exception (returns `false').
+         */
+
+        try {
+            if (!candidate.exists()) {
+                return false;
+            }
+
+            if (!candidate.isDirectory()) {
+                return false;
+            }
+
+            if (!candidate.canRead()) {
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+
+        return true;
     }
 
     private void statusError() {
@@ -91,7 +113,6 @@ public class LsTool extends ATool implements ILsTool {
 
 	@Override
 	public String getStdin() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.stdin;
 	}
 }
