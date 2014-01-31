@@ -91,11 +91,10 @@ public class CdTool extends ATool implements ICdTool {
      * Executes the cd tool.
      *
      * @param workingDir The current working directory.
-     * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
      * @return An empty string (no output is produced).
      */
     @Override
-    public String execute(IShell shell, File workingDir, String stdin) {
+    public String execute(IShell shell, File workingDir) {
         final String nothing = "";
 
         if (this.args.length < 1) {
@@ -109,7 +108,7 @@ public class CdTool extends ATool implements ICdTool {
             statusError();
             return nothing;
         } else {
-        	 Shell.instance().changeWorkingDirectory(candidateDir);
+        	 shell.changeWorkingDirectory(candidateDir);
         }
 
         statusSuccess();

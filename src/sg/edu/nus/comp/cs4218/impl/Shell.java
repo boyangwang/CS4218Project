@@ -60,8 +60,7 @@ public class Shell implements IShell {
      * Code for instance stuff.
      */
     private File cwd = null;    
-    private Shell() {
-        // TODO: Initialise instance variables.    	
+    public Shell() {
     	String userDir = System.getProperty("user.dir");
     	cwd = new File(userDir);
     }
@@ -76,7 +75,6 @@ public class Shell implements IShell {
      * 6. Report the exit status of the command to the user
      */    
 	public void run() {
-    	Shell shell = Shell.instance();
         Scanner sc = new Scanner(System.in);
 		Thread runningThread = null;
 
@@ -86,12 +84,12 @@ public class Shell implements IShell {
 
             if (cmd.equals("ctrl-z")) {
                 if (null != runningThread && runningThread.isAlive()) {
-                    shell.stop(runningThread);
+                    stop(runningThread);
                 }
             } else {
-                ITool tool = shell.parse(cmd);
+                ITool tool = parse(cmd);
                 if ((runningThread == null || !runningThread.isAlive()) && tool != null) {
-                    runningThread = (Thread)shell.execute(tool);
+                    runningThread = (Thread)execute(tool);
                 } else {
                     System.out.print(cwd.getAbsolutePath() + "> ");
                 }
@@ -154,24 +152,11 @@ public class Shell implements IShell {
     /**
      * Code for static stuff.
      */
-    private static Shell self = null;
-
 	public static void main(String[] args){
         Logging.logger(System.out).setLevel(Logging.All);
-		Shell.instance().run();
+		Shell sh = new Shell();
+        sh.run();
 	}
-
-    public static Shell instance() {
-        while (self == null) {
-            try {
-                self = new Shell();
-            } catch (Exception ex) {
-                Logging.logger(System.out).writeLog(Logging.Fatal, "Could not instantiate shell.");
-                System.exit(1);
-            }
-        }
-        return self;
-    }
     
     /**
 	 * Parse inputString and returns true if the control should be 
@@ -180,8 +165,7 @@ public class Shell implements IShell {
 	 * @param inputString the user input string
 	 * @return true if the control should be passed to PipingTool
 	 */
-	public static boolean isContainsPipeOperator(String inputString) {
+	private static boolean isContainsPipeOperator(String inputString) {
 		return inputString.contains("|");
 	}
-	
 }
