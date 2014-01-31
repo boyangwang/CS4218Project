@@ -8,10 +8,9 @@ public interface ITool {
      *
      * @param shell A reference to the calling shell.
      * @param workingDir The current working directory.
-     * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
      * @return Output on stdout
      */
-	public String execute(IShell shell, File workingDir, String stdin);
+	public String execute(IShell shell, File workingDir);
 
     /**
      * Returns the contents of this ITool's stdin.
