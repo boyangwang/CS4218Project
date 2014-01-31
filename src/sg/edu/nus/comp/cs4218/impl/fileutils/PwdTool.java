@@ -24,6 +24,10 @@ public class PwdTool extends ATool implements IPwdTool{
 
     @Override
 	public String execute(IShell shell, File workingDir) {
+        if (Thread.interrupted()) {
+            return null;
+        }
+
 		return getStringForDirectory(workingDir);
     }
 }

@@ -95,6 +95,10 @@ public class CdTool extends ATool implements ICdTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
+        if (Thread.interrupted()) {
+            return null;
+        }
+
         final String nothing = "";
 
         if (this.args.length < 1) {
