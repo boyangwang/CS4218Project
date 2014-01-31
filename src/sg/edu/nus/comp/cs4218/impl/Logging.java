@@ -1,5 +1,8 @@
 package sg.edu.nus.comp.cs4218.impl;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
 /**
  * A basic logger.
  *
@@ -10,9 +13,10 @@ public class Logging {
      * Code for instance stuff.
      */
     private int level = 0;
+    private PrintWriter out;
 
-    private Logging() {
-        // Empty.
+    private Logging(OutputStream os) {
+        this.out = new PrintWriter(os);
     }
 
     public void setLevel(int newLevel) {
@@ -21,7 +25,7 @@ public class Logging {
 
     public void writeLog(int level, String message) {
         if (level >= this.level) {
-            System.err.println(message);
+            out.println(message);
         }
     }
 
@@ -30,10 +34,10 @@ public class Logging {
      */
     private static Logging lg = null;
 
-    public static Logging logger() {
+    public static Logging logger(OutputStream os) {
         while (lg == null) {
             try {
-                lg = new Logging();
+                lg = new Logging(os);
             } catch (Exception ex) {
                 // TODO: How now brown cow?
             }

@@ -161,7 +161,7 @@ public class Shell implements IShell {
     private static Shell self = null;
 
 	public static void main(String[] args){
-        Logging.logger().setLevel(Logging.All);
+        Logging.logger(System.out).setLevel(Logging.All);
 		Shell.instance().run();
 	}
 
@@ -170,7 +170,7 @@ public class Shell implements IShell {
             try {
                 self = new Shell();
             } catch (Exception ex) {
-                Logging.logger().writeLog(Logging.Fatal, "Could not instantiate shell.");
+                Logging.logger(System.out).writeLog(Logging.Fatal, "Could not instantiate shell.");
                 System.exit(1);
             }
         }
