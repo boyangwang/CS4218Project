@@ -32,7 +32,9 @@ public abstract class ATool {
      *
      * @return Contents of stdin as a String.
      */
-    public abstract String getStdin();
+    public String getStdin() {
+        return this.stdin;
+    }
 	
 	/**
 	 * After execution returns the status of the tool
