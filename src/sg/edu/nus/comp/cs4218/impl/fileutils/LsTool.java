@@ -36,6 +36,10 @@ public class LsTool extends ATool implements ILsTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
+        if (Thread.interrupted()) {
+            return null;
+        }
+
         if (this.args.length < 1) {
             return listDirectory(workingDir);
         } else {
