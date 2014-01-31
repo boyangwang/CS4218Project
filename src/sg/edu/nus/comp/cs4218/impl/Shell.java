@@ -6,12 +6,11 @@ import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 /**
  * The Shell is used to interpret and execute user's
@@ -37,7 +36,7 @@ public class Shell implements IShell {
 		}		
 		@Override
 		public void run() {			
-			handleOutput(_tool.execute(_shell, _cwd, _stdin));
+			handleOutput(_tool.execute(_shell, _cwd));
 			System.out.print(_cwd.getAbsolutePath() + "> ");
 			
 		}
@@ -77,30 +76,27 @@ public class Shell implements IShell {
      * 6. Report the exit status of the command to the user
      */    
 	public void run() {
-    	Shell shell = Shell.instance();    		
-		BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));		
+    	Shell shell = Shell.instance();
+        Scanner sc = new Scanner(System.in);
 		Thread runningThread = null;
-		System.out.print(cwd.getAbsolutePath() + "> ");
-    	while(true){
-    		try {    						
-				String cmd=buffer.readLine().trim();
-				if(cmd.trim().equals("ctrl-z")){
-					if (null != runningThread && runningThread.isAlive()){
-						shell.stop(runningThread);
-					}	
-				} else {
-					ITool tool = shell.parse(cmd);
-					if ((null == runningThread || !runningThread.isAlive()) && tool!=null){
-						runningThread = (Thread) shell.execute(tool);
-					}else{
-						System.out.print(cwd.getAbsolutePath() + "> ");
-					}
-				}				
-					
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-    	}
+
+        System.out.print(cwd.getAbsolutePath() + "> ");
+        while (true) {
+            String cmd = sc.nextLine().trim();
+
+            if (cmd.equals("ctrl-z")) {
+                if (null != runningThread && runningThread.isAlive()) {
+                    shell.stop(runningThread);
+                }
+            } else {
+                ITool tool = shell.parse(cmd);
+                if ((runningThread == null || !runningThread.isAlive()) && tool != null) {
+                    runningThread = (Thread)shell.execute(tool);
+                } else {
+                    System.out.print(cwd.getAbsolutePath() + "> ");
+                }
+            }
+        }
     }
 
 	@Override
@@ -115,7 +111,7 @@ public class Shell implements IShell {
 			return new PwdTool(null, "");
 		} else {
 			//TODO Implement all other tools
-			Logging.logger().writeLog(Logging.Error, "Cannot parse " + commandline);
+			Logging.logger(System.out).writeLog(Logging.Error, "Cannot parse " + commandline);
 			return null;
 		}
 	}
