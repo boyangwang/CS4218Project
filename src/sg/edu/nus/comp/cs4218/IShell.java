@@ -34,4 +34,5 @@ public interface IShell {
      */
     public void changeWorkingDirectory(File newDirectory);
     
+    public File getWorkingDirectory();
 }

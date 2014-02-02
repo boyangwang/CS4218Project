@@ -53,4 +53,8 @@ public abstract class ATool {
 	protected void setStatusCode(int statusCode){
 		this.statusCode = statusCode;
 	}
+	
+	public void setStdin(String stdin) {
+		this.stdin = stdin;
+	}
 }

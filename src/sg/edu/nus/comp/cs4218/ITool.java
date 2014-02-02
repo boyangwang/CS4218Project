@@ -25,4 +25,6 @@ public interface ITool {
      * @return Tools that execute correctly should return 0.
      */
 	public int getStatusCode();
+	
+	public void setStdin(String stdin);
 }

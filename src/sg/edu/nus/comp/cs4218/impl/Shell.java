@@ -4,6 +4,7 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.ReverseTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
 import java.io.File;
@@ -101,29 +102,40 @@ public class Shell implements IShell {
 	public ITool parse(String commandline) {
 		// at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
 		if (isContainsPipeOperator(commandline)) {
-			IPipingTool pipingTool = new PipingTool(null, commandline);
+			String[] args = new String[1];
+			args[0] = commandline;
+			IPipingTool pipingTool = new PipingTool(args, "");
 			return pipingTool;
 		}
+		 
+		String[] argsWithCmdName = tokenizeCommandlineString(commandline);
+		String[] args = getArgsFromCommandline(argsWithCmdName);
 		
 		if(commandline.trim().startsWith("pwd")){
+			
 			return new PwdTool(null, "");
-		} else {
+		} 
+		else if(commandline.trim().startsWith("reverse")) {
+			
+			return new ReverseTool(args, "");
+		}
+		else {
 			//TODO Implement all other tools
 			Logging.logger(System.out).writeLog(Logging.Error, "Cannot parse " + commandline);
 			return null;
 		}
 	}
 
-    @Override
+	@Override
 	public Runnable execute(ITool tool) {
 		// TODO stdin, do piping
 		Thread t;
-		if (!(tool instanceof IPipingTool)) {
+//		if (!(tool instanceof IPipingTool)) {
 			t = new Thread(new TaskExecution(this, tool, cwd, "", System.out));
-		}
-		else {
-			t = new Thread(new TaskExecution(this, tool, cwd, "", ((IPipingTool)tool).getOutputStream()));
-		}
+//		}
+//		else {
+//			t = new Thread(new TaskExecution(this, tool, cwd, "", ((IPipingTool)tool).getOutputStream()));
+//		}
 		
 		t.start();
 		return t;
@@ -147,6 +159,10 @@ public class Shell implements IShell {
     public void changeWorkingDirectory(File newDirectory) {
         this.cwd = newDirectory;
     }
+    
+    public File getWorkingDirectory() {
+    	return this.cwd;
+    }
 
     
     /**
@@ -168,4 +184,19 @@ public class Shell implements IShell {
 	private static boolean isContainsPipeOperator(String inputString) {
 		return inputString.contains("|");
 	}
+	
+	private String[] tokenizeCommandlineString(String str) {
+		// all crappy for the time being code
+		return str.split(" ");
+	}
+	
+    private String[] getArgsFromCommandline(String[] argsWithCmdName) {
+    	String[] args = new String[argsWithCmdName.length-1];
+    	for (int i=1; i<argsWithCmdName.length; i++) {
+    		args[i-1] = argsWithCmdName[i];
+    	}
+    	
+		return args;
+	}
+
 }

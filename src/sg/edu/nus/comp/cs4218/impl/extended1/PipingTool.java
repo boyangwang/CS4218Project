@@ -15,6 +15,7 @@ public class PipingTool extends ATool implements IPipingTool {
 	
 	private IShell shell;
 	private OutputStream pipeOutputStream;
+	private File pipeWorkingDirectory;
 	
 	public PipingTool(String[] arguments, String stdin) {
 		super(arguments, stdin);	
@@ -33,7 +34,9 @@ public class PipingTool extends ATool implements IPipingTool {
      */
 	@Override
     public String pipe(ITool from, ITool to) {
-        return pipe(from.execute(shell, getWorkingDirStub()), to);
+		String output = from.execute(shell, shell.getWorkingDirectory());
+		
+        return pipe(output, to);
     }
 	
 	/**
@@ -45,7 +48,8 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String pipe(String stdout, ITool to) {
-        String output = to.execute(shell, getWorkingDirStub());
+    	to.setStdin(stdout);
+        String output = to.execute(shell, shell.getWorkingDirectory());
 
     	return output;
     }
@@ -55,23 +59,35 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
-        return null;
+    	this.pipeWorkingDirectory = workingDir;
+    	this.shell = shell;
+    	
+    	String[] commands = tokenizeStdinIntoCommands(this.args[0]);
+        
+    	ITool command;
+    	String output = this.stdin;
+    	
+    	for (int i=0; i<commands.length; i++) {
+    		command = shell.parse(commands[i]);
+    		output = pipe(output, command);
+    	}
+    	
+    	return output;
     }
     
-    public OutputStream getOutputStream() {
+    private String[] tokenizeStdinIntoCommands(String stdin) {
+    	String[] commands = stdin.split("\\|");
+    	for (int i=0; i<commands.length; i++) {
+    		commands[i] = commands[i].trim();
+    	}
+		return commands;
+	}
+
+	public OutputStream getOutputStream() {
     	return pipeOutputStream;
     }
     
-    /**
-     * stdin getter
-     */
-	@Override
-	public String getStdin() {
-		return stdin;
-	}
-    
     // Stub functions for the time being
-    
     private ITool parseStub(String stdin) {
     	return null;
     }
