@@ -28,7 +28,23 @@ public class CopyTool extends ATool implements ICopyTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
-        return null;
+        final String nothing = "";
+
+        if (this.args.length != 2) {
+            statusError();
+            return nothing;
+        }
+
+        File to = new File(this.args[0]);
+        File from = new File(this.args[1]);
+        boolean result = copy(to, from);
+        if (!result) {
+            statusError();
+            return "Could not copy file: " + this.args[0] + " to: " + this.args[1];
+        }
+
+        statusSuccess();
+        return nothing;
     }
 
     /**
