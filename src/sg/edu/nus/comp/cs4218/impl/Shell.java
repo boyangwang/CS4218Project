@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -81,7 +82,13 @@ public class Shell implements IShell {
 
         System.out.print(cwd.getAbsolutePath() + "> ");
         while (true) {
-            String cmd = sc.nextLine().trim();
+            String cmd;
+            try {
+                cmd = sc.nextLine().trim();
+            } catch (NoSuchElementException ex) {
+                // Terminate gracefully.
+                break;
+            }
 
             if (cmd.equals("ctrl-z")) {
                 if (null != runningThread && runningThread.isAlive()) {
