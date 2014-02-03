@@ -121,7 +121,6 @@ public class CdTool extends ATool implements ICdTool {
 
 	@Override
 	public String getStdin() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getStdin();
 	}
 }

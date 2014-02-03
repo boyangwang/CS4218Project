@@ -1,4 +1,5 @@
 package sg.edu.nus.comp.cs4218.impl.extended1;
+
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
@@ -8,9 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 
-/**
- * Created by boyang on 1/22/14.
- */
 public class PipingTool extends ATool implements IPipingTool {
 	
 	private IShell shell;

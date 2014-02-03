@@ -6,6 +6,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.File;
 
+// TODO: Not finished!
 public class CatTool extends ATool implements ICatTool {
     /**
      * Constructor

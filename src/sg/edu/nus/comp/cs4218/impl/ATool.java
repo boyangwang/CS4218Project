@@ -41,7 +41,7 @@ public abstract class ATool {
      *
 	 * @return Returns 0 if executed properly
 	 */
-	public int getStatusCode(){
+	public int getStatusCode() {
 		return statusCode;
 	}
 	
@@ -50,7 +50,7 @@ public abstract class ATool {
      *
 	 * @param statusCode 0 if executed normally. Otherwise, see http://tldp.org/LDP/abs/html/exitcodes.html#EXITCODESREF
 	 */
-	protected void setStatusCode(int statusCode){
+	protected void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
 	}
 	
