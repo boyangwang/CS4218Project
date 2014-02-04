@@ -36,6 +36,6 @@ public class PwdTool extends ATool implements IPwdTool{
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        return getStringForDirectory(workingDir);
+        return String.format("%s\n", getStringForDirectory(workingDir));
     }
 }

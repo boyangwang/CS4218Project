@@ -37,7 +37,7 @@ public class Shell implements IShell {
 		@Override
 		public void run() {			
 			handleOutput(_tool.execute(_cwd, _stdin));
-			System.out.print(_cwd.getAbsolutePath() + "> ");
+		    Shell.printPrompt(_cwd.getAbsolutePath());
 			
 		}
 		
@@ -112,14 +112,16 @@ public class Shell implements IShell {
                 }
 
                 runningThread = (Thread)execute(tool);
-
-                printPrompt();
             }
         }
     }
 
     private void printPrompt() {
-        System.out.print(cwd.getAbsolutePath() + "> ");
+        Shell.printPrompt(cwd.getAbsolutePath());
+    }
+
+    private static void printPrompt(String cwd) {
+        System.out.print(cwd + "> ");
     }
 
 	@Override
