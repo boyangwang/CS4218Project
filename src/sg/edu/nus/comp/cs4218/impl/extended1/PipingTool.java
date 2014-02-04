@@ -53,13 +53,6 @@ public class PipingTool extends ATool implements IPipingTool {
     	return output;
     }
 
-    private String[] tokenizeStdinIntoCommands(String stdin) {
-    	String[] commands = stdin.split("\\|");
-    	for (int i=0; i<commands.length; i++) {
-    		commands[i] = commands[i].trim();
-    	}
-		return commands;
-	}
     
     /**
      * Executes the tool with args provided in the constructor
@@ -70,10 +63,13 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-    	this.pipeWorkingDirectory = workingDir;
+    	System.out.println("in piping execute");
+    	for (String s : args) {
+    		System.out.println(s);
+    	}
     	
-    	String[] commands = tokenizeStdinIntoCommands(this.args[0]);
-        
+    	this.pipeWorkingDirectory = workingDir;
+          	
     	ITool command;
     	String output = stdin;
     	
@@ -81,8 +77,8 @@ public class PipingTool extends ATool implements IPipingTool {
     		setStatusCode(2);
     		return ERROR_MSG_NULL_SHELL + System.lineSeparator();
     	}
-    	for (int i=0; i<commands.length; i++) {
-    		command = this.shell.parse(commands[i]);
+    	for (int i=0; i<args.length; i++) {
+    		command = this.shell.parse(args[i]);
     		output = pipe(output, command);
     		if (command.getStatusCode() != 0) {
     			setStatusCode(1);

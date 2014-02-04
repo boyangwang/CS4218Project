@@ -5,20 +5,20 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandParser {
     public static ITool parse(String str) {
         // at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
-        if (containsPipeOperator(str)) {
-            String[] args = new String[1];
-            args[0] = str;
-            PipingTool pipingTool = new PipingTool(args);
+    	String[] argList = tokenizePipeCommands(str);
+        if (argList != null) {
+            PipingTool pipingTool = new PipingTool(argList);
             return pipingTool;
         }
 
         String[] tokens = tokenizeString(str);
-        String[] argList = getArgumentList(tokens);
+        argList = getArgumentList(tokens);
         String cmd = getCommand(tokens);
 
         switch (cmd) {
@@ -55,15 +55,43 @@ public class CommandParser {
     }
 
     /**
-     * Parse inputString and returns true if the control should be
+     * Parse inputString and returns an array of commands string if the control should be
      * passed to PipingTool
      *
+     * Null otherwise
+     *
      * @param str the user input string
-     * @return `true` if the control should be passed to PipingTool
+     * @return `null` if the control shouldn't be passed to PipingTool
      */
-    private static boolean containsPipeOperator(String str) {
-        return str.contains("|");
-    }
+	private static String[] tokenizePipeCommands(String str) {
+		ArrayList<String> cmds = new ArrayList<String>();
+		StringBuilder curCmd = new StringBuilder();
+		boolean inQuotes = false;
+		
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (c == '\"') {
+				inQuotes = !inQuotes;
+				continue;
+			}
+			
+			if (c == '|' && !inQuotes) {
+				cmds.add(curCmd.toString());
+				curCmd = new StringBuilder();
+				continue;
+			}
+			
+			curCmd.append(c);
+		}
+		
+		if (cmds.size() >= 1) {
+			cmds.add(curCmd.toString());
+			return cmds.toArray(new String[cmds.size()]);
+		}
+		else {
+			return null;
+		}
+	}
 
     private static String[] tokenizeString(String str) {
         return str.split(" ");
