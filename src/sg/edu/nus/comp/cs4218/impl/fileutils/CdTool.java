@@ -72,7 +72,15 @@ public class CdTool extends ATool implements ICdTool {
             return null;
         }
 
-        File dir = new File(newDirectory);
+        String candidatePath;
+        try {
+            candidatePath = String.format("%s%s%s", parent.getWorkingDirectory().getCanonicalPath(), File.separator, newDirectory);
+        } catch (IOException e) {
+            statusError();
+            return null;
+        }
+
+        File dir = new File(candidatePath);
         if (canChangeDirectoryTo(dir)) {
             return dir;
         }
@@ -99,14 +107,7 @@ public class CdTool extends ATool implements ICdTool {
             return "";
         }
 
-        String candidatePath;
-        try {
-            candidatePath = String.format("%s%s%s", parent.getWorkingDirectory().getCanonicalPath(), File.separator, this.args[0]);
-        } catch (IOException e) {
-            statusError();
-            return "";
-        }
-        File candidateDir = changeDirectory(candidatePath);
+        File candidateDir = changeDirectory(this.args[0]);
 
         if (candidateDir == null) {
             statusError();
