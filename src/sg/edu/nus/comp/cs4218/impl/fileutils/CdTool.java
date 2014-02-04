@@ -81,7 +81,6 @@ public class CdTool extends ATool implements ICdTool {
 
     /**
      * Executes the tool with args provided in the constructor
-     * TODO Use interface methods when implementing execute!
      *
      * @param workingDir
      * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.

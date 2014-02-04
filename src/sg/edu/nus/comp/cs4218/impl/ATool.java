@@ -18,7 +18,6 @@ public abstract class ATool {
 	
 	/**
 	 * Executes the tool with args provided in the constructor
-	 * TODO Use interface methods when implementing execute!
 	 * @param stdin Input on stdin. NOT THE ARGUMENTS! Can be null.
 	 * @return Output on stdout
 	 */

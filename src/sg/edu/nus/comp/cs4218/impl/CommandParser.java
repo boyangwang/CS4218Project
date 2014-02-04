@@ -5,6 +5,7 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CdTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class CommandParser {
                 break;
 
             case "echo":
-                break;
+                return new EchoTool(argList);
 
             case "ls":
                 break;
