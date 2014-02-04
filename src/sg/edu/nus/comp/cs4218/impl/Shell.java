@@ -45,7 +45,7 @@ public class Shell implements IShell {
 		
 		public void handleOutput(String output) {
 			if (_stdout instanceof PrintStream) {
-				((PrintStream)_stdout).println(output);
+				((PrintStream)_stdout).print(output);
 			}
 			else {
 				try {
