@@ -3,7 +3,9 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
-import java.io.File;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 // TODO: Not finished!
 public class CatTool extends ATool implements ICatTool {
@@ -18,7 +20,29 @@ public class CatTool extends ATool implements ICatTool {
 
     @Override
     public String getStringForFile(File toRead) {
-        return null;
+        if (toRead.exists() && toRead.canRead()) {
+            try {
+                FileInputStream fis = new FileInputStream(toRead);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                int ch;
+                while ((ch = fis.read()) != -1) {
+                    baos.write(ch);
+                }
+                fis.close();
+                byte[] file = baos.toByteArray();
+                statusSuccess();
+                return new String(file, StandardCharsets.UTF_8);
+            } catch (FileNotFoundException e) {
+                statusError();
+                return null;
+            } catch (IOException e) {
+                statusError();
+                return null;
+            }
+        } else {
+            statusError();
+            return null;
+        }
     }
 
     /**
@@ -30,6 +54,30 @@ public class CatTool extends ATool implements ICatTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        return null;
+        int argLength = this.args.length;
+        if (argLength == 0) {
+            return stdin;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String arg : this.args) {
+            if (Thread.interrupted()) {
+                statusError();
+                return String.format("%s\n", sb.toString());
+            }
+            switch (arg) {
+                case "-":
+                    sb.append(stdin);
+                    break;
+                default:
+                    String result = getStringForFile(new File(arg));
+                    if (result == null) {
+                        statusError();
+                        sb.append(String.format("Error: Could not read file: %s", arg));
+                        return String.format("%s\n", sb.toString());
+                    }
+                    sb.append(result);
+            }
+        }
+        return String.format("%s\n", sb.toString());
     }
 }

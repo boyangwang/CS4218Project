@@ -24,7 +24,7 @@ public class CommandParser {
 
         switch (cmd) {
             case "cat":
-                break;
+                return new CatTool(argList);
 
             case "cd":
                 return new CdTool(argList);
@@ -54,8 +54,6 @@ public class CommandParser {
                 Logging.logger(System.out).writeLog(Logging.Error, "Cannot parse " + str);
                 return null;
         }
-
-        return null;
     }
 
     /**
