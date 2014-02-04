@@ -76,7 +76,7 @@ public class CommandParser {
 			}
 			
 			if (c == '|' && !inQuotes) {
-				cmds.add(curCmd.toString());
+				cmds.add(curCmd.toString().trim());
 				curCmd = new StringBuilder();
 				continue;
 			}
@@ -85,7 +85,7 @@ public class CommandParser {
 		}
 		
 		if (cmds.size() >= 1) {
-			cmds.add(curCmd.toString());
+			cmds.add(curCmd.toString().trim());
 			return cmds.toArray(new String[cmds.size()]);
 		}
 		else {

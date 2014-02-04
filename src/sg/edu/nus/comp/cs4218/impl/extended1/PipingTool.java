@@ -14,6 +14,7 @@ public class PipingTool extends ATool implements IPipingTool {
 	private Shell shell;
 	private File pipeWorkingDirectory;
 	private static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
+	private static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
     /**
      * Constructor
      *
@@ -63,13 +64,10 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-    	System.out.println("in piping execute");
     	for (String s : args) {
     		System.out.println(s);
     	}
     	
-    	this.pipeWorkingDirectory = workingDir;
-          	
     	ITool command;
     	String output = stdin;
     	
@@ -79,7 +77,14 @@ public class PipingTool extends ATool implements IPipingTool {
     	}
     	for (int i=0; i<args.length; i++) {
     		command = this.shell.parse(args[i]);
+    		
+    		if (command == null) {
+    			setStatusCode(3);
+    			return ERROR_MSG_NULL_CMD + System.lineSeparator();
+    		}
+    		
     		output = pipe(output, command);
+    		
     		if (command.getStatusCode() != 0) {
     			setStatusCode(1);
     			return output + System.lineSeparator();
