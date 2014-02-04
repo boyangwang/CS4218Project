@@ -80,7 +80,7 @@ public class Shell implements IShell {
         Scanner sc = new Scanner(System.in);
 		Thread runningThread = null;
 
-        System.out.print(cwd.getAbsolutePath() + "> ");
+        printPrompt();
         while (true) {
             String cmd;
             try {
@@ -91,18 +91,37 @@ public class Shell implements IShell {
             }
 
             if (cmd.equals("ctrl-z")) {
-                if (null != runningThread && runningThread.isAlive()) {
+                if (runningThread != null && runningThread.isAlive()) {
                     stop(runningThread);
                 }
             } else {
                 ITool tool = parse(cmd);
-                if ((runningThread == null || !runningThread.isAlive()) && tool != null) {
-                    runningThread = (Thread)execute(tool);
-                } else {
-                    System.out.print(cwd.getAbsolutePath() + "> ");
+
+                // Report an invalid command immediately.
+                if (tool == null) {
+                    System.out.println("Invalid command.");
+                    printPrompt();
+                    continue;
                 }
+
+                // Block until previous command has finished execution.
+                if (runningThread != null) {
+                    try {
+                        runningThread.join();
+                    } catch (InterruptedException e) {
+                        // How now brown cow?
+                    }
+                }
+
+                runningThread = (Thread)execute(tool);
+
+                printPrompt();
             }
         }
+    }
+
+    private void printPrompt() {
+        System.out.print(cwd.getAbsolutePath() + "> ");
     }
 
 	@Override

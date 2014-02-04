@@ -8,9 +8,14 @@ import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
 
 public class PwdTool extends ATool implements IPwdTool{
-	public PwdTool(String[] arguments, String stdin) {
-		super(arguments, stdin);
-	}
+    /**
+     * Constructor
+     *
+     * @param arguments Arguments the tool is going to be executed with.
+     */
+    public PwdTool(String[] arguments) {
+        super(arguments);
+    }
 
     @Override
 	public String getStringForDirectory(File directory) {
@@ -22,10 +27,15 @@ public class PwdTool extends ATool implements IPwdTool{
 		return directory.getAbsolutePath();
 	}
 
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
     @Override
-	public String execute(IShell shell, File workingDir) {
-        // Note that we do not check for Thread.interrupted() here as there is no blocking operation.
-
+    public String execute(File workingDir, String stdin) {
         return getStringForDirectory(workingDir);
     }
 }
