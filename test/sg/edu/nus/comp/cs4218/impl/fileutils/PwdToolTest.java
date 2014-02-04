@@ -17,7 +17,7 @@ public class PwdToolTest {
 	
 	@Before
 	public void before(){
-		pwdtool = new PwdTool(null, "");
+		pwdtool = new PwdTool(new String[0]);
 	}
 
     @After

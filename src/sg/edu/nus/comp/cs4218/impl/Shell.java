@@ -2,10 +2,7 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
-import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
-import sg.edu.nus.comp.cs4218.impl.extended1.ReverseTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,16 +26,18 @@ public class Shell implements IShell {
 		String _stdin;
 		IShell _shell;
 		OutputStream _stdout;
+
 		public TaskExecution(IShell shell, ITool tool, File cwd, String stdin, OutputStream stdout){
 			_shell = shell;
 			_tool = tool;
 			_cwd = cwd;
 			_stdin = stdin;
 			_stdout = stdout;
-		}		
+		}
+
 		@Override
 		public void run() {			
-			handleOutput(_tool.execute(_shell, _cwd));
+			handleOutput(_tool.execute(_cwd, _stdin));
 			System.out.print(_cwd.getAbsolutePath() + "> ");
 			
 		}
@@ -80,7 +79,7 @@ public class Shell implements IShell {
         Scanner sc = new Scanner(System.in);
 		Thread runningThread = null;
 
-        System.out.print(cwd.getAbsolutePath() + "> ");
+        printPrompt();
         while (true) {
             String cmd;
             try {
@@ -91,23 +90,46 @@ public class Shell implements IShell {
             }
 
             if (cmd.equals("ctrl-z")) {
-                if (null != runningThread && runningThread.isAlive()) {
+                if (runningThread != null && runningThread.isAlive()) {
                     stop(runningThread);
                 }
             } else {
                 ITool tool = parse(cmd);
-                if ((runningThread == null || !runningThread.isAlive()) && tool != null) {
-                    runningThread = (Thread)execute(tool);
-                } else {
-                    System.out.print(cwd.getAbsolutePath() + "> ");
+
+                // Report an invalid command immediately.
+                if (tool == null) {
+                    System.out.println("Invalid command.");
+                    printPrompt();
+                    continue;
                 }
+
+                // Block until previous command has finished execution.
+                if (runningThread != null) {
+                    try {
+                        runningThread.join();
+                    } catch (InterruptedException e) {
+                        // How now brown cow?
+                    }
+                }
+
+                runningThread = (Thread)execute(tool);
+
+                printPrompt();
             }
         }
     }
 
+    private void printPrompt() {
+        System.out.print(cwd.getAbsolutePath() + "> ");
+    }
+
 	@Override
 	public ITool parse(String commandline) {
-		return CommandParser.parse(commandline);
+		ITool tool = CommandParser.parse(commandline);
+		if (tool instanceof PipingTool) {
+			((PipingTool) tool).setShell(this);
+		}
+		return tool;
 	}
 
 	@Override
@@ -142,7 +164,6 @@ public class Shell implements IShell {
     	return this.cwd;
     }
 
-    
     /**
      * Code for static stuff.
      */

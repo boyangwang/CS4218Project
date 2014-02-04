@@ -1,6 +1,5 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -13,38 +12,9 @@ public class CopyTool extends ATool implements ICopyTool {
      * Constructor
      *
      * @param arguments Arguments the tool is going to be executed with.
-     * @param stdin
      */
-    public CopyTool(String[] arguments, String stdin) {
-        super(arguments, stdin);
-    }
-
-    /**
-     * Executes the tool with args provided in the constructor
-     *
-     * @param shell
-     * @param workingDir The current working directory.
-     * @return Output on stdout
-     */
-    @Override
-    public String execute(IShell shell, File workingDir) {
-        final String nothing = "";
-
-        if (this.args.length != 2) {
-            statusError();
-            return nothing;
-        }
-
-        File to = new File(this.args[0]);
-        File from = new File(this.args[1]);
-        boolean result = copy(to, from);
-        if (!result) {
-            statusError();
-            return "Could not copy file: " + this.args[0] + " to: " + this.args[1];
-        }
-
-        statusSuccess();
-        return nothing;
+    public CopyTool(String[] arguments) {
+        super(arguments);
     }
 
     /**
@@ -147,5 +117,31 @@ public class CopyTool extends ATool implements ICopyTool {
         if (trash.exists() && trash.canWrite()) {
             trash.delete();
         }
+    }
+
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
+    @Override
+    public String execute(File workingDir, String stdin) {
+        if (this.args.length != 2) {
+            statusError();
+            return "";
+        }
+
+        File to = new File(this.args[0]);
+        File from = new File(this.args[1]);
+        boolean result = copy(to, from);
+        if (!result) {
+            statusError();
+            return "Could not copy file: " + this.args[0] + " to: " + this.args[1];
+        }
+
+        statusSuccess();
+        return "";
     }
 }

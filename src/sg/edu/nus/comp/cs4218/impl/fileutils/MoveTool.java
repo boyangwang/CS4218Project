@@ -7,7 +7,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import java.io.File;
 
 public class MoveTool extends ATool implements IMoveTool {
-    private final String nothing = "";
     private IShell shell;
     private File cwd;
 
@@ -15,36 +14,9 @@ public class MoveTool extends ATool implements IMoveTool {
      * Constructor
      *
      * @param arguments Arguments the tool is going to be executed with.
-     * @param stdin
      */
-    public MoveTool(String[] arguments, String stdin) {
-        super(arguments, stdin);
-    }
-
-    /**
-     * Executes the tool with args provided in the constructor
-     *
-     * @param shell
-     * @param workingDir The current working directory.
-     * @return Output on stdout
-     */
-    @Override
-    public String execute(IShell shell, File workingDir) {
-        this.shell = shell;
-        this.cwd = workingDir;
-
-        if (this.args.length != 2) {
-            statusError();
-            return nothing;
-        }
-
-        File from = new File(this.args[0]);
-        File to = new File(this.args[1]);
-        if (move(from, to)) {
-            return nothing;
-        } else {
-            return "Could not move file: " + this.args[0] + " to: " + this.args[1];
-        }
+    public MoveTool(String[] arguments) {
+        super(arguments);
     }
 
     @Override
@@ -56,8 +28,8 @@ public class MoveTool extends ATool implements IMoveTool {
             String[] rmArgs = new String[1];
             rmArgs[0] = from.getAbsolutePath();
 
-            CopyTool cp = new CopyTool(cpArgs, nothing);
-            cp.execute(shell, cwd);
+            CopyTool cp = new CopyTool(cpArgs);
+            cp.execute(cwd, "");
             if (cp.getStatusCode() != 0) {
                 cleanup(to);
 
@@ -65,8 +37,8 @@ public class MoveTool extends ATool implements IMoveTool {
                 return false;
             }
 
-            DeleteTool rm = new DeleteTool(rmArgs, nothing);
-            rm.execute(shell, cwd);
+            DeleteTool rm = new DeleteTool(rmArgs);
+            rm.execute(cwd, "");
             if (rm.getStatusCode() != 0) {
                 statusError();
                 return false;
@@ -108,6 +80,32 @@ public class MoveTool extends ATool implements IMoveTool {
     private void cleanup(File trash) {
         if (trash.exists() && trash.canWrite()) {
             trash.delete();
+        }
+    }
+
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
+    @Override
+    public String execute(File workingDir, String stdin) {
+        this.shell = shell;
+        this.cwd = workingDir;
+
+        if (this.args.length != 2) {
+            statusError();
+            return "";
+        }
+
+        File from = new File(this.args[0]);
+        File to = new File(this.args[1]);
+        if (move(from, to)) {
+            return "";
+        } else {
+            return "Could not move file: " + this.args[0] + " to: " + this.args[1];
         }
     }
 }

@@ -4,23 +4,25 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 
 public class PipingTool extends ATool implements IPipingTool {
-	
-	private IShell shell;
-	private OutputStream pipeOutputStream;
+	private Shell shell;
 	private File pipeWorkingDirectory;
-	
-	public PipingTool(String[] arguments, String stdin) {
-		super(arguments, stdin);	
-		
-		this.pipeOutputStream = new ByteArrayOutputStream();
-	}
-	
+	private static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
+    /**
+     * Constructor
+     *
+     * @param arguments Arguments the tool is going to be executed with.
+     */
+    public PipingTool(String[] arguments) {
+        super(arguments);
+    }
+
     /**
      * Pipe the stdout of *from* to stdin of *to*
      * Currently the method is not in complete form
@@ -32,11 +34,11 @@ public class PipingTool extends ATool implements IPipingTool {
      */
 	@Override
     public String pipe(ITool from, ITool to) {
-		String output = from.execute(shell, shell.getWorkingDirectory());
+		String output = from.execute(shell.getWorkingDirectory(), "");
 		
         return pipe(output, to);
     }
-	
+
 	/**
      * Pipe the stdout to stdin of *to*
      * 
@@ -46,36 +48,11 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String pipe(String stdout, ITool to) {
-    	to.setStdin(stdout);
-        String output = to.execute(shell, shell.getWorkingDirectory());
+        String output = to.execute(shell.getWorkingDirectory(), stdout);
 
     	return output;
     }
-    
-    /**
-     * 
-     */
-    @Override
-    public String execute(IShell shell, File workingDir) {
-    	this.pipeWorkingDirectory = workingDir;
-    	this.shell = shell;
-    	
-    	String[] commands = tokenizeStdinIntoCommands(this.args[0]);
-        
-    	ITool command;
-    	String output = this.stdin;
-    	
-    	for (int i=0; i<commands.length; i++) {
-    		command = shell.parse(commands[i]);
-    		output = pipe(output, command);
-    		if (command.getStatusCode() != 0) {
-    			return output;
-    		}
-    	}
-    	
-    	return output;
-    }
-    
+
     private String[] tokenizeStdinIntoCommands(String stdin) {
     	String[] commands = stdin.split("\\|");
     	for (int i=0; i<commands.length; i++) {
@@ -83,21 +60,40 @@ public class PipingTool extends ATool implements IPipingTool {
     	}
 		return commands;
 	}
-
-	public OutputStream getOutputStream() {
-    	return pipeOutputStream;
+    
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
+    @Override
+    public String execute(File workingDir, String stdin) {
+    	this.pipeWorkingDirectory = workingDir;
+    	
+    	String[] commands = tokenizeStdinIntoCommands(this.args[0]);
+        
+    	ITool command;
+    	String output = stdin;
+    	
+    	if (this.shell == null) {
+    		setStatusCode(2);
+    		return ERROR_MSG_NULL_SHELL + System.lineSeparator();
+    	}
+    	for (int i=0; i<commands.length; i++) {
+    		command = this.shell.parse(commands[i]);
+    		output = pipe(output, command);
+    		if (command.getStatusCode() != 0) {
+    			setStatusCode(1);
+    			return output + System.lineSeparator();
+    		}
+    	}
+    	
+    	return output + System.lineSeparator();
     }
     
-    // Stub functions for the time being
-    private ITool parseStub(String stdin) {
-    	return null;
-    }
-    
-    private Runnable executeStub(ITool tool) {
-    	return null;
-    }
-    
-    private File getWorkingDirStub() {
-    	return null;
+    public void setShell(Shell shell) {
+    	this.shell = shell;
     }
 }

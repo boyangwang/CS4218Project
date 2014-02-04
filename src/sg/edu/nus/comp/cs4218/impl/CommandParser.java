@@ -2,8 +2,8 @@ package sg.edu.nus.comp.cs4218.impl;
 
 
 import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
 import java.util.Arrays;
 
@@ -13,7 +13,7 @@ public class CommandParser {
         if (containsPipeOperator(str)) {
             String[] args = new String[1];
             args[0] = str;
-            IPipingTool pipingTool = new PipingTool(args, "");
+            PipingTool pipingTool = new PipingTool(args);
             return pipingTool;
         }
 
@@ -26,25 +26,25 @@ public class CommandParser {
                 break;
 
             case "cd":
-                break;
+                return new CdTool(argList);
 
             case "copy":
-                break;
+                return new CopyTool(argList);
 
             case "delete":
-                break;
+                return new DeleteTool(argList);
 
             case "echo":
-                break;
+                return new EchoTool(argList);
 
             case "ls":
-                break;
+                return new LsTool(argList);
 
             case "move":
-                break;
+                return new MoveTool(argList);
 
             case "pwd":
-                break;
+                return new PwdTool(argList);
 
             default:
                 Logging.logger(System.out).writeLog(Logging.Error, "Cannot parse " + str);
