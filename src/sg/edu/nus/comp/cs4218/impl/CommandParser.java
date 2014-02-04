@@ -98,7 +98,11 @@ public class CommandParser {
     }
 
     private static String[] getArgumentList(String[] tokens) {
-        return Arrays.copyOfRange(tokens, 0, tokens.length - 1);
+        if (tokens.length < 2) {
+            return new String[0];
+        } else {
+            return Arrays.copyOfRange(tokens, 1, tokens.length);
+        }
     }
 
     private static String getCommand(String[] tokens) {

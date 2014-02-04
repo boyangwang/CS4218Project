@@ -21,34 +21,36 @@ public class Shell implements IShell {
 	 * TaskExecution Thread
 	 */
 	private static class TaskExecution implements Runnable{
-		ITool _tool;
-		File _cwd;
-		String _stdin;
-		IShell _shell;
-		OutputStream _stdout;
+		ITool tool;
+		Shell shell;
+        String stdin;
+		OutputStream stdout;
 
-		public TaskExecution(IShell shell, ITool tool, File cwd, String stdin, OutputStream stdout){
-			_shell = shell;
-			_tool = tool;
-			_cwd = cwd;
-			_stdin = stdin;
-			_stdout = stdout;
+		public TaskExecution(Shell shell, ITool tool, String stdin, OutputStream stdout){
+			this.shell = shell;
+			this.tool = tool;
+			this.stdin = stdin;
+			this.stdout = stdout;
 		}
 
 		@Override
-		public void run() {			
-			handleOutput(_tool.execute(_cwd, _stdin));
-			System.out.print(_cwd.getAbsolutePath() + "> ");
-			
-		}
+		public void run() {
+			handleOutput(tool.execute(shell.getWorkingDirectory(), stdin));
+            try {
+                Shell.printPrompt(shell.getWorkingDirectory().getCanonicalPath());
+            } catch (IOException e) {
+                // TODO:
+            }
+
+        }
 		
 		public void handleOutput(String output) {
-			if (_stdout instanceof PrintStream) {
-				((PrintStream)_stdout).print(output);
+			if (stdout instanceof PrintStream) {
+				((PrintStream) stdout).print(output);
 			}
 			else {
 				try {
-					_stdout.write(output.getBytes());
+					stdout.write(output.getBytes());
 				}
 				catch(IOException e) {
 					e.printStackTrace();
@@ -113,14 +115,20 @@ public class Shell implements IShell {
                 }
 
                 runningThread = (Thread)execute(tool);
-
-                printPrompt();
             }
         }
     }
 
     private void printPrompt() {
-        System.out.print(cwd.getAbsolutePath() + "> ");
+        try {
+            Shell.printPrompt(cwd.getCanonicalPath());
+        } catch (IOException e) {
+            // TODO:
+        }
+    }
+
+    private static void printPrompt(String cwd) {
+        System.out.print(cwd + "> ");
     }
 
 	@Override
@@ -134,9 +142,9 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
-		// TODO stdin, do piping
+        ((ATool)tool).setShell(this);
 		Thread t;
-        t = new Thread(new TaskExecution(this, tool, cwd, "", System.out));
+        t = new Thread(new TaskExecution(this, tool, "", System.out));
 		t.start();
 		return t;
 	}
