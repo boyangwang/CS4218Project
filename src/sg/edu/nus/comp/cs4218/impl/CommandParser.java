@@ -42,7 +42,7 @@ public class CommandParser {
                 return new LsTool(argList);
 
             case "move":
-                break;
+                return new MoveTool(argList);
 
             case "pwd":
                 return new PwdTool(argList);
