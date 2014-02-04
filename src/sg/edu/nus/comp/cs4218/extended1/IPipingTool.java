@@ -1,8 +1,10 @@
 package sg.edu.nus.comp.cs4218.extended1;
 
-import java.io.OutputStream;
-
 import sg.edu.nus.comp.cs4218.ITool;
+
+/**
+ * Do not modify this file
+ */
 
 /**
  * The pipe tools allows the output of one program to 
@@ -23,5 +25,4 @@ public interface IPipingTool extends ITool{
 	 */
 	String pipe(ITool from, ITool to);
 	String pipe(String stdout, ITool to);
-	
 }

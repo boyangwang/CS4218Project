@@ -9,10 +9,6 @@ import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
-/**
- * @author boyang
- *
- */
 public class ReverseTool extends ATool implements ITool {
 
 	/**

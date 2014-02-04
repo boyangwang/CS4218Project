@@ -2,6 +2,9 @@ package sg.edu.nus.comp.cs4218.extended2;
 
 import sg.edu.nus.comp.cs4218.ITool;
 
+/**
+ * Do not modify this file
+ */
 /*
  * 
  * uniq : Writes the unique lines in the given input. The input need not be sorted, but repeated input lines are detected only if they are adjacent.

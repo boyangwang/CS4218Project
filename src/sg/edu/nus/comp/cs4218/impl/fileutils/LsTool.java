@@ -36,9 +36,7 @@ public class LsTool extends ATool implements ILsTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
-        if (Thread.interrupted()) {
-            return null;
-        }
+        // Note that we do not check for Thread.interrupted() here as there is no blocking operation.
 
         if (this.args.length < 1) {
             return listDirectory(workingDir);
@@ -105,14 +103,6 @@ public class LsTool extends ATool implements ILsTool {
         }
 
         return true;
-    }
-
-    private void statusError() {
-        this.setStatusCode(1);
-    }
-
-    private void statusSuccess() {
-        this.setStatusCode(0);
     }
 
 	@Override

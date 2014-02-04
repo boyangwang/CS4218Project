@@ -24,10 +24,8 @@ public class PwdTool extends ATool implements IPwdTool{
 
     @Override
 	public String execute(IShell shell, File workingDir) {
-        if (Thread.interrupted()) {
-            return null;
-        }
+        // Note that we do not check for Thread.interrupted() here as there is no blocking operation.
 
-		return getStringForDirectory(workingDir);
+        return getStringForDirectory(workingDir);
     }
 }

@@ -1,20 +1,19 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import sg.edu.nus.comp.cs4218.IShell;
-import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.File;
 
-// TODO: Not finished!
-public class CatTool extends ATool implements ICatTool {
+public class EchoTool extends ATool implements IEchoTool {
     /**
      * Constructor
      *
      * @param arguments Arguments the tool is going to be executed with.
      * @param stdin
      */
-    public CatTool(String[] arguments, String stdin) {
+    public EchoTool(String[] arguments, String stdin) {
         super(arguments, stdin);
     }
 
@@ -27,15 +26,22 @@ public class CatTool extends ATool implements ICatTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
-        if (Thread.interrupted()) {
-            return null;
-        }
+        StringBuilder sb = new StringBuilder();
 
-        return null;
+        // Concatenates arguments into a space-separated list, terminated by a newline.
+        // If no arguments are given, this algorithm returns a newline.
+        for (String str : this.args) {
+            sb.append(str);
+            sb.append(" ");
+        }
+        sb.append("\n");
+
+        return sb.toString();
     }
 
+    // This method is not used.
     @Override
-    public String getStringForFile(File toRead) {
-        return null;
+    public String echo(String toEcho) {
+        return toEcho;
     }
 }

@@ -2,6 +2,9 @@ package sg.edu.nus.comp.cs4218.extended2;
 
 import sg.edu.nus.comp.cs4218.ITool;
 
+/**
+ * Do not modify this file
+ */
 /*
  * 
  * cut : prints a substring that is specified in a certain range

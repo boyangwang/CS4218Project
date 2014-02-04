@@ -23,14 +23,6 @@ public class CdTool extends ATool implements ICdTool {
         super(arguments, stdin);
     }
 
-    private void statusError() {
-        setStatusCode(1);
-    }
-
-    private void statusSuccess() {
-        setStatusCode(0);
-    }
-
     /**
      * Checks that the new directory is accessible and switchable.
      *
@@ -95,9 +87,7 @@ public class CdTool extends ATool implements ICdTool {
      */
     @Override
     public String execute(IShell shell, File workingDir) {
-        if (Thread.interrupted()) {
-            return null;
-        }
+        // Note that we do not check for Thread.interrupted() here as there is no blocking operation.
 
         final String nothing = "";
 
@@ -121,7 +111,6 @@ public class CdTool extends ATool implements ICdTool {
 
 	@Override
 	public String getStdin() {
-		// TODO Auto-generated method stub
-		return null;
+		return super.getStdin();
 	}
 }
