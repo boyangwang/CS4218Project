@@ -10,17 +10,19 @@ import java.io.File;
 import java.io.OutputStream;
 
 public class PipingTool extends ATool implements IPipingTool {
-	
 	private IShell shell;
 	private OutputStream pipeOutputStream;
 	private File pipeWorkingDirectory;
-	
-	public PipingTool(String[] arguments, String stdin) {
-		super(arguments, stdin);	
-		
-		this.pipeOutputStream = new ByteArrayOutputStream();
-	}
-	
+
+    /**
+     * Constructor
+     *
+     * @param arguments Arguments the tool is going to be executed with.
+     */
+    public PipingTool(String[] arguments) {
+        super(arguments);
+    }
+
     /**
      * Pipe the stdout of *from* to stdin of *to*
      * Currently the method is not in complete form
@@ -32,11 +34,12 @@ public class PipingTool extends ATool implements IPipingTool {
      */
 	@Override
     public String pipe(ITool from, ITool to) {
-		String output = from.execute(shell, shell.getWorkingDirectory());
+//		String output = from.execute(shell, shell.getWorkingDirectory());
 		
-        return pipe(output, to);
+//        return pipe(output, to);
+        return null;
     }
-	
+
 	/**
      * Pipe the stdout to stdin of *to*
      * 
@@ -46,33 +49,13 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String pipe(String stdout, ITool to) {
-    	to.setStdin(stdout);
-        String output = to.execute(shell, shell.getWorkingDirectory());
+//    	to.setStdin(stdout);
+//        String output = to.execute(shell, shell.getWorkingDirectory());
 
-    	return output;
+//    	return output;
+        return null;
     }
-    
-    /**
-     * 
-     */
-    @Override
-    public String execute(IShell shell, File workingDir) {
-    	this.pipeWorkingDirectory = workingDir;
-    	this.shell = shell;
-    	
-    	String[] commands = tokenizeStdinIntoCommands(this.args[0]);
-        
-    	ITool command;
-    	String output = this.stdin;
-    	
-    	for (int i=0; i<commands.length; i++) {
-    		command = shell.parse(commands[i]);
-    		output = pipe(output, command);
-    	}
-    	
-    	return output;
-    }
-    
+
     private String[] tokenizeStdinIntoCommands(String stdin) {
     	String[] commands = stdin.split("\\|");
     	for (int i=0; i<commands.length; i++) {
@@ -96,5 +79,30 @@ public class PipingTool extends ATool implements IPipingTool {
     
     private File getWorkingDirStub() {
     	return null;
+    }
+
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
+    @Override
+    public String execute(File workingDir, String stdin) {
+        this.pipeWorkingDirectory = workingDir;
+        this.shell = shell;
+
+        String[] commands = tokenizeStdinIntoCommands(this.args[0]);
+
+        ITool command;
+        String output = stdin;
+
+        for (int i=0; i<commands.length; i++) {
+            command = shell.parse(commands[i]);
+            output = pipe(output, command);
+        }
+
+        return output;
     }
 }

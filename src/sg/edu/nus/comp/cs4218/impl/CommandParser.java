@@ -2,8 +2,6 @@ package sg.edu.nus.comp.cs4218.impl;
 
 
 import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
-import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
 import java.util.Arrays;
@@ -14,8 +12,9 @@ public class CommandParser {
         if (containsPipeOperator(str)) {
             String[] args = new String[1];
             args[0] = str;
-            IPipingTool pipingTool = new PipingTool(args, "");
-            return pipingTool;
+//            IPipingTool pipingTool = new PipingTool(args, "");
+//            return pipingTool;
+            return null;
         }
 
         String[] tokens = tokenizeString(str);
