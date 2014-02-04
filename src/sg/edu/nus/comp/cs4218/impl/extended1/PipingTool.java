@@ -63,11 +63,9 @@ public class PipingTool extends ATool implements IPipingTool {
      * @return Output on stdout
      */
     @Override
-    public String execute(File workingDir, String stdin) {
-    	for (String s : args) {
-    		System.out.println(s);
-    	}
-    	
+    public String execute(File workingDir, String stdin) {    	
+    	this.pipeWorkingDirectory = workingDir;
+          	
     	ITool command;
     	String output = stdin;
     	
