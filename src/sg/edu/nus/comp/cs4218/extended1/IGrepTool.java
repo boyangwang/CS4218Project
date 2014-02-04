@@ -3,6 +3,10 @@ package sg.edu.nus.comp.cs4218.extended1;
 import sg.edu.nus.comp.cs4218.ITool;
 
 /**
+ * Do not modify this file
+ */
+
+/**
  * The grep command searches one or more input files 
  * for lines containing a match to a specified pattern. 
  * The grep tool must work on all characters in UTF-8 encoding. 

@@ -2,6 +2,9 @@ package sg.edu.nus.comp.cs4218.extended2;
 
 import sg.edu.nus.comp.cs4218.ITool;
 
+/**
+ * Do not modify this file
+ */
 /*
  * 
  * comm : Compares two sorted files line by line. With no options, produce three-column output. 
