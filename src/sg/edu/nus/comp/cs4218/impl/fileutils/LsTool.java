@@ -1,6 +1,5 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
@@ -24,33 +23,15 @@ public class LsTool extends ATool implements ILsTool {
      *
      * @param arguments Arguments the tool is going to be executed with.
      */
-    public LsTool(String[] arguments, String stdin) {
-        super(arguments, stdin);
-    }
-
-    /**
-     * Executes the tool with args provided in the constructor
-     *
-     * @param workingDir The current working directory.
-     * @return Output on stdout
-     */
-    @Override
-    public String execute(IShell shell, File workingDir) {
-        // Note that we do not check for Thread.interrupted() here as there is no blocking operation.
-
-        if (this.args.length < 1) {
-            return listDirectory(workingDir);
-        } else {
-            File specified = new File(this.args[0]);
-            return listDirectory(specified);
-        }
+    public LsTool(String[] arguments) {
+        super(arguments);
     }
 
     @Override
     public List<File> getFiles(File directory) {
         File[] files = directory.listFiles();
         if (files == null) {
-            return new ArrayList<File>(); // Return empty array.
+            return new ArrayList<>(); // Return empty array.
         } else {
             return Arrays.asList(files);
         }
@@ -105,8 +86,20 @@ public class LsTool extends ATool implements ILsTool {
         return true;
     }
 
-	@Override
-	public String getStdin() {
-		return this.stdin;
-	}
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
+    @Override
+    public String execute(File workingDir, String stdin) {
+        if (this.args.length < 1) {
+            return listDirectory(workingDir);
+        } else {
+            File specified = new File(this.args[0]);
+            return listDirectory(specified);
+        }
+    }
 }
