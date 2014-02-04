@@ -6,6 +6,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Changes CWD.
@@ -93,14 +94,21 @@ public class CdTool extends ATool implements ICdTool {
             return "";
         }
 
-        String candidatePath = this.args[0];
-        File candidateDir = changeDirectory(candidatePath);
-        if (candidateDir == null) {
+        if (parent == null) {
             statusError();
             return "";
         }
 
-        if (parent == null) {
+        String candidatePath;
+        try {
+            candidatePath = String.format("%s%s%s", parent.getWorkingDirectory().getCanonicalPath(), File.separator, this.args[0]);
+        } catch (IOException e) {
+            statusError();
+            return "";
+        }
+        File candidateDir = changeDirectory(candidatePath);
+
+        if (candidateDir == null) {
             statusError();
             return "";
         }
