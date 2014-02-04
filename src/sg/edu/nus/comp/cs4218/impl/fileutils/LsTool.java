@@ -95,11 +95,14 @@ public class LsTool extends ATool implements ILsTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
+        String result;
         if (this.args.length < 1) {
-            return listDirectory(workingDir);
+            result = listDirectory(workingDir);
+            return ((result != null) ? result : "");
         } else {
             File specified = new File(this.args[0]);
-            return listDirectory(specified);
+            result = listDirectory(specified);
         }
+        return ((result != null) ? result : "");
     }
 }
