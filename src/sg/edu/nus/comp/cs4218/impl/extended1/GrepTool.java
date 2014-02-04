@@ -37,8 +37,7 @@ public class GrepTool extends ATool implements IGrepTool {
     static Charset UTF_8 = StandardCharsets.UTF_8;
 
     private boolean count, onlyMatching, invertMatch;
-    private long afterContext, beforeContext, context;
-    private String patternString;
+    private int afterContext, beforeContext;
 
     public GrepTool(String[] arguments){
         super(arguments);
@@ -76,115 +75,48 @@ public class GrepTool extends ATool implements IGrepTool {
 
     @Override
     public String getOnlyMatchingLines(String pattern, String input) {
-        Pattern regex;
-        try {
-            regex = Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
-            statusError();
-            return e.toString();
-        }
-
-        Matcher matcher = null;
-        StringBuilder output = new StringBuilder();
-
-        Scanner scanner = new Scanner(input);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (matcher == null) {
-                matcher = regex.matcher(line);
-            } else {
-                matcher.reset(line);
-            }
-            if (matcher.find()) {
-                output.append(line);
-                output.append(System.lineSeparator());
-            }
-        }
-        scanner.close();
-
-        return output.toString();
+        reset();
+        return grep(pattern, input);
     }
 
     @Override
     public String getMatchingLinesWithTrailingContext(int option_A, String pattern, String input) {
-        return "";
+        reset();
+        afterContext = option_A;
+        return grep(pattern, input);
     }
 
     @Override
     public String getMatchingLinesWithLeadingContext(int option_B, String pattern, String input) {
-        return "";
+        reset();
+        beforeContext = option_B;
+        return grep(pattern, input);
     }
 
     @Override
     public String getMatchingLinesWithOutputContext(int option_C, String pattern, String input) {
-        return "";
+        reset();
+        beforeContext = afterContext = option_C;
+        return grep(pattern, input);
     }
 
     @Override
     public String getMatchingLinesOnlyMatchingPart(String pattern, String input) {
-        Pattern regex;
-        try {
-            regex = Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
-            statusError();
-            return e.toString();
-        }
-
-        Matcher matcher = null;
-        StringBuilder output = new StringBuilder();
-
-        Scanner scanner = new Scanner(input);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (matcher == null) {
-                matcher = regex.matcher(line);
-            } else {
-                matcher.reset(line);
-            }
-            while (matcher.find()) {
-                output.append(matcher.group());
-                output.append(System.lineSeparator());
-            }
-        }
-        scanner.close();
-
-        return output.toString();
+        reset();
+        onlyMatching = true;
+        return grep(pattern, input);
     }
 
     @Override
     public String getNonMatchingLines(String pattern, String input) {
-        Pattern regex;
-        try {
-            regex = Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
-            statusError();
-            return e.toString();
-        }
-
-        Matcher matcher = null;
-        StringBuilder output = new StringBuilder();
-
-        Scanner scanner = new Scanner(input);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (matcher == null) {
-                matcher = regex.matcher(line);
-            } else {
-                matcher.reset(line);
-            }
-            if (!matcher.find()) {
-                output.append(line);
-                output.append(System.lineSeparator());
-            }
-        }
-        scanner.close();
-
-        return output.toString();
+        reset();
+        invertMatch = true;
+        return grep(pattern, input);
     }
 
     @Override
     public String getHelp() {
-        return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]";
+        return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]" + System.lineSeparator();
     }
 
     @Override
@@ -194,51 +126,47 @@ public class GrepTool extends ATool implements IGrepTool {
         while (i < args.length && args[i].startsWith("-")) {
             String arg = args[i++];
 
-            if (arg.equals("-A")) {
-                if (i < args.length) {
+            switch (arg) {
+                case "-A":
+                case "-B":
+                case "-C":
                     try {
-                        afterContext = Long.parseLong(args[i++]);
-                        continue;
-                    } catch (NumberFormatException e) {}
-                }
-                statusError();
-                return "-A requires a number";
-            } else if (arg.equals("-B")) {
-                if (i < args.length) {
-                    try {
-                        beforeContext = Long.parseLong(args[i++]);
-                        continue;
-                    } catch (NumberFormatException e) {}
-                }
-                statusError();
-                return "-B requires a number";
-            } else if (arg.equals("-C")) {
-                if (i < args.length) {
-                    try {
-                        context = Long.parseLong(args[i++]);
-                        continue;
-                    } catch (NumberFormatException e) {}
-                }
-                statusError();
-                return "-C requires a number";
-            } else {
-                for (int j = 1; j < arg.length(); j++) {
-                    char flag = arg.charAt(j);
-                    switch (flag) {
-                        case 'c':
-                            count = true;
-                            break;
-                        case 'o':
-                            onlyMatching = true;
-                            break;
-                        case 'v':
-                            invertMatch = true;
-                            break;
-                        default:
-                            statusError();
-                            return "Illegal argument -" + flag;
+                        if (i < args.length) {
+                            throw new NumberFormatException();
+                        }
+                        int contextNum = Integer.parseInt(args[i++]);
+                        if (contextNum < 0) {
+                            throw new NumberFormatException();
+                        }
+                        if (arg.equals("-B") || arg.equals("-C")) {
+                            beforeContext = contextNum;
+                        }
+                        if (arg.equals("-A") || arg.equals("-C")) {
+                            afterContext = contextNum;
+                        }
+                    } catch (NumberFormatException e) {
+                        statusError();
+                        return arg + " requires a positive number" + System.lineSeparator();
                     }
-                }
+                    break;
+                default:
+                    for (int j = 1; j < arg.length(); j++) {
+                        char flag = arg.charAt(j);
+                        switch (flag) {
+                            case 'c':
+                                count = true;
+                                break;
+                            case 'o':
+                                onlyMatching = true;
+                                break;
+                            case 'v':
+                                invertMatch = true;
+                                break;
+                            default:
+                                statusError();
+                                return "Illegal argument -" + flag + System.lineSeparator();
+                        }
+                    }
             }
         }
 
@@ -247,38 +175,76 @@ public class GrepTool extends ATool implements IGrepTool {
             return getHelp();
         }
 
-        patternString = args[i++];
+        String pattern = args[i++];
 
         StringBuilder output = new StringBuilder();
 
         while (i < args.length) {
-            output.append(grepPath(args[i++]));
+            output.append(grepPath(pattern, args[i++]));
         }
 
         return output.toString();
     }
 
-    private String grepPath(String pathname) {
+    private void reset() {
+        count = onlyMatching = invertMatch = false;
+        afterContext = beforeContext = 0;
+    }
+
+    private String grepPath(String pattern, String pathname) {
         try {
             byte[] encoded = Files.readAllBytes(Paths.get(pathname));
-            return grep(UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
+            return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
         } catch (NoSuchFileException e) {
-            return "grep: " + pathname + ": No such file or directory";
+            return "grep: " + pathname + ": No such file or directory" + System.lineSeparator();
         } catch (IOException e) {
-            return "grep: " + pathname + ": " + e;
+            return "grep: " + pathname + ": " + e + System.lineSeparator();
         }
     }
 
-    private String grep(String input) {
+    private String grep(String pattern, String input) {
         if (count) {
-            return Integer.toString(getCountOfMatchingLines(patternString, input)) + System.lineSeparator();
+            return Integer.toString(getCountOfMatchingLines(pattern, input)) + System.lineSeparator();
         }
-        if (invertMatch) {
-            return getNonMatchingLines(patternString, input);
+
+        Pattern regex;
+        try {
+            regex = Pattern.compile(pattern);
+        } catch (PatternSyntaxException e) {
+            statusError();
+            return e.toString() + System.lineSeparator();
         }
-        if (onlyMatching) {
-            return getMatchingLinesOnlyMatchingPart(patternString, input);
+
+        Matcher matcher = null;
+        StringBuilder output = new StringBuilder();
+
+        Scanner scanner = new Scanner(input);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+
+            if (matcher == null) {
+                matcher = regex.matcher(line);
+            } else {
+                matcher.reset(line);
+            }
+
+            boolean matched = false;
+            while (matcher.find()) {
+                matched = true;
+                if (onlyMatching) {
+                    output.append(matcher.group());
+                } else {
+                    break;
+                }
+                output.append(System.lineSeparator());
+            }
+            if (matched != invertMatch) {
+                output.append(line);
+                output.append(System.lineSeparator());
+            }
         }
-        return getOnlyMatchingLines(patternString, input);
+        scanner.close();
+
+        return output.toString();
     }
 }
