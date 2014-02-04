@@ -37,6 +37,8 @@ public abstract class ATool {
 	protected void setStatusCode(int statusCode){
 		this.statusCode = statusCode;
 	}
-	
 
+    protected void statusError() {
+        setStatusCode(1);
+    }
 }
