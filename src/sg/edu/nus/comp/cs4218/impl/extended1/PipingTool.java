@@ -70,6 +70,9 @@ public class PipingTool extends ATool implements IPipingTool {
     	for (int i=0; i<commands.length; i++) {
     		command = shell.parse(commands[i]);
     		output = pipe(output, command);
+    		if (command.getStatusCode() != 0) {
+    			return output;
+    		}
     	}
     	
     	return output;
