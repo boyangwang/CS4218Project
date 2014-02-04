@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl;
 
 
 import sg.edu.nus.comp.cs4218.ITool;
+import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
@@ -45,6 +46,9 @@ public class CommandParser {
 
             case "pwd":
                 return new PwdTool(argList);
+
+            case "grep":
+                return new GrepTool(argList);
 
             default:
                 Logging.logger(System.out).writeLog(Logging.Error, "Cannot parse " + str);
