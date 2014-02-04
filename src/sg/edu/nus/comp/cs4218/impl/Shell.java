@@ -2,10 +2,6 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
-import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
-import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
-import sg.edu.nus.comp.cs4218.impl.extended1.ReverseTool;
-import sg.edu.nus.comp.cs4218.impl.fileutils.PwdTool;
 
 import java.io.File;
 import java.io.IOException;
