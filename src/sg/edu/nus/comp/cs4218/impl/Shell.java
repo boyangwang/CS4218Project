@@ -35,7 +35,7 @@ public class Shell implements IShell {
 		}
 
 		@Override
-		public void run() {			
+		public void run() {
 			handleOutput(_tool.execute(_cwd, _stdin));
 		    Shell.printPrompt(_cwd.getAbsolutePath());
 			
@@ -131,7 +131,7 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
-		// TODO stdin, do piping
+        ((ATool)tool).setShell(this);
 		Thread t;
         t = new Thread(new TaskExecution(this, tool, cwd, "", System.out));
 		t.start();

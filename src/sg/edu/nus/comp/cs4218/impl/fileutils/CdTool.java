@@ -88,8 +88,6 @@ public class CdTool extends ATool implements ICdTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        final String nothing = "";
-
         if (this.args.length < 1) {
             statusError();
             return "";
