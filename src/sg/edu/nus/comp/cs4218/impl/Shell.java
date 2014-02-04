@@ -29,16 +29,18 @@ public class Shell implements IShell {
 		String _stdin;
 		IShell _shell;
 		OutputStream _stdout;
+
 		public TaskExecution(IShell shell, ITool tool, File cwd, String stdin, OutputStream stdout){
 			_shell = shell;
 			_tool = tool;
 			_cwd = cwd;
 			_stdin = stdin;
 			_stdout = stdout;
-		}		
+		}
+
 		@Override
 		public void run() {			
-			handleOutput(_tool.execute(_shell, _cwd));
+			handleOutput(_tool.execute(_cwd, _stdin));
 			System.out.print(_cwd.getAbsolutePath() + "> ");
 			
 		}
