@@ -70,7 +70,7 @@ public class CommandParser {
     }
 
     private static String[] getArgumentList(String[] tokens) {
-        return Arrays.copyOfRange(tokens, 0, tokens.length - 2);
+        return Arrays.copyOfRange(tokens, 0, tokens.length - 1);
     }
 
     private static String getCommand(String[] tokens) {
