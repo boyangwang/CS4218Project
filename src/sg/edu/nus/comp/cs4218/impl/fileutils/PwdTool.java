@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import java.io.File;
+import java.io.IOException;
 
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.ATool;
@@ -24,8 +25,15 @@ public class PwdTool extends ATool implements IPwdTool{
 			setStatusCode(1);
 			return "Error: Cannot find working directory";
 		}
-		return directory.getAbsolutePath();
-	}
+
+        String canonicalPath;
+        try {
+            canonicalPath = directory.getCanonicalPath();
+        } catch (IOException e) {
+            canonicalPath = null;
+        }
+        return canonicalPath;
+    }
 
     /**
      * Executes the tool with args provided in the constructor
@@ -36,6 +44,13 @@ public class PwdTool extends ATool implements IPwdTool{
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        return String.format("%s\n", getStringForDirectory(workingDir));
+        String result = getStringForDirectory(workingDir);
+        if (result == null) {
+            statusError();
+            return "Unable to get working directory.";
+        }
+
+        statusSuccess();
+        return String.format("%s\n", result);
     }
 }
