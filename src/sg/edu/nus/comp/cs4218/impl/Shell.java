@@ -2,6 +2,7 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,7 +127,11 @@ public class Shell implements IShell {
 
 	@Override
 	public ITool parse(String commandline) {
-		return CommandParser.parse(commandline);
+		ITool tool = CommandParser.parse(commandline);
+		if (tool instanceof PipingTool) {
+			((PipingTool) tool).setShell(this);
+		}
+		return tool;
 	}
 
 	@Override
