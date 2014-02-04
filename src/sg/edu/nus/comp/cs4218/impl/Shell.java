@@ -163,7 +163,6 @@ public class Shell implements IShell {
     	return this.cwd;
     }
 
-    
     /**
      * Code for static stuff.
      */

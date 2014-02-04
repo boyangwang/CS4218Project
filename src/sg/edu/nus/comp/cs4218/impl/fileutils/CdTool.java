@@ -19,8 +19,8 @@ public class CdTool extends ATool implements ICdTool {
      *
      * @param arguments Arguments the tool is going to be executed with.
      */
-    public CdTool(String[] arguments, String stdin) {
-        super(arguments, stdin);
+    public CdTool(String[] arguments) {
+        super(arguments);
     }
 
     /**
@@ -80,37 +80,37 @@ public class CdTool extends ATool implements ICdTool {
     }
 
     /**
-     * Executes the cd tool.
+     * Executes the tool with args provided in the constructor
+     * TODO Use interface methods when implementing execute!
      *
-     * @param workingDir The current working directory.
-     * @return An empty string (no output is produced).
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
      */
     @Override
-    public String execute(IShell shell, File workingDir) {
-        // Note that we do not check for Thread.interrupted() here as there is no blocking operation.
-
+    public String execute(File workingDir, String stdin) {
         final String nothing = "";
 
         if (this.args.length < 1) {
             statusError();
-            return nothing;
+            return "";
         }
 
         String candidatePath = this.args[0];
         File candidateDir = changeDirectory(candidatePath);
         if (candidateDir == null) {
             statusError();
-            return nothing;
-        } else {
-        	 shell.changeWorkingDirectory(candidateDir);
+            return "";
         }
 
-        statusSuccess();
-        return nothing;
-    }
+        if (parent == null) {
+            statusError();
+            return "";
+        }
 
-	@Override
-	public String getStdin() {
-		return super.getStdin();
-	}
+        parent.changeWorkingDirectory(candidateDir);
+
+        statusSuccess();
+        return "";
+    }
 }

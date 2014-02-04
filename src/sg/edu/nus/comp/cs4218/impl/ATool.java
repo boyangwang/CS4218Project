@@ -3,8 +3,10 @@ package sg.edu.nus.comp.cs4218.impl;
 import java.io.File;
 
 public abstract class ATool {
+    private int statusCode = 0;
+
 	protected String[] args;
-	private int statusCode = 0;
+    protected Shell parent;
 	
 	/**
 	 * Constructor
@@ -40,5 +42,13 @@ public abstract class ATool {
 
     protected void statusError() {
         setStatusCode(1);
+    }
+
+    protected void statusSuccess() {
+        setStatusCode(0);
+    }
+
+    protected void setShell(Shell sh) {
+        parent = sh;
     }
 }
