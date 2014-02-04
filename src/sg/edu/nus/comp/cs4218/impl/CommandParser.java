@@ -30,7 +30,7 @@ public class CommandParser {
                 return new CdTool(argList);
 
             case "copy":
-                break;
+                return new CopyTool(argList);
 
             case "delete":
                 return new DeleteTool(argList);
