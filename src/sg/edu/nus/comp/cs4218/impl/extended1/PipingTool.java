@@ -4,6 +4,7 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.Logging;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +51,7 @@ public class PipingTool extends ATool implements IPipingTool {
     @Override
     public String pipe(String stdout, ITool to) {
         String output = to.execute(shell.getWorkingDirectory(), stdout);
-
+        
     	return output;
     }
 
@@ -77,10 +78,12 @@ public class PipingTool extends ATool implements IPipingTool {
     		command = this.shell.parse(args[i]);
     		
     		if (command == null) {
+    			Logging.logger(System.out).writeLog(5, args[i]);
     			setStatusCode(3);
     			return ERROR_MSG_NULL_CMD + System.lineSeparator();
     		}
-    		
+
+    		((ATool)command).setShell(this.shell);
     		output = pipe(output, command);
     		
     		if (command.getStatusCode() != 0) {

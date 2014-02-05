@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -131,7 +133,7 @@ public class GrepTool extends ATool implements IGrepTool {
                 case "-B":
                 case "-C":
                     try {
-                        if (i < args.length) {
+                        if (i >= args.length) {
                             throw new NumberFormatException();
                         }
                         int contextNum = Integer.parseInt(args[i++]);
@@ -202,6 +204,23 @@ public class GrepTool extends ATool implements IGrepTool {
         }
     }
 
+    public class CircularQueue<E> extends LinkedList<E> {
+        private int limit;
+
+        public CircularQueue(int limit) {
+            this.limit = limit;
+        }
+
+        @Override
+        public boolean add(E element) {
+            super.add(element);
+            while (size() > limit) {
+                super.remove();
+            }
+            return true;
+        }
+    }
+
     private String grep(String pattern, String input) {
         if (count) {
             return Integer.toString(getCountOfMatchingLines(pattern, input)) + System.lineSeparator();
@@ -217,6 +236,9 @@ public class GrepTool extends ATool implements IGrepTool {
 
         Matcher matcher = null;
         StringBuilder output = new StringBuilder();
+        CircularQueue<String> previousLines = new CircularQueue<>(beforeContext);
+        boolean printAfterContext = false;
+        int afterContextCount = 0;
 
         Scanner scanner = new Scanner(input);
         while (scanner.hasNextLine()) {
@@ -230,18 +252,40 @@ public class GrepTool extends ATool implements IGrepTool {
 
             boolean matched = false;
             while (matcher.find()) {
-                matched = true;
+                if (!matched) {
+                    matched = true;
+                    ListIterator<String> listIterator = previousLines.listIterator(afterContextCount);
+                    while (listIterator.hasNext()) {
+                        output.append(listIterator.next());
+                        output.append(System.lineSeparator());
+                    }
+                    if (afterContext > 0) {
+                        printAfterContext = true;
+                        afterContextCount = 0;
+                    }
+                }
+
                 if (onlyMatching) {
                     output.append(matcher.group());
+                    output.append(System.lineSeparator());
                 } else {
                     break;
                 }
-                output.append(System.lineSeparator());
             }
             if (matched != invertMatch) {
                 output.append(line);
                 output.append(System.lineSeparator());
             }
+            if (printAfterContext && (matched == invertMatch)) {
+                if (afterContextCount++ < afterContext) {
+                    output.append(line);
+                    output.append(System.lineSeparator());
+                } else {
+                    printAfterContext = false;
+                    afterContextCount = 0;
+                }
+            }
+            previousLines.add(line);
         }
         scanner.close();
 

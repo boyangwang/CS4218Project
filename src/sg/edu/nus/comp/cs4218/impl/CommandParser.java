@@ -69,19 +69,26 @@ public class CommandParser {
 		ArrayList<String> cmds = new ArrayList<String>();
 		StringBuilder curCmd = new StringBuilder();
 		boolean inQuotes = false;
+		char currentQuote = 0;
 		
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
-			if (c == '\"') {
-				inQuotes = !inQuotes;
-				continue;
-			}
 			
 			if (c == '|' && !inQuotes) {
 				cmds.add(curCmd.toString().trim());
 				curCmd = new StringBuilder();
 				continue;
 			}
+			
+			if (!inQuotes && (c == '\'' || c == '\"')) {
+				inQuotes = true;
+				currentQuote = c;
+			}
+			else if (inQuotes && (currentQuote == c)) {
+				inQuotes = false;
+				currentQuote = 0;
+			}
+			
 			
 			curCmd.append(c);
 		}

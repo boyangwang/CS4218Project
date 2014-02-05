@@ -134,9 +134,6 @@ public class Shell implements IShell {
 	@Override
 	public ITool parse(String commandline) {
 		ITool tool = CommandParser.parse(commandline);
-		if (tool instanceof PipingTool) {
-			((PipingTool) tool).setShell(this);
-		}
 		return tool;
 	}
 

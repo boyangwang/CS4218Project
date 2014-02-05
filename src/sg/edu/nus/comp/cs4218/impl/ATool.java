@@ -47,7 +47,7 @@ public abstract class ATool {
         setStatusCode(0);
     }
 
-    protected void setShell(Shell sh) {
+    public void setShell(Shell sh) {
         parent = sh;
     }
 }

@@ -12,7 +12,6 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 
 public class PwdToolTest {
-	//TODO Always test against the interface! 
 	private IPwdTool pwdtool; 
 	
 	@Before
