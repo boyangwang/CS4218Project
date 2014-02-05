@@ -36,7 +36,7 @@ public class PipingTool extends ATool implements IPipingTool {
 	@Override
     public String pipe(ITool from, ITool to) {
 		String output = from.execute(shell.getWorkingDirectory(), "");
-		
+
         return pipe(output, to);
     }
 
@@ -85,11 +85,11 @@ public class PipingTool extends ATool implements IPipingTool {
     		
     		if (command.getStatusCode() != 0) {
     			setStatusCode(1);
-    			return output + System.lineSeparator();
+    			return output;
     		}
     	}
     	
-    	return output + System.lineSeparator();
+    	return output;
     }
     
     public void setShell(Shell shell) {

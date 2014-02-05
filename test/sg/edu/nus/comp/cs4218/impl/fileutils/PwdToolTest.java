@@ -24,7 +24,12 @@ public class PwdToolTest {
 	public void after(){
 		pwdtool = null;
 	}
-	
+
+    /**
+     * MUT: getStringForDirectory()
+     * Checks that MUT returns system canonical path.
+     * @throws IOException
+     */
 	@Test
 	public void getStringForDirectoryTest() throws IOException {
 		//Test expected behavior
@@ -32,11 +37,16 @@ public class PwdToolTest {
 		String existsDirString = File.createTempFile("exists", "tmp").getParent();
 		File existsDir = new File(existsDirString);
 		String dirString = pwdtool.getStringForDirectory(existsDir);
-		assertTrue(dirString.equals(existsDirString));
+		assertTrue(dirString.equals(existsDir.getCanonicalPath()));
 		assertEquals(pwdtool.getStatusCode(), 0);
     }
 
 
+    /**
+     * MUT: getStringForDirectory()
+     * Program should not crash when attempting to print non-existent directory.
+     * @throws IOException
+     */
 	@Test
 	public void getStringForNonExistingDirectoryTest() throws IOException { 
 		//Test error-handling 1
@@ -45,8 +55,12 @@ public class PwdToolTest {
         pwdtool.getStringForDirectory(notExistsDir);
 		assertNotEquals(pwdtool.getStatusCode(), 0);
     }
-		
 
+    /**
+     * MUT: getStringForDirectory()
+     * Program should not crash when null File is supplied.
+     * @throws IOException
+     */
 	@Test
 	public void getStringForNullDirectoryTest() throws IOException { 
 		//Test error-handling 2
@@ -54,5 +68,45 @@ public class PwdToolTest {
 		assertNotEquals(pwdtool.getStatusCode(), 0);
 		
 	}
+
+    /**
+     * MUT: getStringForDirectory()
+     * Directory for "." should be the current working directory.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForCurrentDirectoryTest() throws IOException {
+        String path = ".";
+        String result = pwdtool.getStringForDirectory(new File(path));
+        String expected = new File(System.getProperty("user.dir")).getCanonicalPath();
+        assertEquals(result, expected);
+        assertEquals(pwdtool.getStatusCode(), 0);
+    }
+
+    /**
+     * MUT: getStringForDirectory()
+     * Program should not crash when the supplied directory is a file.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForFileTest() throws IOException {
+        File f = new File("file.txt");
+        pwdtool.getStringForDirectory(f);
+        assertNotEquals(pwdtool.getStatusCode(), 0);
+        f.delete();
+    }
+
+    /**
+     * MUT: getStringForDirectory()
+     * Program should not crash when an invalid path is supplied.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForInvalidPathTest() throws IOException {
+        File f = new File("!nvali$d.p}th\\");
+        String result = pwdtool.getStringForDirectory(f);
+        assertNull(result);
+        assertNotEquals(pwdtool.getStatusCode(), 0);
+    }
 
 }

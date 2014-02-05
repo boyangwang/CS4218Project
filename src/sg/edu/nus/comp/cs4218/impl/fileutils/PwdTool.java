@@ -22,8 +22,8 @@ public class PwdTool extends ATool implements IPwdTool{
 	public String getStringForDirectory(File directory) {
 		//Error Handling
 		if (directory == null || !directory.exists() || !directory.isDirectory()) {
-			setStatusCode(1);
-			return "Error: Cannot find working directory";
+            statusError();
+			return null;
 		}
 
         String canonicalPath;
@@ -31,7 +31,10 @@ public class PwdTool extends ATool implements IPwdTool{
             canonicalPath = directory.getCanonicalPath();
         } catch (IOException e) {
             canonicalPath = null;
+            statusError();
         }
+
+        statusSuccess();
         return canonicalPath;
     }
 

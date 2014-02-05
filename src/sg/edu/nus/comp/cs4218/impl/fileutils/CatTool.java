@@ -4,7 +4,6 @@ import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 // TODO: Not finished!
@@ -62,7 +61,7 @@ public class CatTool extends ATool implements ICatTool {
         for (String arg : this.args) {
             if (Thread.interrupted()) {
                 statusError();
-                return String.format("%s\n", sb.toString());
+                return sb.toString();
             }
             switch (arg) {
                 case "-":
@@ -73,11 +72,11 @@ public class CatTool extends ATool implements ICatTool {
                     if (result == null) {
                         statusError();
                         sb.append(String.format("Error: Could not read file: %s", arg));
-                        return String.format("%s\n", sb.toString());
+                        return sb.toString();
                     }
                     sb.append(result);
             }
         }
-        return String.format("%s\n", sb.toString());
+        return sb.toString();
     }
 }
