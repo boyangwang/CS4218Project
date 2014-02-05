@@ -29,16 +29,34 @@ public class LsTool extends ATool implements ILsTool {
 
     @Override
     public List<File> getFiles(File directory) {
+        statusError();
+        if (directory == null) {
+            return null;
+        }
+
+        if (!validDirectory(directory)) {
+            return null;
+        }
+
         File[] files = directory.listFiles();
         if (files == null) {
-            return new ArrayList<>(); // Return empty array.
+            return null;
         } else {
+            statusSuccess();
             return Arrays.asList(files);
         }
     }
 
     @Override
     public String getStringForFiles(List<File> files) {
+        if (files == null) {
+            return null;
+        }
+
+        if (files.isEmpty()) {
+            return "\n";
+        }
+
         StringBuilder sb = new StringBuilder();
         for (File f : files) {
             sb.append(String.format("%s\n", f.getName()));
