@@ -18,6 +18,7 @@ public class EchoTool extends ATool implements IEchoTool {
     // This method is not used.
     @Override
     public String echo(String toEcho) {
+        setStatusCode(((toEcho == null) ? 1 : 0));
         return toEcho;
     }
 
