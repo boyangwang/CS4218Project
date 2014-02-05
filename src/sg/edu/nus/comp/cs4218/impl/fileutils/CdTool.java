@@ -69,6 +69,7 @@ public class CdTool extends ATool implements ICdTool {
     @Override
     public File changeDirectory(String newDirectory) {
         if (newDirectory == null) {
+            statusError();
             return null;
         }
 
@@ -82,9 +83,11 @@ public class CdTool extends ATool implements ICdTool {
 
         File dir = new File(candidatePath);
         if (canChangeDirectoryTo(dir)) {
+            statusSuccess();
             return dir;
         }
 
+        statusError();
         return null;
     }
 
