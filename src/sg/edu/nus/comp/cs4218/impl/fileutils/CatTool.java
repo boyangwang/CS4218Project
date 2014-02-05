@@ -6,7 +6,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-// TODO: Not finished!
 public class CatTool extends ATool implements ICatTool {
     /**
      * Constructor
@@ -19,7 +18,11 @@ public class CatTool extends ATool implements ICatTool {
 
     @Override
     public String getStringForFile(File toRead) {
-        if (toRead.exists() && toRead.canRead()) {
+        if (toRead == null) {
+            statusError();
+            return null;
+        }
+        if (toRead.exists() && toRead.isFile() && toRead.canRead()) {
             try {
                 FileInputStream fis = new FileInputStream(toRead);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
