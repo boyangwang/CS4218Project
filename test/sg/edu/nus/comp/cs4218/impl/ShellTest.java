@@ -24,56 +24,58 @@ public class ShellTest {
 	public void tearDown() throws Exception {
 	}
 
-	/*TODO:
-	 * test execute, parse and stop
-	 */
-	/*TODO:
-	 * 
-	 */
 	@Test
 	public void parseCommandLeadingSpaces() {
+		sh = new Shell();
 		String cmd = "  echo you shall not pass  ";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
 	}
 	@Test
 	public void parseCommandWrongCase() {
+		sh = new Shell();
 		String cmd = "eCho you shall not pass";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
 	}
 	@Test
 	public void parseCommandWrongQuote() {
+		sh = new Shell();
 		String cmd = "echo 'you shall not pass ";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
 	}
 	@Test
 	public void parseCommandWrongDQuote() {
+		sh = new Shell();
 		String cmd = "echo \"you shall not pass ";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
 	}
 	@Test
 	public void parseCommandWrongBQuote() {
+		sh = new Shell();
 		String cmd = "echo `you shall not pass ";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
 	}
 	@Test
 	public void parseCommandPipe(){
+		sh = new Shell();
 		String cmd = " echo pipe | cat";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IPipingTool);
 	}
 	@Test
 	public void parseCommandWithQuote(){
+		sh = new Shell();
 		String cmd = "echo `don't seperate | echo us`";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
 	}
 	@Test
 	public void parseNormalCommand() {
+		sh = new Shell();
 		String cmd = "echo you shall not pass";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
