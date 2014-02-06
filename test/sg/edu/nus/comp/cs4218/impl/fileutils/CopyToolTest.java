@@ -134,6 +134,26 @@ public class CopyToolTest {
     }
 
     /**
+     * Copy does not support directories.
+     * Program should not crash, and directory should not be copied.
+     * @throws IOException
+     */
+    @Test
+    public void sourceIsDirectory() throws IOException {
+        File f = new File("testDir");
+        f.mkdir();
+
+        File dest = new File("testDest");
+        boolean result = copyTool.copy(f, dest);
+        assertFalse(dest.exists());
+        assertFalse(result);
+        assertNotEquals(copyTool.getStatusCode(), 0);
+
+        f.delete();
+        dest.delete();
+    }
+
+    /**
      * MUT: copy()
      * Copying empty file should result in destination being created.
      */
@@ -212,91 +232,5 @@ public class CopyToolTest {
         dest.setWritable(true);
         dest.delete();
         f.delete();
-    }
-
-    /**
-     * MUT: copy()
-     * Empty directories should be copied.
-     */
-    @Test
-    public void emptyDirectory() {
-        File f = new File("testDir");
-        f.mkdir();
-
-        File dest = new File("copiedDir");
-        boolean result = copyTool.copy(f, dest);
-        assertTrue(dest.exists());
-        assertTrue(dest.isDirectory());
-        assertTrue(result);
-        assertEquals(copyTool.getStatusCode(), 0);
-    }
-
-    /**
-     * MUT: copy()
-     * Non-empty directories should have their files copied.
-     * @throws IOException
-     */
-    @Test
-    public void nonEmptyDirectory() throws IOException {
-        File dir = new File("testDir");
-        dir.mkdir();
-
-        File testFile = new File("testDir/testFile");
-        testFile.createNewFile();
-        Random rand = new Random();
-        byte[] ref = new byte[131072];
-        FileOutputStream fos = new FileOutputStream(testFile);
-        for (int i = 0; i < 131072; i++) {
-            byte b = (byte)rand.nextInt(255);
-            fos.write(b);
-            ref[i] = b;
-        }
-        fos.close();
-
-        File dest = new File("testDest");
-        boolean result = copyTool.copy(dir, dest);
-        assertTrue(dir.exists());
-        assertTrue(dir.isDirectory());
-        assertTrue(testFile.exists());
-        assertTrue(compareByteArrays(fileGetContents(testFile), ref));
-        assertTrue(result);
-        assertEquals(copyTool.getStatusCode(), 0);
-
-        (new DeleteTool(new String[0])).delete(dir);
-    }
-
-    /**
-     * Non-readable files in a directory should not be copied.
-     * Program should not crash.
-     *
-     * Note: What happens to other files in the directory is not specified.
-     *
-     * @throws IOException
-     */
-    @Test
-    public void directoryWithNonReadable() throws IOException {
-        File dir = new File("testDir");
-        dir.mkdir();
-
-        File testFile = new File("testDir/testFile");
-        testFile.createNewFile();
-        Random rand = new Random();
-        byte[] ref = new byte[131072];
-        FileOutputStream fos = new FileOutputStream(testFile);
-        for (int i = 0; i < 131072; i++) {
-            byte b = (byte)rand.nextInt(255);
-            fos.write(b);
-            ref[i] = b;
-        }
-        fos.close();
-        testFile.setReadable(false);
-
-        File dest = new File("testDest");
-        boolean result = copyTool.copy(dir, dest);
-        assertFalse(testFile.exists());
-        assertFalse(result);
-        assertNotEquals(copyTool.getStatusCode(), 0);
-
-        (new DeleteTool(new String[0])).delete(dir);
     }
 }
