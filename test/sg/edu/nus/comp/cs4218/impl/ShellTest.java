@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.cs4218.impl.fileutils;
+package sg.edu.nus.comp.cs4218.impl;
 
 import static org.junit.Assert.*;
 
@@ -15,31 +15,6 @@ import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
 public class ShellTest {
-	private class TestInterruptTool implements ITool{
-		int _status;
-		public TestInterruptTool(){
-			_status = 1;
-		}
-		@Override
-		public String execute(File workingDir, String stdin) {
-			try {
-				System.out.println("Sleeping");
-				Thread.sleep(10*1000); //sleep 10 sec
-			} catch (InterruptedException e) {
-				_status = 0;
-				return null;
-			}
-			_status = 0;
-			return null;
-		}
-
-		@Override
-		public int getStatusCode() {
-			// TODO Auto-generated method stub
-			return _status;
-		}
-		
-	}
 	IShell sh;
 	@Before
 	public void setUp() throws Exception {
@@ -116,21 +91,6 @@ public class ShellTest {
 		sh = new Shell();
 		Runnable executor = sh.execute(null);
 		assertEquals(null,executor);
-	}
-	@Test
-	public void stopThread(){
-		sh = new Shell();
-		ITool tool = new TestInterruptTool();
-
-		Runnable executor = sh.execute(tool);
-		sh.stop(executor);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertEquals(0,tool.getStatusCode());
 	}
 	
 }
