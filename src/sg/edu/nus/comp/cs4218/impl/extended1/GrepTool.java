@@ -36,7 +36,7 @@ import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
  *   -help : Brief information about supported options
  */
 public class GrepTool extends ATool implements IGrepTool {
-    static Charset UTF_8 = StandardCharsets.UTF_8;
+    static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     private boolean count, onlyMatching, invertMatch;
     private int afterContext, beforeContext;

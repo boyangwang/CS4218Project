@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandParser {
-	private static char DELIMITER_CHAR = ' ';
-	private static char QUOTE_CHAR = '\'';
-	private static char DQUOTE_CHAR = '"';
-	private static char BQUOTE_CHAR = '`';
-	private static char PIPE_CHAR = '|';
-    public static ITool parse(String str) {
-    	str = str.trim();
+	private final static char DELIMITER_CHAR = ' ';
+	private final static  char QUOTE_CHAR = '\'';
+	private final static char DQUOTE_CHAR = '"';
+	private final static char BQUOTE_CHAR = '`';
+	private final static char PIPE_CHAR = '|';
+    public static ITool parse(String rawInput) {
+    	String trimmedCmd = rawInput.trim();
         // at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
-    	if (!verifyCommand(str)) {
+    	if (!verifyCommand(trimmedCmd)) {
     		return null;
     	}
-    	String[] argList = tokenizePipeCommands(str);
+    	String[] argList = tokenizePipeCommands(trimmedCmd);
         if (argList != null) {
             PipingTool pipingTool = new PipingTool(argList);
             return pipingTool;
         }
 
-        String[] tokens = tokenizeString(str);
+        String[] tokens = tokenizeString(trimmedCmd);
         argList = getArgumentList(tokens);
         String cmd = getCommand(tokens);
 
@@ -60,7 +60,7 @@ public class CommandParser {
                 return new GrepTool(argList);
 
             default:
-                Logging.logger(System.out).writeLog(Logging.Error, "Cannot parse " + str);
+                Logging.logger(System.out).writeLog(Logging.ERROR, "Cannot parse " + trimmedCmd);
                 return null;
         }
     }

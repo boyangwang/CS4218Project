@@ -66,18 +66,16 @@ public class CatTool extends ATool implements ICatTool {
                 statusError();
                 return sb.toString();
             }
-            switch (arg) {
-                case "-":
-                    sb.append(stdin);
-                    break;
-                default:
-                    String result = getStringForFile(new File(arg));
-                    if (result == null) {
-                        statusError();
-                        sb.append(String.format("Error: Could not read file: %s", arg));
-                        return sb.toString();
-                    }
-                    sb.append(result);
+            if(arg=="-"){
+            	sb.append(stdin);
+            }else{
+            	String result = getStringForFile(new File(arg));
+            	if (result == null) {
+            		statusError();
+            		sb.append(String.format("Error: Could not read file: %s", arg));
+            		return sb.toString();
+            	}
+            	sb.append(result);
             }
         }
         return sb.toString();

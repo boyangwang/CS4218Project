@@ -176,7 +176,7 @@ public class Shell implements IShell {
      * Code for static stuff.
      */
 	public static void main(String[] args){
-        Logging.logger(System.out).setLevel(Logging.All);
+        Logging.logger(System.out).setLevel(Logging.ALL);
 		Shell sh = new Shell();
         sh.run();
 	}
