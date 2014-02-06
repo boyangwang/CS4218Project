@@ -94,6 +94,10 @@ public class Shell implements IShell {
             if (cmd.equals("ctrl-z")) {
                 if (runningThread != null && runningThread.isAlive()) {
                     stop(runningThread);
+                    try {
+						runningThread.join();
+					} catch (InterruptedException e) {
+					}
                 }
             } else {
                 ITool tool = parse(cmd);
