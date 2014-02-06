@@ -1,17 +1,15 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
+
+import static org.junit.Assert.*;
 
 public class CopyToolTest {
     ICopyTool copyTool;

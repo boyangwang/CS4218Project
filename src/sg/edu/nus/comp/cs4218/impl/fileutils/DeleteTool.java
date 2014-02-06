@@ -29,9 +29,28 @@ public class DeleteTool extends ATool implements IDeleteTool {
      */
     @Override
     public boolean delete(File toDelete) {
+        statusError();
+
         if (canDeleteFile(toDelete)) {
-            toDelete.delete();
-            return true;
+            if (toDelete.isDirectory()) {
+                File[] files = toDelete.listFiles();
+                if (files == null) {
+                    return false;
+                }
+
+                for (File f : files){
+                    boolean writable = f.canWrite();
+                    boolean result = f.delete();
+                    if (!result) {
+                        return false;
+                    }
+                }
+            }
+
+            if (toDelete.delete()) {
+                statusSuccess();
+                return true;
+            }
         }
 
         return false;
