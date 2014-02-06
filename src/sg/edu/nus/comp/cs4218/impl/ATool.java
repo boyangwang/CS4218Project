@@ -3,7 +3,7 @@ package sg.edu.nus.comp.cs4218.impl;
 import java.io.File;
 
 public abstract class ATool {
-    private int statusCode = -1;
+    private int statusCode = 0;
 
 	protected String[] args;
     protected Shell parent;

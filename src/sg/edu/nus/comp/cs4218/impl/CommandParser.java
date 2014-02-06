@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class CommandParser {
 	private final static char DELIMITER_CHAR = ' ';
-	private final static  char QUOTE_CHAR = '\'';
+	private final static char QUOTE_CHAR = '\'';
 	private final static char DQUOTE_CHAR = '"';
 	private final static char BQUOTE_CHAR = '`';
 	private final static char PIPE_CHAR = '|';
