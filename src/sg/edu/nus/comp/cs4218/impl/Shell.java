@@ -106,15 +106,10 @@ public class Shell implements IShell {
                 }
 
                 // Block until previous command has finished execution.
-                if (runningThread != null) {
-                    try {
-                        runningThread.join();
-                    } catch (InterruptedException e) {
-                        // How now brown cow?
-                    }
+                if (runningThread == null || !runningThread.isAlive()) {
+                	runningThread = (Thread)execute(tool);
                 }
 
-                runningThread = (Thread)execute(tool);
             }
         }
     }
