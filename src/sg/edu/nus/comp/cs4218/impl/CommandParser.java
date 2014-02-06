@@ -132,11 +132,10 @@ public class CommandParser {
 	}
 
     private static String[] tokenizeString(String str) {
-    	ArrayList<String> out = null;
+    	ArrayList<String> out = new ArrayList<String>();
     	if (str!=null){
     		char currentQuote = 0;
     		boolean isInQuote = false;
-    		out = new ArrayList<String>();
     		StringBuilder sb = new StringBuilder();
     		for (int i = 0; i < str.length(); i++){
     			char c = str.charAt(i);
@@ -165,7 +164,7 @@ public class CommandParser {
     		}
     	}
 
-    	return out.size()==0?null:out.toArray(new String[out.size()]);
+    	return out.toArray(new String[out.size()]);
     }
 
     private static String[] getArgumentList(String[] tokens) {
