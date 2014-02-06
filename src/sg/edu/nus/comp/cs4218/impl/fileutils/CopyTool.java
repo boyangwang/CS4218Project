@@ -33,9 +33,40 @@ public class CopyTool extends ATool implements ICopyTool {
             return false;
         }
 
+        if (from.isDirectory()) {
+            to.mkdir();
+            File[] files = from.listFiles();
+            for (File f : files) {
+                try {
+                    String dst = String.format("%s%s%s", to.getCanonicalPath(), File.separator, f.getName());
+                    File dstFile = new File(dst);
+                    if (!dstFile.canRead()) {
+                        return false;
+                    }
+
+                    boolean result = (new CopyTool(new String[0])).copy(f, new File(dst));
+                    if (!result) {
+                        return false;
+                    }
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+            statusSuccess();
+            return true;
+        } else if (from.isFile()) {
+            if (copyf(from, to)) {
+                statusSuccess();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean copyf(File src, File dst) {
         try {
-            FileInputStream fis = new FileInputStream(from);
-            FileOutputStream fos = new FileOutputStream(to);
+            FileInputStream fis = new FileInputStream(src);
+            FileOutputStream fos = new FileOutputStream(dst);
 
             byte[] buffer = new byte[BUF_SIZE];
             int read;
@@ -46,17 +77,12 @@ public class CopyTool extends ATool implements ICopyTool {
             fis.close();
             fos.close();
 
-            statusSuccess();
             return true;
         } catch (FileNotFoundException e) {
-            cleanup(to);
-
-            statusError();
+            cleanup(dst);
             return false;
         } catch (IOException e) {
-            cleanup(to);
-
-            statusError();
+            cleanup(dst);
             return false;
         }
     }
@@ -70,10 +96,6 @@ public class CopyTool extends ATool implements ICopyTool {
     private boolean isValidSource(File candidate) {
         try {
             if (!candidate.exists()) {
-                return false;
-            }
-
-            if (!candidate.isFile()) {
                 return false;
             }
 
