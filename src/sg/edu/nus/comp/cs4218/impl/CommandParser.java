@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class CommandParser {
 	private final static char DELIMITER_CHAR = ' ';
-	private final static  char QUOTE_CHAR = '\'';
+	private final static char QUOTE_CHAR = '\'';
 	private final static char DQUOTE_CHAR = '"';
 	private final static char BQUOTE_CHAR = '`';
 	private final static char PIPE_CHAR = '|';
@@ -152,7 +152,7 @@ public class CommandParser {
     			}
     			if (c==DELIMITER_CHAR && !isInQuote){
     				if(sb.length()>0){
-    					out.add(sb.toString());
+    					out.add(sb.toString().trim());
     				}
     				sb = new StringBuilder();
     			}else{
@@ -160,7 +160,7 @@ public class CommandParser {
     			}
     		}
     		if(sb.length()>0){
-    			out.add(sb.toString());
+    			out.add(sb.toString().trim());
     		}
     	}
 

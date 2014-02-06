@@ -39,8 +39,13 @@ public class EchoTool extends ATool implements IEchoTool {
             sb.append(str);
             sb.append(" ");
         }
+        
+        if (sb.length() >=1 && sb.charAt(sb.length() - 1) == ' ') {
+        	sb.deleteCharAt(sb.length() - 1);
+        }
+        
         sb.append("\n");
-
+        
         return sb.toString();
     }
 }
