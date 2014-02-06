@@ -93,5 +93,13 @@ public class ShellTest {
 		Runnable executor = sh.execute(null);
 		assertEquals(null,executor);
 	}
+	@Test 
+	public void executeNullPipe(){
+		sh = new Shell();
+		ITool tool = sh.parse("|");
+		//TODO: 
+		Runnable executor = sh.execute(tool);
+		assertNotEquals(null,executor);
+	}
 	
 }
