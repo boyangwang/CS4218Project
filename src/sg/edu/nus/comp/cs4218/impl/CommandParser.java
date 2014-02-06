@@ -10,8 +10,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CommandParser {
+	private static char DELIMITER_CHAR = ' ';
+	private static char QUOTE_CHAR = '\'';
+	private static char DQUOTE_CHAR = '"';
+	private static char BQUOTE_CHAR = '`';
+	private static char PIPE_CHAR = '|';
     public static ITool parse(String str) {
+    	str = str.trim();
         // at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
+    	if (!verifyCommand(str)) {
+    		return null;
+    	}
     	String[] argList = tokenizePipeCommands(str);
         if (argList != null) {
             PipingTool pipingTool = new PipingTool(argList);
@@ -56,7 +65,29 @@ public class CommandParser {
         }
     }
 
-    /**
+    //to return true if the command has proper closing quotes
+    //return false if it fails above test(s)
+    private static boolean verifyCommand(String cmd) {
+    	boolean isInQuote = false;
+    	char currentQuote = 0;
+    	for(int i=0;i<cmd.length();i++){
+    		char c = cmd.charAt(i);
+    		if (isInQuote){
+    			if(currentQuote == c){
+    				currentQuote = 0;
+    				isInQuote = false;
+    			}
+    		}else{
+    			if (c==BQUOTE_CHAR || c== QUOTE_CHAR || c== DQUOTE_CHAR){
+    				currentQuote = c;
+    				isInQuote = true;
+    			}
+    		}
+    	}
+		return !isInQuote;
+	}
+
+	/**
      * Parse inputString and returns an array of commands string if the control should be
      * passed to PipingTool
      *
@@ -74,21 +105,19 @@ public class CommandParser {
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
 			
-			if (c == '|' && !inQuotes) {
+			if (c == PIPE_CHAR && !inQuotes) {
 				cmds.add(curCmd.toString().trim());
 				curCmd = new StringBuilder();
 				continue;
 			}
 			
-			if (!inQuotes && (c == '\'' || c == '\"')) {
+			if (!inQuotes && (c == DQUOTE_CHAR || c==QUOTE_CHAR || c==BQUOTE_CHAR)) {
 				inQuotes = true;
 				currentQuote = c;
-			}
-			else if (inQuotes && (currentQuote == c)) {
+			} else if (inQuotes && (currentQuote == c)) {
 				inQuotes = false;
 				currentQuote = 0;
 			}
-			
 			
 			curCmd.append(c);
 		}
@@ -103,7 +132,40 @@ public class CommandParser {
 	}
 
     private static String[] tokenizeString(String str) {
-        return str.split(" ");
+    	ArrayList<String> out = null;
+    	if (str!=null){
+    		char currentQuote = 0;
+    		boolean isInQuote = false;
+    		out = new ArrayList<String>();
+    		StringBuilder sb = new StringBuilder();
+    		for (int i = 0; i < str.length(); i++){
+    			char c = str.charAt(i);
+    			if (isInQuote){
+    				if (currentQuote == c){
+    					currentQuote = 0; 
+    					isInQuote = false;
+    				}
+    			}else{
+    				if (c==QUOTE_CHAR || c==DQUOTE_CHAR || c==BQUOTE_CHAR){
+    					currentQuote = c;
+    					isInQuote = true;
+    				}
+    			}
+    			if (c==DELIMITER_CHAR && !isInQuote){
+    				if(sb.length()>0){
+    					out.add(sb.toString());
+    				}
+    				sb = new StringBuilder();
+    			}else{
+    				sb.append(c);
+    			}
+    		}
+    		if(sb.length()>0){
+    			out.add(sb.toString());
+    		}
+    	}
+
+    	return out.size()==0?null:out.toArray(new String[out.size()]);
     }
 
     private static String[] getArgumentList(String[] tokens) {
