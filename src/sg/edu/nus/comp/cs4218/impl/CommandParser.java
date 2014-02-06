@@ -152,7 +152,7 @@ public class CommandParser {
     			}
     			if (c==DELIMITER_CHAR && !isInQuote){
     				if(sb.length()>0){
-    					out.add(sb.toString());
+    					out.add(sb.toString().trim());
     				}
     				sb = new StringBuilder();
     			}else{
@@ -160,7 +160,7 @@ public class CommandParser {
     			}
     		}
     		if(sb.length()>0){
-    			out.add(sb.toString());
+    			out.add(sb.toString().trim());
     		}
     	}
 

@@ -44,16 +44,22 @@ public class PipingToolTest {
 	 */
 	@Test
 	public void testExecute() {
-		pipingTool = new PipingTool(new String[]{});
 		Shell shell = new Shell();
-		pipingTool.setShell(shell);
-		
 		String[] args;
 		String output;
 		
 		args = new String[]{"echo foo", "cat -"};
+		pipingTool = new PipingTool(args);
+		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
-		assertEquals("foo", output);
+		assertEquals("foo\n", output);
+		
+		args = new String[]{"echo foo", "echo bar", "cat -"};
+		pipingTool = new PipingTool(args);
+		pipingTool.setShell(shell);
+		output = pipingTool.execute(shell.getWorkingDirectory(), "");
+		assertEquals("bar\n", output);
+		
 		
 	}
 

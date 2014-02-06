@@ -66,7 +66,8 @@ public class CatTool extends ATool implements ICatTool {
                 statusError();
                 return sb.toString();
             }
-            if(arg=="-"){
+            
+            if(arg.equals("-")){
             	sb.append(stdin);
             }else{
             	String result = getStringForFile(new File(arg));
