@@ -139,6 +139,9 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
+		if (tool==null || !(tool instanceof ATool)){
+			return null;
+		}
         ((ATool)tool).setShell(this);
 		Thread t;
         t = new Thread(new TaskExecution(this, tool, "", System.out));
