@@ -131,6 +131,12 @@ public class CommandParser {
 		}
 	}
 
+	/**
+     * Parse inputString and array of token strings
+     *
+     * @param str the user input string
+     * @return array of parsed tokens, might be empty
+     */
     private static String[] tokenizeString(String str) {
     	ArrayList<String> out = new ArrayList<String>();
     	if (str!=null){

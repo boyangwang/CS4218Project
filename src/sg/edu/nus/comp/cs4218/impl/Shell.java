@@ -34,6 +34,9 @@ public class Shell implements IShell {
 		}
 
 		@Override
+		/**
+		 * To run start executing a tool in another thread
+		 */
 		public void run() {
 			handleOutput(tool.execute(shell.getWorkingDirectory(), stdin));
             try {
@@ -44,6 +47,9 @@ public class Shell implements IShell {
 
         }
 		
+		/**
+		 * This function decides to print out or piping output to another tool
+		 */
 		public void handleOutput(String output) {
 			if (stdout instanceof PrintStream) {
 				((PrintStream) stdout).print(output);
@@ -118,6 +124,9 @@ public class Shell implements IShell {
         }
     }
 
+	/**
+	 * Print the shell prompt
+	 */
     private void printPrompt() {
         try {
             Shell.printPrompt(cwd.getCanonicalPath());
@@ -131,8 +140,12 @@ public class Shell implements IShell {
     }
 
 	@Override
-	public ITool parse(String commandline) {
-		ITool tool = CommandParser.parse(commandline);
+	/**
+	 * Parse command line input
+	 * @return: ITool or null if command is invalid
+	 */
+	public ITool parse(String cmd) {
+		ITool tool = CommandParser.parse(cmd);
 		return tool;
 	}
 
