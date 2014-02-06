@@ -4,6 +4,9 @@ import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.StandardCopyOption;
 
 public class CopyTool extends ATool implements ICopyTool {
     private final int BUF_SIZE = 16384;
@@ -28,35 +31,19 @@ public class CopyTool extends ATool implements ICopyTool {
     public boolean copy(File from, File to) {
         statusError();
 
-        boolean canCopy = (isValidSource(from) && isValidDestination(to));
-        if (!canCopy) {
+        if (from == null || to == null) {
+            return false;
+        }
+
+        if (!to.canWrite()) {
             return false;
         }
 
         try {
-            FileInputStream fis = new FileInputStream(from);
-            FileOutputStream fos = new FileOutputStream(to);
-
-            byte[] buffer = new byte[BUF_SIZE];
-            int read;
-            while ((read = fis.read(buffer)) > 0) {
-                fos.write(buffer, 0, read);
-            }
-
-            fis.close();
-            fos.close();
-
+            Files.copy(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES, LinkOption.NOFOLLOW_LINKS);
             statusSuccess();
             return true;
-        } catch (FileNotFoundException e) {
-            cleanup(to);
-
-            statusError();
-            return false;
         } catch (IOException e) {
-            cleanup(to);
-
-            statusError();
             return false;
         }
     }
@@ -85,41 +72,6 @@ public class CopyTool extends ATool implements ICopyTool {
         }
 
         return true;
-    }
-
-    /**
-     * Checks if the specified File represents a valid destination.
-     *
-     * @param candidate The file to check.
-     * @return `true' iff the File is a valid destination.
-     */
-    private boolean isValidDestination(File candidate) {
-        try {
-            // Cannot overwrite a directory.
-            if (candidate.exists() && candidate.isDirectory()) {
-                return false;
-            }
-
-            // Cannot overwrite a readonly file.
-            if (candidate.exists() && !candidate.canWrite()) {
-                return false;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Tries to remove a partially copied file in case of failure.
-     *
-     * @param trash The file to remove.
-     */
-    private void cleanup(File trash) {
-        if (trash.exists() && trash.canWrite()) {
-            trash.delete();
-        }
     }
 
     /**
