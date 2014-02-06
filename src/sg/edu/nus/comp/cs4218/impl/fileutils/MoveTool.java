@@ -26,12 +26,29 @@ public class MoveTool extends ATool implements IMoveTool {
 
     @Override
     public boolean move(File from, File to) {
+        statusError();
+
+        if (from == null || to == null) {
+            return false;
+        }
+
+        if (!from.canRead()) {
+            return false;
+        }
+
+        if (!to.canWrite()) {
+            return false;
+        }
+
+        if (from.isDirectory()) {
+            return false;
+        }
+
         try {
             Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             statusSuccess();
             return true;
         } catch (IOException e) {
-            statusError();
             return false;
         }
     }
