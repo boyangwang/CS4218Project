@@ -1,10 +1,15 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class MoveTool extends ATool implements IMoveTool {
     private IShell shell;
@@ -21,56 +26,51 @@ public class MoveTool extends ATool implements IMoveTool {
 
     @Override
     public boolean move(File from, File to) {
-        if (canMoveSource(from)) {
-            String[] cpArgs = new String[2];
-            cpArgs[0] = from.getAbsolutePath(); // Source.
-            cpArgs[1] = to.getAbsolutePath(); // Destination.
-            String[] rmArgs = new String[1];
-            rmArgs[0] = from.getAbsolutePath();
-
-            CopyTool cp = new CopyTool(cpArgs);
-            cp.execute(cwd, "");
-            if (cp.getStatusCode() != 0) {
-                cleanup(to);
-
-                statusError();
-                return false;
-            }
-
-            DeleteTool rm = new DeleteTool(rmArgs);
-            rm.execute(cwd, "");
-            if (rm.getStatusCode() != 0) {
-                statusError();
-                return false;
-            }
-
+        try {
+            Files.move(from.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             statusSuccess();
             return true;
-        }
-
-        statusError();
-        return false;
-    }
-
-    private boolean canMoveSource(File candidate) {
-        try {
-            if (!candidate.exists()) {
-                return false;
-            }
-
-            if (!candidate.canRead()) {
-                return false;
-            }
-
-            if (!candidate.canWrite()) {
-                return false;
-            }
-        } catch (Exception ex) {
+        } catch (IOException e) {
+            statusError();
             return false;
         }
-
-        return true;
     }
+
+//    private boolean validSource(File candidate) {
+//        try {
+//            if (!candidate.exists()) {
+//                return false;
+//            }
+//
+//            if (!candidate.canRead()) {
+//                return false;
+//            }
+//
+//            if (!candidate.canWrite()) {
+//                return false;
+//            }
+//        } catch (Exception ex) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    private boolean validDest(File candidate) {
+//        try {
+//            if (!candidate.canWrite()) {
+//                return false;
+//            }
+//
+//            if (candidate.isDirectory()) {
+//                return false;
+//            }
+//        } catch (Exception ex) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     /**
      * Tries to remove a partially copied file in case of failure.
