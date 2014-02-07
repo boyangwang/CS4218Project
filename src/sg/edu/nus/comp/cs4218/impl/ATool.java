@@ -1,6 +1,7 @@
 package sg.edu.nus.comp.cs4218.impl;
 
 import java.io.File;
+import java.util.Arrays;
 
 public abstract class ATool {
     private int statusCode = 0;
@@ -13,7 +14,11 @@ public abstract class ATool {
 	 * @param arguments Arguments the tool is going to be executed with.
 	 */
 	public ATool(String[] arguments){
-		this.args = arguments;
+        if (arguments == null) {
+            this.args = new String[0];
+        } else {
+            this.args = Arrays.copyOf(arguments, arguments.length);
+        }
 	}
 	
 	/**
