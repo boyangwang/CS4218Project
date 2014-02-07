@@ -29,6 +29,13 @@ public class Shell implements IShell {
         String stdin;
 		OutputStream stdout;
 
+		/**
+		 * 
+		 * @param shell
+		 * @param tool the tool run by this executor
+		 * @param stdin 
+		 * @param stdout
+		 */
 		public TaskExecution(Shell shell, ITool tool, String stdin, OutputStream stdout){
 			this.shell = shell;
 			this.tool = tool;
@@ -46,7 +53,10 @@ public class Shell implements IShell {
             }
 
         }
-		
+		/**
+		 * print output stream to console
+		 * @param output the text to print out to users
+		 */
 		public void handleOutput(String output) {
 			if (stdout instanceof PrintStream) {
 				((PrintStream) stdout).print(output);
@@ -122,6 +132,9 @@ public class Shell implements IShell {
         sc.close();
     }
 
+	/**
+	 * print the command prompt containing current working dir
+	 */
     private void printPrompt() {
         try {
             Shell.printPrompt(cwd.getCanonicalPath());
@@ -130,6 +143,9 @@ public class Shell implements IShell {
         }
     }
 
+	/**
+	 * print the command prompt to users
+	 */
     private static void printPrompt(String cwd) {
         System.out.print(cwd + "> ");
     }
@@ -196,10 +212,9 @@ public class Shell implements IShell {
 	}
 
     /**
-     * To read from user input stdin
-     * until ctrl-z<newlinechar>
-     * return the content read
-     * @return String input
+     * To read from user input system.in
+     * until ctrl-z<newlinechar> is encountered
+	 * @return string containing the text user inputs, excluding ctrl-z
      */
 	private static String readFromUserInput() {
     	@SuppressWarnings("resource")
