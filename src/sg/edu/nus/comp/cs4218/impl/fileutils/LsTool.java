@@ -123,7 +123,7 @@ public class LsTool extends ATool implements ILsTool {
             result = listDirectory(workingDir);
             return ((result != null) ? result : "");
         } else {
-            File specified = new File(this.args[0]);
+            File specified = workingDir.toPath().resolve(this.args[0]).toFile();
             result = listDirectory(specified);
         }
         return ((result != null) ? result : "");

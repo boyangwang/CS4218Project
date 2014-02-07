@@ -136,8 +136,8 @@ public class CopyTool extends ATool implements ICopyTool {
             return "";
         }
 
-        File to = new File(this.args[0]);
-        File from = new File(this.args[1]);
+        File to = workingDir.toPath().resolve(this.args[0]).toFile();
+        File from = workingDir.toPath().resolve(this.args[1]).toFile();
         boolean result = copy(to, from);
         if (!result) {
             statusError();

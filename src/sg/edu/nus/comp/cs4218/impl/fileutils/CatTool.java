@@ -5,6 +5,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 
 public class CatTool extends ATool implements ICatTool {
     /**
@@ -77,7 +78,7 @@ public class CatTool extends ATool implements ICatTool {
                     sb.append(stdin);
                 }
             }else{
-            	String result = getStringForFile(new File(arg));
+            	String result = getStringForFile(workingDir.toPath().resolve(arg).toFile());
             	if (result == null) {
             		statusError();
             		sb.append(String.format("Error: Could not read file: %s%n", arg));
