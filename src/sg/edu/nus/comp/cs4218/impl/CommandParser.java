@@ -8,7 +8,6 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class CommandParser {
 	private final static char DELIMITER_CHAR = ' ';
@@ -140,7 +139,6 @@ public class CommandParser {
      */
     private static String[] tokenizeString(String str) {
     	ArrayList<String> out = new ArrayList<String>();
-    	boolean alreadyReadFromStdin = false;
     	if (str!=null){
     		char currentQuote = 0;
     		boolean isInQuote = false;
@@ -177,14 +175,7 @@ public class CommandParser {
     	return out.toArray(new String[out.size()]);
     }
 
-    private static boolean toolCanReadFromStdin(String toolText) {
-    	if(toolText.equalsIgnoreCase("grep") || toolText.equalsIgnoreCase("cat")){
-    		return true;
-    	}else{
-    		return false;
-    	}
-	}
-
+  
 
 	private static String[] getArgumentList(String[] tokens) {
         if (tokens.length < 2) {
