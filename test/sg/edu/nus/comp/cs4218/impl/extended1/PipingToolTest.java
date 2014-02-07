@@ -48,19 +48,49 @@ public class PipingToolTest {
 		String[] args;
 		String output;
 		
+		// the case where shell is not set
+		args = new String[]{"echo foo", "cat -"};
+		pipingTool = new PipingTool(args);
+		
+		output = pipingTool.execute(shell.getWorkingDirectory(), "");
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals(PipingTool.ERROR_MSG_NULL_SHELL + System.lineSeparator(), output);
+		
 		args = new String[]{"echo foo", "cat -"};
 		pipingTool = new PipingTool(args);
 		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
-		assertEquals("foo\n", output);
+		assertEquals(0, pipingTool.getStatusCode());
+		assertEquals("foo" + System.lineSeparator(), output);
 		
 		args = new String[]{"echo foo", "echo bar", "cat -"};
 		pipingTool = new PipingTool(args);
 		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
-		assertEquals("bar\n", output);
+		assertEquals(0, pipingTool.getStatusCode());
+		assertEquals("bar" + System.lineSeparator(), output);
 		
+		// cases where one or more of the commands are null
+		args = new String[]{"echo foo", ""};
+		pipingTool = new PipingTool(args);
+		pipingTool.setShell(shell);
+		output = pipingTool.execute(shell.getWorkingDirectory(), "");
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
 		
+		args = new String[]{"", "echo foo"};
+		pipingTool = new PipingTool(args);
+		pipingTool.setShell(shell);
+		output = pipingTool.execute(shell.getWorkingDirectory(), "");
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
+		
+		args = new String[]{"echo foo", "", ""};
+		pipingTool = new PipingTool(args);
+		pipingTool.setShell(shell);
+		output = pipingTool.execute(shell.getWorkingDirectory(), "");
+		assertEquals(1, pipingTool.getStatusCode());
+		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
 	}
 
 	/**
@@ -76,7 +106,8 @@ public class PipingToolTest {
 		CatTool to = new CatTool(new String[]{"-"});
 		
 		String output = pipingTool.pipe(from, to);
-		assertEquals("foo\n", output);
+		assertEquals(0, pipingTool.getStatusCode());
+		assertEquals("foo" + System.lineSeparator(), output);
 	}
 
 	/**
@@ -93,7 +124,7 @@ public class PipingToolTest {
 			fail("Should throw NullPointerException");
 		}
 		catch(NullPointerException e) {
-			
+			assertTrue("no shell set yet", true);
 		}
 		catch(Exception e) {
 			fail("Should throw NullPointerException, not other types of exceptions");
@@ -103,11 +134,12 @@ public class PipingToolTest {
 		pipingTool.setShell(shell);
 		try {
 			pipingTool.pipe("foo", new EchoTool(new String[]{}));
+			assertEquals(0, pipingTool.getStatusCode());
 			assertTrue("No exception after setShell call", true);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			fail("Should no throw Exception"); 
+			fail("Should not throw Exception"); 
 		}
 	}
 	
@@ -128,40 +160,49 @@ public class PipingToolTest {
 		// Assuming EchoTool functional
 		input = "foo";
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(input, result);
 		
 		input = "'\"\"'";
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		input = "    \n\t";
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		input = "'\"";
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		// pipe operator wraped inside quotes should be supported
 		input = "\"|\"";
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		input = "'|'";
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		// some UNICODE testing
 		input = "" + Character.toChars(2202).toString();
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		input = "" + Character.toChars(0x2E97).toString();
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 		
 		input = "" + Character.toChars(0x3042).toString();
 		result = pipingTool.pipe(input, catTool);
+		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals(result, input);
 	}
 

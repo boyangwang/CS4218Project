@@ -116,6 +116,7 @@ public class Shell implements IShell {
 
             }
         }
+        sc.close();
     }
 
     private void printPrompt() {

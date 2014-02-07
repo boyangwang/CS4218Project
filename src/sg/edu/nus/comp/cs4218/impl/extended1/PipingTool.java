@@ -14,8 +14,8 @@ import java.io.OutputStream;
 public class PipingTool extends ATool implements IPipingTool {
 	private Shell shell;
     private File pipeWorkingDirectory;
-	private static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
-	private static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
+	public static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
+	public static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
     /**
      * Constructor
      *
@@ -71,7 +71,7 @@ public class PipingTool extends ATool implements IPipingTool {
     	String output = stdin;
     	
     	if (this.shell == null) {
-    		setStatusCode(2);
+    		statusError();
     		return ERROR_MSG_NULL_SHELL + System.lineSeparator();
     	}
     	for (int i=0; i<args.length; i++) {
@@ -84,7 +84,7 @@ public class PipingTool extends ATool implements IPipingTool {
     		
     		if (command == null) {
     			Logging.logger(System.out).writeLog(5, args[i]);
-    			setStatusCode(3);
+    			statusError();
     			return ERROR_MSG_NULL_CMD + System.lineSeparator();
     		}
 
@@ -92,11 +92,12 @@ public class PipingTool extends ATool implements IPipingTool {
     		output = pipe(output, command);
     		
     		if (command.getStatusCode() != 0) {
-    			setStatusCode(1);
+    			statusError();
     			return output;
     		}
     	}
     	
+    	statusSuccess();
     	return output;
     }
     
