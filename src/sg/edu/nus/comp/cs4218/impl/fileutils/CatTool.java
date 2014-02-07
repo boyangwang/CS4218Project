@@ -80,7 +80,7 @@ public class CatTool extends ATool implements ICatTool {
             	String result = getStringForFile(new File(arg));
             	if (result == null) {
             		statusError();
-            		sb.append(String.format("Error: Could not read file: %s", arg));
+            		sb.append(String.format("Error: Could not read file: %s%n", arg));
             		return sb.toString();
             	}
             	sb.append(result);
