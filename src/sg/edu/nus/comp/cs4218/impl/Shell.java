@@ -2,12 +2,15 @@ package sg.edu.nus.comp.cs4218.impl;
 
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -141,8 +144,24 @@ public class Shell implements IShell {
 		if (!(tool instanceof ATool)){
 			return null;
 		}
+		String stdin = "";
+		if(tool instanceof IGrepTool || tool instanceof ICatTool){
+			ATool aTool = (ATool) tool;
+			ArrayList<String> tmpArgs = new ArrayList<String>();
+			int argLength = aTool.args.length;
+			boolean alreadyReadFromStdin = false;;
+			for(int i=0;i<argLength;i++){
+				if (aTool.args[i].equals("-") && !alreadyReadFromStdin){
+					stdin = readFromUserInput();
+					alreadyReadFromStdin = true;
+				}else{
+					tmpArgs.add(aTool.args[i]);
+				}
+			}
+			aTool.args = tmpArgs.toArray(new String[tmpArgs.size()]);
+		}
 		Thread t;
-        t = new Thread(new TaskExecution(this, tool, "", System.out));
+        t = new Thread(new TaskExecution(this, tool, stdin, System.out));
 		t.start();
 		return t;
 	}
@@ -177,5 +196,29 @@ public class Shell implements IShell {
         Logging.logger(System.out).setLevel(Logging.ALL);
 		Shell sh = new Shell();
         sh.run();
+	}
+
+    /**
+     * To read from user input stdin
+     * until ctrl-z<newlinechar>
+     * return the content read
+     * @return String input
+     */
+	private static String readFromUserInput() {
+    	@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+    	StringBuilder sb = new StringBuilder();
+    	String str= sc.nextLine();
+    	while (true){
+    		if (str.toLowerCase().endsWith("ctrl-z")){
+    			String realArg = str.substring(0,str.length()-"ctrl-z".length());
+    			sb.append(realArg);
+    			break;
+    		}else{
+    			sb.append(str + "\n");
+    		}
+    		str= sc.nextLine();
+    	}
+    	return sb.toString();
 	}
 }
