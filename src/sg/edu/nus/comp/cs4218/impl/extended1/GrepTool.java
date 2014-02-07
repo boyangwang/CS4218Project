@@ -179,10 +179,20 @@ public class GrepTool extends ATool implements IGrepTool {
 
         String pattern = args[i++];
 
+        boolean isFirstStdin = true;
         StringBuilder output = new StringBuilder();
 
         while (i < args.length) {
-            output.append(grepPath(pattern, args[i++]));
+            String arg = args[i++];
+            if(arg.equals("-")){
+                // Process only first stdin argument
+                if (isFirstStdin) {
+                    isFirstStdin = false;
+                    output.append(grep(pattern, stdin));
+                }
+            } else {
+                output.append(grepPath(pattern, args[i++]));
+            }
         }
 
         return output.toString();
