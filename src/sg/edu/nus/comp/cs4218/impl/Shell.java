@@ -147,18 +147,14 @@ public class Shell implements IShell {
 		String stdin = "";
 		if(tool instanceof IGrepTool || tool instanceof ICatTool){
 			ATool aTool = (ATool) tool;
-			ArrayList<String> tmpArgs = new ArrayList<String>();
 			int argLength = aTool.args.length;
 			boolean alreadyReadFromStdin = false;;
 			for(int i=0;i<argLength;i++){
 				if (aTool.args[i].equals("-") && !alreadyReadFromStdin){
 					stdin = readFromUserInput();
 					alreadyReadFromStdin = true;
-				}else{
-					tmpArgs.add(aTool.args[i]);
 				}
 			}
-			aTool.args = tmpArgs.toArray(new String[tmpArgs.size()]);
 		}
 
 		Thread t;
