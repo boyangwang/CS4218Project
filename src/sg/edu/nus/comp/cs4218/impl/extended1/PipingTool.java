@@ -1,21 +1,19 @@
 package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.Logging;
 import sg.edu.nus.comp.cs4218.impl.Shell;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.OutputStream;
+
 
 public class PipingTool extends ATool implements IPipingTool {
 	private Shell shell;
     private File pipeWorkingDirectory;
 	public static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
 	public static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
+	
     /**
      * Constructor
      *
@@ -64,16 +62,16 @@ public class PipingTool extends ATool implements IPipingTool {
      * @return Output on stdout
      */
     @Override
-    public String execute(File workingDir, String stdin) {    	
-    	this.pipeWorkingDirectory = workingDir;
-          	
-    	ITool command;
-    	String output = stdin;
-    	
+    public String execute(File workingDir, String stdin) {    
     	if (this.shell == null) {
     		statusError();
     		return ERROR_MSG_NULL_SHELL + System.lineSeparator();
     	}
+    	
+    	this.pipeWorkingDirectory = workingDir;
+    	ITool command;
+    	String output = stdin;
+    	
     	for (int i=0; i<args.length; i++) {
             if (Thread.interrupted()) {
                 statusSuccess();
