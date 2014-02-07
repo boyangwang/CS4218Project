@@ -213,8 +213,8 @@ public class Shell implements IShell {
 
     /**
      * To read from user input system.in
-     * until ctrl-z<newlinechar> is encountered
-	 * @return string containing the text user inputs, excluding ctrl-z
+     * until ctrl-d<newlinechar> is encountered
+	 * @return string containing the text user inputs, excluding ctrl-d
      */
 	private static String readFromUserInput() {
     	@SuppressWarnings("resource")
@@ -222,8 +222,8 @@ public class Shell implements IShell {
     	StringBuilder sb = new StringBuilder();
     	String str= sc.nextLine();
     	while (true){
-    		if (str.toLowerCase().endsWith("ctrl-z")){
-    			String realArg = str.substring(0,str.length()-"ctrl-z".length());
+    		if (str.toLowerCase().endsWith("ctrl-d")){
+    			String realArg = str.substring(0,str.length()-"ctrl-d".length());
     			sb.append(realArg);
     			break;
     		}else{
