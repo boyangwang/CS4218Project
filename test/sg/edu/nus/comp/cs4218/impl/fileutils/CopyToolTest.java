@@ -12,7 +12,7 @@ import java.util.Random;
 import static org.junit.Assert.*;
 
 public class CopyToolTest {
-    private final static String testDest = "testDest";
+    private final static String TEST_DEST = "testDest";
 
     ICopyTool copyTool;
 
@@ -125,7 +125,7 @@ public class CopyToolTest {
         f.createNewFile();
         f.setReadable(false);
 
-        File dest = new File(testDest);
+        File dest = new File(TEST_DEST);
         boolean result = copyTool.copy(f, dest);
         assertFalse(dest.exists());
         assertFalse(result);
@@ -145,7 +145,7 @@ public class CopyToolTest {
         File f = new File("testDir");
         f.mkdir();
 
-        File dest = new File(testDest);
+        File dest = new File(TEST_DEST);
         boolean result = copyTool.copy(f, dest);
         assertFalse(dest.exists());
         assertFalse(result);
@@ -195,7 +195,7 @@ public class CopyToolTest {
         }
         fos.close();
 
-        File dest = new File(testDest);
+        File dest = new File(TEST_DEST);
         copyTool.copy(f, dest);
         byte[] contents = fileGetContents(dest);
         assertTrue(compareByteArrays(ref, contents));
@@ -219,7 +219,7 @@ public class CopyToolTest {
         pw.write("test string.");
         pw.close();
 
-        File dest = new File(testDest);
+        File dest = new File(TEST_DEST);
         dest.createNewFile();
         dest.setWritable(false);
 
