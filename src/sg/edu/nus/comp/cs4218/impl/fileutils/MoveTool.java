@@ -1,18 +1,14 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
-import sg.edu.nus.comp.cs4218.IShell;
-import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 public class MoveTool extends ATool implements IMoveTool {
-    private IShell shell;
     private File cwd;
 
     /**
@@ -109,7 +105,6 @@ public class MoveTool extends ATool implements IMoveTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        this.shell = shell;
         this.cwd = workingDir;
 
         if (this.args.length != 2) {

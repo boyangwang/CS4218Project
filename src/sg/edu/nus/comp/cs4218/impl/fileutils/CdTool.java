@@ -1,12 +1,10 @@
 package sg.edu.nus.comp.cs4218.impl.fileutils;
 
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * Changes CWD.
@@ -15,6 +13,8 @@ import java.io.IOException;
  * Extra parameters are ignored.
  */
 public class CdTool extends ATool implements ICdTool {
+    File workingDir;
+
     /**
      * Constructor
      *
@@ -22,6 +22,7 @@ public class CdTool extends ATool implements ICdTool {
      */
     public CdTool(String[] arguments) {
         super(arguments);
+        workingDir = new File(System.getProperty("user.dir"));
     }
 
     /**
@@ -69,7 +70,7 @@ public class CdTool extends ATool implements ICdTool {
     @Override
     public File changeDirectory(String newDirectory) {
         if (newDirectory != null) {
-            File dir = parent.getWorkingDirectory().toPath().resolve(newDirectory).toFile();
+            File dir = workingDir.toPath().resolve(newDirectory).toFile();
             if (canChangeDirectoryTo(dir)) {
                 statusSuccess();
                 return dir;
@@ -89,12 +90,9 @@ public class CdTool extends ATool implements ICdTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        if (this.args.length < 1) {
-            statusError();
-            return "";
-        }
+        this.workingDir = workingDir;
 
-        if (parent == null) {
+        if (this.args.length < 1) {
             statusError();
             return "";
         }
@@ -106,7 +104,20 @@ public class CdTool extends ATool implements ICdTool {
             return "";
         }
 
-        parent.changeWorkingDirectory(candidateDir);
+        try {
+            // Usually bad practice to use reflection in this manner. However,
+            // the other viable alternative would be to pass a reference to
+            // the shell to the tool in order to be able to set the shell's
+            // working directory, which is arguably an even worse practice,
+            // as it breaks encapsulation, and would be more incompatible as it
+            // requires the addition and usage of our own private api.
+            Field field = workingDir.getClass().getDeclaredField("path");
+            field.setAccessible(true);
+            field.set(workingDir, candidateDir.getPath());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            statusError();
+            return "";
+        }
 
         statusSuccess();
         return "";
