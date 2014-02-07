@@ -122,7 +122,7 @@ public class MoveTool extends ATool implements IMoveTool {
         if (move(from, to)) {
             return "";
         } else {
-            return "Could not move file: " + this.args[0] + " to: " + this.args[1];
+            return String.format("Could not move file: %s to: %s%n", this.args[0], this.args[1]);
         }
     }
 }

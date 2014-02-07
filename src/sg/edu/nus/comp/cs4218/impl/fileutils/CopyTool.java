@@ -141,7 +141,7 @@ public class CopyTool extends ATool implements ICopyTool {
         boolean result = copy(to, from);
         if (!result) {
             statusError();
-            return "Could not copy file: " + this.args[0] + " to: " + this.args[1];
+            return String.format("Could not copy file: %s to: %s%n", this.args[0], this.args[1]);
         }
 
         statusSuccess();
