@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 
 public class MoveTool extends ATool implements IMoveTool {
     private IShell shell;
+    private File cwd;
 
     /**
      * Constructor
