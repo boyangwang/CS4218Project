@@ -160,20 +160,6 @@ public class CommandParser {
     				}
     			}
     			if (c==DELIMITER_CHAR && !isInQuote){
-    				if (sb.toString().trim().equals("-") ){
-    					if(!alreadyReadFromStdin){
-    						if(out.size()>0){
-    							String toolText = out.get(0);
-    							if(toolCanReadFromStdin(toolText)){
-    								sb = new StringBuilder(readFromUserInput());
-    								alreadyReadFromStdin = true;
-    							}
-    						}
-    					}else{
-    						sb = new StringBuilder("");
-    					}
-    				}
-
     				if(sb.length()>0){
     					out.add(sb.toString());
     				}
@@ -182,19 +168,6 @@ public class CommandParser {
     				sb.append(c);
     			}
     		}
-    		if (sb.toString().trim().equals("-") ){
-				if(!alreadyReadFromStdin){
-					if(out.size()>0){
-						String toolText = out.get(0);
-						if(toolCanReadFromStdin(toolText)){
-							sb = new StringBuilder(readFromUserInput());
-							alreadyReadFromStdin = true;
-						}
-					}
-				}else{
-					sb = new StringBuilder("");
-				}
-			}
 
     		if(sb.length()>0){
     			out.add(sb.toString().trim());
@@ -212,23 +185,6 @@ public class CommandParser {
     	}
 	}
 
-	private static String readFromUserInput() {
-    	@SuppressWarnings("resource")
-		Scanner sc = new Scanner(System.in);
-    	StringBuilder sb = new StringBuilder();
-    	String str= sc.nextLine();
-    	while (true){
-    		if (str.toLowerCase().endsWith("ctrl-z")){
-    			String realArg = str.substring(0,str.length()-"ctrl-z".length());
-    			sb.append(realArg);
-    			break;
-    		}else{
-    			sb.append(str + "\n");
-    		}
-    		str= sc.nextLine();
-    	}
-    	return sb.toString();
-	}
 
 	private static String[] getArgumentList(String[] tokens) {
         if (tokens.length < 2) {
