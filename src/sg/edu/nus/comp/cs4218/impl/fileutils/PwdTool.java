@@ -50,7 +50,7 @@ public class PwdTool extends ATool implements IPwdTool{
         String result = getStringForDirectory(workingDir);
         if (result == null) {
             statusError();
-            return "Unable to get working directory.";
+            return String.format("Unable to get working directory.%n");
         }
 
         statusSuccess();

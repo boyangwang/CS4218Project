@@ -34,9 +34,6 @@ public class Shell implements IShell {
 		}
 
 		@Override
-		/**
-		 * To run start executing a tool in another thread
-		 */
 		public void run() {
 			handleOutput(tool.execute(shell.getWorkingDirectory(), stdin));
             try {
@@ -47,9 +44,6 @@ public class Shell implements IShell {
 
         }
 		
-		/**
-		 * This function decides to print out or piping output to another tool
-		 */
 		public void handleOutput(String output) {
 			if (stdout instanceof PrintStream) {
 				((PrintStream) stdout).print(output);
@@ -122,11 +116,9 @@ public class Shell implements IShell {
 
             }
         }
+        sc.close();
     }
 
-	/**
-	 * Print the shell prompt
-	 */
     private void printPrompt() {
         try {
             Shell.printPrompt(cwd.getCanonicalPath());
