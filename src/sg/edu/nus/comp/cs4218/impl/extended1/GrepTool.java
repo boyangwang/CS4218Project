@@ -191,7 +191,7 @@ public class GrepTool extends ATool implements IGrepTool {
                     output.append(grep(pattern, stdin));
                 }
             } else {
-                output.append(grepPath(pattern, args[i++]));
+                output.append(grepPath(pattern, arg));
             }
         }
 
