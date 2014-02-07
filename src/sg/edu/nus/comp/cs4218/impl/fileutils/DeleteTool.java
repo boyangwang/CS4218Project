@@ -106,7 +106,7 @@ public class DeleteTool extends ATool implements IDeleteTool {
             // Remaining files in the list are not deleted.
             if (!result) {
                 statusError();
-                return "Could not delete file: " + this.args[i];
+                return String.format("Could not delete file: %s%n", this.args[i]);
             }
         }
 
