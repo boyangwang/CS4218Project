@@ -54,7 +54,7 @@ public class LsTool extends ATool implements ILsTool {
         }
 
         if (files.isEmpty()) {
-            return "\n";
+            return System.lineSeparator();
         }
 
         StringBuilder sb = new StringBuilder();
@@ -64,7 +64,7 @@ public class LsTool extends ATool implements ILsTool {
                 return sb.toString();
             }
 
-            sb.append(String.format("%s\n", f.getName()));
+            sb.append(String.format("%s%n", f.getName()));
         }
         return sb.toString();
     }

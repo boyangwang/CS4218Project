@@ -50,7 +50,7 @@ public class EchoTool extends ATool implements IEchoTool {
         	sb.deleteCharAt(sb.length() - 1);
         }
         
-        sb.append("\n");
+        sb.append(System.lineSeparator());
         
         return sb.toString();
     }
