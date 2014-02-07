@@ -91,7 +91,7 @@ public class Shell implements IShell {
                 break;
             }
 
-            if (cmd.equals("ctrl-z")) {
+            if (cmd.equalsIgnoreCase("ctrl-z")) {
                 if (runningThread != null && runningThread.isAlive()) {
                     stop(runningThread);
                     try {

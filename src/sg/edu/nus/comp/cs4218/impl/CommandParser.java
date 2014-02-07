@@ -30,7 +30,7 @@ public class CommandParser {
         argList = getArgumentList(tokens);
         String cmd = getCommand(tokens);
 
-        switch (cmd) {
+        switch (cmd.toLowerCase()) {
             case "cat":
                 return new CatTool(argList);
 
