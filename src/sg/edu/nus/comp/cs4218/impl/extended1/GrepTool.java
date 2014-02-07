@@ -46,6 +46,11 @@ public class GrepTool extends ATool implements IGrepTool {
 
     @Override
     public int getCountOfMatchingLines(String pattern, String input) {
+        if (pattern == null || input == null) {
+            statusError();
+            return -1;
+        }
+
         Pattern regex;
         try {
             regex = Pattern.compile(pattern);
@@ -71,6 +76,7 @@ public class GrepTool extends ATool implements IGrepTool {
         }
         scanner.close();
 
+        statusSuccess();
         return lineCount;
     }
 
@@ -117,6 +123,7 @@ public class GrepTool extends ATool implements IGrepTool {
 
     @Override
     public String getHelp() {
+        statusSuccess();
         return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]" + System.lineSeparator();
     }
 
@@ -198,6 +205,7 @@ public class GrepTool extends ATool implements IGrepTool {
     }
 
     private void reset() {
+        setStatusCode(0);
         count = onlyMatching = invertMatch = false;
         afterContext = beforeContext = 0;
     }
@@ -231,8 +239,14 @@ public class GrepTool extends ATool implements IGrepTool {
     }
 
     private String grep(String pattern, String input) {
+        if (pattern == null || input == null) {
+            statusError();
+            return "";
+        }
+
         if (count) {
-            return Integer.toString(getCountOfMatchingLines(pattern, input)) + System.lineSeparator();
+            int matchingLinesCount = getCountOfMatchingLines(pattern, input);
+            return matchingLinesCount == -1 ? "" : String.format("%d%n", matchingLinesCount);
         }
 
         Pattern regex;
@@ -268,10 +282,12 @@ public class GrepTool extends ATool implements IGrepTool {
             while (matcher.find()) {
                 if (!matched) {
                     matched = true;
-                    ListIterator<String> listIterator = previousLines.listIterator(afterContextCount);
-                    while (listIterator.hasNext()) {
-                        output.append(listIterator.next());
-                        output.append(System.lineSeparator());
+                    if (!previousLines.isEmpty()) {
+                        ListIterator<String> listIterator = previousLines.listIterator(afterContextCount);
+                        while (listIterator.hasNext()) {
+                            output.append(listIterator.next());
+                            output.append(System.lineSeparator());
+                        }
                     }
                     if (afterContext > 0) {
                         printAfterContext = true;
@@ -286,7 +302,7 @@ public class GrepTool extends ATool implements IGrepTool {
                     break;
                 }
             }
-            if (matched != invertMatch) {
+            if (!onlyMatching && matched != invertMatch) {
                 output.append(line);
                 output.append(System.lineSeparator());
             }
