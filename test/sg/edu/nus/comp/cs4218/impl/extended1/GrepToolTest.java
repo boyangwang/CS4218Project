@@ -47,6 +47,9 @@ public class GrepToolTest {
         grepTool = null;
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getCountOfMatchingLines(java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getCountOfMatchingLinesTest() {
         // Test null
@@ -66,6 +69,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getOnlyMatchingLines(java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getOnlyMatchingLinesTest() {
         // Test null
@@ -85,6 +91,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesWithTrailingContext(int, java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getMatchingLinesWithTrailingContextTest() {
         // Test null
@@ -104,6 +113,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesWithLeadingContext(int, java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getMatchingLinesWithLeadingContextTest() {
         // Test null
@@ -123,6 +135,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesWithOutputContext(int, java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getMatchingLinesWithOutputContextTest() {
         // Test null
@@ -142,6 +157,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesOnlyMatchingPart(java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getMatchingLinesOnlyMatchingPartTest() {
         // Test null
@@ -161,6 +179,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getNonMatchingLines(java.lang.String, java.lang.String)}.
+     */
     @Test
     public void getNonMatchingLinesTest() {
         // Test null
@@ -180,6 +201,9 @@ public class GrepToolTest {
         assertEquals(grepTool.getStatusCode(), 0);
     }
 
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getHelp()}.
+     */
     @Test
     public void getHelpTest() {
         assertEquals(grepTool.getHelp(), String.format("grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]%n"));
