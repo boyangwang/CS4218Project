@@ -17,7 +17,7 @@ public class PipingTool extends ATool implements IPipingTool {
     /**
      * Constructor
      *
-     * @param arguments Arguments the tool is going to be executed with.
+     * @param arguments arguments is the array of commands, connected by pipe operator and parsed by CommandParser
      */
     public PipingTool(String[] arguments) {
         super(arguments);
@@ -56,6 +56,7 @@ public class PipingTool extends ATool implements IPipingTool {
     
     /**
      * Executes the tool with args provided in the constructor
+     * 
      *
      * @param workingDir
      * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
