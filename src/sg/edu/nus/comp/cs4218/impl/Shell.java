@@ -145,6 +145,7 @@ public class Shell implements IShell {
 
 	/**
 	 * print the command prompt to users
+	 * @param cwd current working directory string
 	 */
     private static void printPrompt(String cwd) {
         System.out.print(cwd + "> ");
