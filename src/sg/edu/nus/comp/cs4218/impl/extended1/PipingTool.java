@@ -75,6 +75,11 @@ public class PipingTool extends ATool implements IPipingTool {
     		return ERROR_MSG_NULL_SHELL + System.lineSeparator();
     	}
     	for (int i=0; i<args.length; i++) {
+            if (Thread.interrupted()) {
+                statusSuccess();
+                return output;
+            }
+
     		command = this.shell.parse(args[i]);
     		
     		if (command == null) {

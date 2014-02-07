@@ -242,6 +242,11 @@ public class GrepTool extends ATool implements IGrepTool {
 
         Scanner scanner = new Scanner(input);
         while (scanner.hasNextLine()) {
+            if (Thread.interrupted()) {
+                statusSuccess();
+                return output.toString();
+            }
+
             String line = scanner.nextLine();
 
             if (matcher == null) {

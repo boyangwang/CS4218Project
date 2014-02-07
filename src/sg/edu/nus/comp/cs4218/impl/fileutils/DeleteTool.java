@@ -95,8 +95,8 @@ public class DeleteTool extends ATool implements IDeleteTool {
             // Check for program termination.
             // Remaining files at this point are not deleted.
             if (Thread.interrupted()) {
-                statusError();
-                return "Interrupted!";
+                statusSuccess();
+                return "";
             }
 
             File f = new File(this.args[i]);

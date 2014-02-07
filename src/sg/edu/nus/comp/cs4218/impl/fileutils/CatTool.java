@@ -63,7 +63,7 @@ public class CatTool extends ATool implements ICatTool {
         StringBuilder sb = new StringBuilder();
         for (String arg : this.args) {
             if (Thread.interrupted()) {
-                statusError();
+                statusSuccess();
                 return sb.toString();
             }
             

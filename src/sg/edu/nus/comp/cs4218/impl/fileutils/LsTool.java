@@ -59,6 +59,11 @@ public class LsTool extends ATool implements ILsTool {
 
         StringBuilder sb = new StringBuilder();
         for (File f : files) {
+            if (Thread.interrupted()) {
+                statusSuccess();
+                return sb.toString();
+            }
+
             sb.append(String.format("%s\n", f.getName()));
         }
         return sb.toString();
