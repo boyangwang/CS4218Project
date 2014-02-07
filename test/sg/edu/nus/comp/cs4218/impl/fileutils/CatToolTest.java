@@ -77,13 +77,4 @@ public class CatToolTest {
         assertNotEquals(catTool.getStatusCode(), 0);
         f.delete();
     }
-
-    // TODO: Various malformed files. (Remove when swapping)
-    // 1. File that contains \x00 (null)
-    // 2. File that contains \x04 (Ctrl + D)
-    // 3. File that contains \x03 (Ctrl + C)
-    // 4. File that contains \x1a (Ctrl + Z)
-    // 5. ASCII file.
-    // 6. UTF-8 file.
-    // 7. UTF-8 file with invalid codepoints.
 }
