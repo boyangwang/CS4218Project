@@ -36,7 +36,7 @@ public class ShellTest {
 		sh = new Shell();
 		String cmd = "eCho you shall not pass";
 		ITool result = sh.parse(cmd);
-		assertEquals(null,result);
+		assertTrue(result instanceof IEchoTool);
 	}
 	@Test
 	public void parseCommandWrongQuote() {

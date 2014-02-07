@@ -7,7 +7,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
@@ -148,7 +147,7 @@ public class GrepTool extends ATool implements IGrepTool {
                         }
                     } catch (NumberFormatException e) {
                         statusError();
-                        return arg + " requires a positive number" + System.lineSeparator();
+                        return String.format("%s requires a positive number%n");
                     }
                     break;
                 default:
@@ -208,9 +207,9 @@ public class GrepTool extends ATool implements IGrepTool {
             byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));
             return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
         } catch (NoSuchFileException e) {
-            return "grep: " + pathname + ": No such file or directory" + System.lineSeparator();
+            return String.format("grep: %s: No such file or directory%n", pathname);
         } catch (IOException e) {
-            return "grep: " + pathname + ": " + e + System.lineSeparator();
+            return String.format("grep: %s: %s%n", pathname, e);
         }
     }
 

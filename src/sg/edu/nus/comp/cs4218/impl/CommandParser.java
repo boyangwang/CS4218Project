@@ -8,6 +8,7 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class CommandParser {
 	private final static char DELIMITER_CHAR = ' ';
@@ -130,8 +131,16 @@ public class CommandParser {
 		}
 	}
 
+	/**
+     * Parse inputString and array of token strings
+     * if the sign - is encountered at the first time and current tool is cat or grep, read in from user input until ctrl-z<newlinechar>
+     * ignore the sign - from 2nd time onward, not even add it to argument list.
+     * @param str the user input string
+     * @return array of parsed token strings, might be empty
+     */
     private static String[] tokenizeString(String str) {
     	ArrayList<String> out = new ArrayList<String>();
+    	boolean alreadyReadFromStdin = false;
     	if (str!=null){
     		char currentQuote = 0;
     		boolean isInQuote = false;
@@ -140,6 +149,7 @@ public class CommandParser {
     			char c = str.charAt(i);
     			if (isInQuote){
     				if (currentQuote == c){
+    					//exiting from quote
     					currentQuote = 0; 
     					isInQuote = false;
     				}
@@ -150,14 +160,42 @@ public class CommandParser {
     				}
     			}
     			if (c==DELIMITER_CHAR && !isInQuote){
+    				if (sb.toString().trim().equals("-") ){
+    					if(!alreadyReadFromStdin){
+    						if(out.size()>0){
+    							String toolText = out.get(0);
+    							if(toolCanReadFromStdin(toolText)){
+    								sb = new StringBuilder(readFromUserInput());
+    								alreadyReadFromStdin = true;
+    							}
+    						}
+    					}else{
+    						sb = new StringBuilder("");
+    					}
+    				}
+
     				if(sb.length()>0){
-    					out.add(sb.toString().trim());
+    					out.add(sb.toString());
     				}
     				sb = new StringBuilder();
     			}else{
     				sb.append(c);
     			}
     		}
+    		if (sb.toString().trim().equals("-") ){
+				if(!alreadyReadFromStdin){
+					if(out.size()>0){
+						String toolText = out.get(0);
+						if(toolCanReadFromStdin(toolText)){
+							sb = new StringBuilder(readFromUserInput());
+							alreadyReadFromStdin = true;
+						}
+					}
+				}else{
+					sb = new StringBuilder("");
+				}
+			}
+
     		if(sb.length()>0){
     			out.add(sb.toString().trim());
     		}
@@ -166,7 +204,33 @@ public class CommandParser {
     	return out.toArray(new String[out.size()]);
     }
 
-    private static String[] getArgumentList(String[] tokens) {
+    private static boolean toolCanReadFromStdin(String toolText) {
+    	if(toolText.equalsIgnoreCase("grep") || toolText.equalsIgnoreCase("cat")){
+    		return true;
+    	}else{
+    		return false;
+    	}
+	}
+
+	private static String readFromUserInput() {
+    	@SuppressWarnings("resource")
+		Scanner sc = new Scanner(System.in);
+    	StringBuilder sb = new StringBuilder();
+    	String str= sc.nextLine();
+    	while (true){
+    		if (str.toLowerCase().endsWith("ctrl-z")){
+    			String realArg = str.substring(0,str.length()-"ctrl-z".length());
+    			sb.append(realArg);
+    			break;
+    		}else{
+    			sb.append(str + "\n");
+    		}
+    		str= sc.nextLine();
+    	}
+    	return sb.toString();
+	}
+
+	private static String[] getArgumentList(String[] tokens) {
         if (tokens.length < 2) {
             return new String[0];
         } else {
