@@ -191,7 +191,7 @@ public class GrepTool extends ATool implements IGrepTool {
                     output.append(grep(pattern, stdin));
                 }
             } else {
-                output.append(grepPath(pattern, arg));
+                output.append(grepPath(pattern, arg, workingDir));
             }
         }
 
@@ -203,9 +203,9 @@ public class GrepTool extends ATool implements IGrepTool {
         afterContext = beforeContext = 0;
     }
 
-    private String grepPath(String pattern, String pathname) {
+    private String grepPath(String pattern, String pathname, File workingDir) {
         try {
-            byte[] encoded = Files.readAllBytes(Paths.get(pathname));
+            byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));
             return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
         } catch (NoSuchFileException e) {
             return "grep: " + pathname + ": No such file or directory" + System.lineSeparator();

@@ -99,7 +99,7 @@ public class DeleteTool extends ATool implements IDeleteTool {
                 return "";
             }
 
-            File f = new File(this.args[i]);
+            File f = workingDir.toPath().resolve(this.args[i]).toFile();
             boolean result = delete(f);
 
             // Stop processing the list on an error.

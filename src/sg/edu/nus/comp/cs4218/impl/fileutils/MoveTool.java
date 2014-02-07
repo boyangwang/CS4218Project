@@ -117,8 +117,8 @@ public class MoveTool extends ATool implements IMoveTool {
             return "";
         }
 
-        File from = new File(this.args[0]);
-        File to = new File(this.args[1]);
+        File from = workingDir.toPath().resolve(this.args[0]).toFile();
+        File to = workingDir.toPath().resolve(this.args[1]).toFile();
         if (move(from, to)) {
             return "";
         } else {

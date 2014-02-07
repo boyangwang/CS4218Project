@@ -68,23 +68,12 @@ public class CdTool extends ATool implements ICdTool {
      */
     @Override
     public File changeDirectory(String newDirectory) {
-        if (newDirectory == null) {
-            statusError();
-            return null;
-        }
-
-        String candidatePath;
-        try {
-            candidatePath = String.format("%s%s%s", parent.getWorkingDirectory().getCanonicalPath(), File.separator, newDirectory);
-        } catch (IOException e) {
-            statusError();
-            return null;
-        }
-
-        File dir = new File(candidatePath);
-        if (canChangeDirectoryTo(dir)) {
-            statusSuccess();
-            return dir;
+        if (newDirectory != null) {
+            File dir = parent.getWorkingDirectory().toPath().resolve(newDirectory).toFile();
+            if (canChangeDirectoryTo(dir)) {
+                statusSuccess();
+                return dir;
+            }
         }
 
         statusError();
