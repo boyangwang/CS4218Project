@@ -15,6 +15,11 @@ public class CommandParser {
 	private final static char DQUOTE_CHAR = '"';
 	private final static char BQUOTE_CHAR = '`';
 	private final static char PIPE_CHAR = '|';
+	/**
+	 * to parse user input and return an instance of ITool for execution
+	 * @param rawInput user command
+	 * @return ITool if user command is valid, null otherwise
+	 */
     public static ITool parse(String rawInput) {
     	String trimmedCmd = rawInput.trim();
         // at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
@@ -64,8 +69,11 @@ public class CommandParser {
         }
     }
 
-    //to return true if the command has proper closing quotes
-    //return false if it fails above test(s)
+    /**
+     * verify user command, 
+     * @param cmd user command
+     * @return true if quotes are closed properly, false otherwise
+     */
     private static boolean verifyCommand(String cmd) {
     	boolean isInQuote = false;
     	char currentQuote = 0;
@@ -132,8 +140,6 @@ public class CommandParser {
 
 	/**
      * Parse inputString and array of token strings
-     * if the sign - is encountered at the first time and current tool is cat or grep, read in from user input until ctrl-z<newlinechar>
-     * ignore the sign - from 2nd time onward, not even add it to argument list.
      * @param str the user input string
      * @return array of parsed token strings, might be empty
      */
