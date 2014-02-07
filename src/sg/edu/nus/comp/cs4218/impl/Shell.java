@@ -132,8 +132,7 @@ public class Shell implements IShell {
 
 	@Override
 	public ITool parse(String commandline) {
-		ITool tool = CommandParser.parse(commandline);
-		return tool;
+		return CommandParser.parse(commandline);
 	}
 
 	@Override

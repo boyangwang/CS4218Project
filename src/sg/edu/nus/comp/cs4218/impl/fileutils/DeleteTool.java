@@ -39,7 +39,6 @@ public class DeleteTool extends ATool implements IDeleteTool {
                 }
 
                 for (File f : files){
-                    boolean writable = f.canWrite();
                     boolean result = f.delete();
                     if (!result) {
                         return false;

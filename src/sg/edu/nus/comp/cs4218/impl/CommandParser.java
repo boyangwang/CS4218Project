@@ -23,8 +23,7 @@ public class CommandParser {
     	}
     	String[] argList = tokenizePipeCommands(trimmedCmd);
         if (argList != null) {
-            PipingTool pipingTool = new PipingTool(argList);
-            return pipingTool;
+            return new PipingTool(argList);
         }
 
         String[] tokens = tokenizeString(trimmedCmd);

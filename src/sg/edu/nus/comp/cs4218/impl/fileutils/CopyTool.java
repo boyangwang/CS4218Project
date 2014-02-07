@@ -6,7 +6,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import java.io.*;
 
 public class CopyTool extends ATool implements ICopyTool {
-    private final int BUF_SIZE = 16384;
+    private final static int BUF_SIZE = 16384;
 
     /**
      * Constructor

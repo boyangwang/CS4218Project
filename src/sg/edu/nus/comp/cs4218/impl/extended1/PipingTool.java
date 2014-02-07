@@ -13,7 +13,6 @@ import java.io.OutputStream;
 
 public class PipingTool extends ATool implements IPipingTool {
 	private Shell shell;
-	private File pipeWorkingDirectory;
 	private static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
 	private static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
     /**
