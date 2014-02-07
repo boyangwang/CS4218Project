@@ -54,6 +54,6 @@ public class PwdTool extends ATool implements IPwdTool{
         }
 
         statusSuccess();
-        return String.format("%s\n", result);
+        return String.format("%s%n", result);
     }
 }

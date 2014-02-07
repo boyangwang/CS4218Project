@@ -97,7 +97,7 @@ public class Shell implements IShell {
                 break;
             }
 
-            if (cmd.equals("ctrl-z")) {
+            if (cmd.equalsIgnoreCase("ctrl-z")) {
                 if (runningThread != null && runningThread.isAlive()) {
                     stop(runningThread);
                     try {
@@ -140,18 +140,13 @@ public class Shell implements IShell {
     }
 
 	@Override
-	/**
-	 * Parse command line input
-	 * @return: ITool or null if command is invalid
-	 */
-	public ITool parse(String cmd) {
-		ITool tool = CommandParser.parse(cmd);
-		return tool;
+	public ITool parse(String commandline) {
+		return CommandParser.parse(commandline);
 	}
 
 	@Override
 	public Runnable execute(ITool tool) {
-		if (tool==null || !(tool instanceof ATool)){
+		if (!(tool instanceof ATool)){
 			return null;
 		}
         ((ATool)tool).setShell(this);

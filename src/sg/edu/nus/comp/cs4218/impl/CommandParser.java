@@ -23,15 +23,14 @@ public class CommandParser {
     	}
     	String[] argList = tokenizePipeCommands(trimmedCmd);
         if (argList != null) {
-            PipingTool pipingTool = new PipingTool(argList);
-            return pipingTool;
+            return new PipingTool(argList);
         }
 
         String[] tokens = tokenizeString(trimmedCmd);
         argList = getArgumentList(tokens);
         String cmd = getCommand(tokens);
 
-        switch (cmd) {
+        switch (cmd.toLowerCase()) {
             case "cat":
                 return new CatTool(argList);
 

@@ -60,15 +60,22 @@ public class CatTool extends ATool implements ICatTool {
         if (argLength == 0) {
             return stdin;
         }
+
+        boolean isFirstStdin = true;
+
         StringBuilder sb = new StringBuilder();
         for (String arg : this.args) {
             if (Thread.interrupted()) {
-                statusError();
+                statusSuccess();
                 return sb.toString();
             }
             
             if(arg.equals("-")){
-            	sb.append(stdin);
+                // Process only first stdin argument
+                if (isFirstStdin) {
+                    isFirstStdin = false;
+                    sb.append(stdin);
+                }
             }else{
             	String result = getStringForFile(new File(arg));
             	if (result == null) {

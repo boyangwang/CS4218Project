@@ -6,7 +6,7 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import java.io.*;
 
 public class CopyTool extends ATool implements ICopyTool {
-    private final int BUF_SIZE = 16384;
+    private final static int BUF_SIZE = 16384;
 
     /**
      * Constructor
@@ -26,6 +26,8 @@ public class CopyTool extends ATool implements ICopyTool {
      */
     @Override
     public boolean copy(File from, File to) {
+        statusError();
+
         boolean canCopy = (isValidSource(from) && isValidDestination(to));
         if (!canCopy) {
             return false;
@@ -43,6 +45,9 @@ public class CopyTool extends ATool implements ICopyTool {
 
             fis.close();
             fos.close();
+
+            statusSuccess();
+            return true;
         } catch (FileNotFoundException e) {
             cleanup(to);
 
@@ -54,8 +59,6 @@ public class CopyTool extends ATool implements ICopyTool {
             statusError();
             return false;
         }
-
-        return true;
     }
 
     /**

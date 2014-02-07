@@ -36,6 +36,12 @@ public class EchoTool extends ATool implements IEchoTool {
         // Concatenates arguments into a space-separated list, terminated by a newline.
         // If no arguments are given, this algorithm returns a newline.
         for (String str : this.args) {
+            if (Thread.interrupted()) {
+                statusSuccess();
+                sb.append(System.lineSeparator());
+                return sb.toString();
+            }
+
             sb.append(str);
             sb.append(" ");
         }
@@ -44,7 +50,7 @@ public class EchoTool extends ATool implements IEchoTool {
         	sb.deleteCharAt(sb.length() - 1);
         }
         
-        sb.append("\n");
+        sb.append(System.lineSeparator());
         
         return sb.toString();
     }
