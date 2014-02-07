@@ -94,6 +94,10 @@ public class Shell implements IShell {
             if (cmd.equals("ctrl-z")) {
                 if (runningThread != null && runningThread.isAlive()) {
                     stop(runningThread);
+                    try {
+						runningThread.join();
+					} catch (InterruptedException e) {
+					}
                 }
             } else {
                 ITool tool = parse(cmd);
@@ -106,15 +110,10 @@ public class Shell implements IShell {
                 }
 
                 // Block until previous command has finished execution.
-                if (runningThread != null) {
-                    try {
-                        runningThread.join();
-                    } catch (InterruptedException e) {
-                        // How now brown cow?
-                    }
+                if (runningThread == null || !runningThread.isAlive()) {
+                	runningThread = (Thread)execute(tool);
                 }
 
-                runningThread = (Thread)execute(tool);
             }
         }
     }
@@ -139,6 +138,9 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
+		if (tool==null || !(tool instanceof ATool)){
+			return null;
+		}
         ((ATool)tool).setShell(this);
 		Thread t;
         t = new Thread(new TaskExecution(this, tool, "", System.out));
@@ -173,7 +175,7 @@ public class Shell implements IShell {
      * Code for static stuff.
      */
 	public static void main(String[] args){
-        Logging.logger(System.out).setLevel(Logging.All);
+        Logging.logger(System.out).setLevel(Logging.ALL);
 		Shell sh = new Shell();
         sh.run();
 	}

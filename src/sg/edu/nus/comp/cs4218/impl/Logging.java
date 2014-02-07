@@ -8,7 +8,7 @@ import java.io.PrintWriter;
  *
  * ...because log4j also cannot =[
  */
-public class Logging {
+public final class Logging {
     /**
      * Code for instance stuff.
      */
@@ -48,9 +48,9 @@ public class Logging {
     /**
      * Log levels.
      */
-    public final static int Info  = 0;
-    public final static int All   = 0;
-    public final static int Warn  = 1;
-    public final static int Error = 2;
-    public final static int Fatal = 3;
+    public final static int INFO  = 0;
+    public final static int ALL   = 0;
+    public final static int WARN  = 1;
+    public final static int ERROR = 2;
+    public final static int FATAL = 3;
 }
