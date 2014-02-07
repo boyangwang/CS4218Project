@@ -3,8 +3,10 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.CommandParser;
 import sg.edu.nus.comp.cs4218.impl.Logging;
 import sg.edu.nus.comp.cs4218.impl.Shell;
+
 import java.io.File;
 
 /**
@@ -14,14 +16,11 @@ import java.io.File;
  * 
  * If any of the command string given is not valid, it prints ERROR_MSG_NULL_CMD
  * 
- * If shell reference is not set, prints ERROR_MSG_NULL_SHELL
- * 
  * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that
  * point
  */
 public class PipingTool extends ATool implements IPipingTool {
-	private Shell shell;
-    private File pipeWorkingDirectory;
+    private File pipeWorkingDirectory = new File(System.getProperty("user.dir"));
 	public static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
 	public static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
 	
@@ -48,7 +47,7 @@ public class PipingTool extends ATool implements IPipingTool {
      */
 	@Override
     public String pipe(ITool from, ITool to) {
-		String output = from.execute(shell.getWorkingDirectory(), "");
+		String output = from.execute(pipeWorkingDirectory, "");
 
         return pipe(output, to);
     }
@@ -63,7 +62,7 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String pipe(String stdout, ITool to) {
-        String output = to.execute(shell.getWorkingDirectory(), stdout);
+        String output = to.execute(pipeWorkingDirectory, stdout);
         
     	return output;
     }
@@ -76,8 +75,6 @@ public class PipingTool extends ATool implements IPipingTool {
      * 
      * If any of the command string given is not valid, it prints ERROR_MSG_NULL_CMD
      * 
-     * If shell reference is not set, prints ERROR_MSG_NULL_SHELL
-     * 
      * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that point
      *
      * @param workingDir
@@ -86,11 +83,6 @@ public class PipingTool extends ATool implements IPipingTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {    
-    	if (this.shell == null) {
-    		statusError();
-    		return ERROR_MSG_NULL_SHELL + System.lineSeparator();
-    	}
-    	
     	this.pipeWorkingDirectory = workingDir;
     	ITool command;
     	String output = stdin;
@@ -101,7 +93,7 @@ public class PipingTool extends ATool implements IPipingTool {
                 return output;
             }
 
-    		command = this.shell.parse(args[i]);
+    		command = CommandParser.parse(args[i]);
     		
     		if (command == null) {
     			Logging.logger(System.out).writeLog(5, args[i]);
@@ -109,7 +101,6 @@ public class PipingTool extends ATool implements IPipingTool {
     			return ERROR_MSG_NULL_CMD + System.lineSeparator();
     		}
 
-    		((ATool)command).setShell(this.shell);
     		output = pipe(output, command);
     		
     		if (command.getStatusCode() != 0) {
@@ -122,11 +113,4 @@ public class PipingTool extends ATool implements IPipingTool {
     	return output;
     }
     
-    /**
-     * set the reference to a shell instance so that pipingTool has access to its public methods
-     * @param shell the shell to be set
-     */
-    public void setShell(Shell shell) {
-    	this.shell = shell;
-    }
 }

@@ -53,19 +53,20 @@ public class PipingToolTest {
 		pipingTool = new PipingTool(args);
 		
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
+		System.out.println("aaa");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_SHELL + System.lineSeparator(), output);
 		
+		
+		
 		args = new String[]{"echo foo", "cat -"};
 		pipingTool = new PipingTool(args);
-		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals("foo" + System.lineSeparator(), output);
 		
 		args = new String[]{"echo foo", "echo bar", "cat -"};
 		pipingTool = new PipingTool(args);
-		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals("bar" + System.lineSeparator(), output);
@@ -73,21 +74,18 @@ public class PipingToolTest {
 		// cases where one or more of the commands are null
 		args = new String[]{"echo foo", ""};
 		pipingTool = new PipingTool(args);
-		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
 		
 		args = new String[]{"", "echo foo"};
 		pipingTool = new PipingTool(args);
-		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
 		
 		args = new String[]{"echo foo", "", ""};
 		pipingTool = new PipingTool(args);
-		pipingTool.setShell(shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
@@ -100,7 +98,6 @@ public class PipingToolTest {
 	public void testPipeIToolITool() {
 		pipingTool = new PipingTool(new String[]{});
 		Shell shell = new Shell();
-		pipingTool.setShell(shell);
 		
 		EchoTool from = new EchoTool(new String[]{"foo"});
 		CatTool to = new CatTool(new String[]{"-"});
@@ -108,39 +105,6 @@ public class PipingToolTest {
 		String output = pipingTool.pipe(from, to);
 		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals("foo" + System.lineSeparator(), output);
-	}
-
-	/**
-	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.PipingTool#setShell()}.
-	 */
-	@Test
-	public void testSetShell() {
-		pipingTool = new PipingTool(new String[]{});
-		Shell shell = new Shell();
-		
-		// before set shell, should throw exception
-		try {
-			pipingTool.pipe("foo", new EchoTool(new String[]{}));
-			fail("Should throw NullPointerException");
-		}
-		catch(NullPointerException e) {
-			assertTrue("no shell set yet", true);
-		}
-		catch(Exception e) {
-			fail("Should throw NullPointerException, not other types of exceptions");
-		}
-		
-		// after setShell should be fine
-		pipingTool.setShell(shell);
-		try {
-			pipingTool.pipe("foo", new EchoTool(new String[]{}));
-			assertEquals(0, pipingTool.getStatusCode());
-			assertTrue("No exception after setShell call", true);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			fail("Should not throw Exception"); 
-		}
 	}
 	
 	/**
@@ -150,7 +114,6 @@ public class PipingToolTest {
 	public void testPipeStringITool() {
 		pipingTool = new PipingTool(new String[]{});
 		Shell shell = new Shell();
-		pipingTool.setShell(shell);
 		
 		String input;
 		String result;

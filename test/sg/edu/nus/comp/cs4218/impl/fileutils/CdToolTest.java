@@ -26,9 +26,6 @@ public class CdToolTest {
     public void before() {
         sh = new Shell();
         cdTool = new CdTool(new String[0]);
-
-        // A terrible practice, but required due to limitations of the interfaces mandated.
-        ((ATool)cdTool).setShell(sh);
     }
 
     @After
