@@ -18,9 +18,6 @@ import java.io.File;
  * 
  * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that
  * point
- * 
- * @author boyang
- * 
  */
 public class PipingTool extends ATool implements IPipingTool {
 	private Shell shell;
