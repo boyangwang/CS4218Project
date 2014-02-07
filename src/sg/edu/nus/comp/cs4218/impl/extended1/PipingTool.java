@@ -7,7 +7,21 @@ import sg.edu.nus.comp.cs4218.impl.Logging;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 import java.io.File;
 
-
+/**
+ * PipingTool pipes the output of previous command to the next command as input
+ * If any of the command encounters error (i.e. exit with non-0 code), stop
+ * piping and print generated output up to that point
+ * 
+ * If any of the command string given is not valid, it prints ERROR_MSG_NULL_CMD
+ * 
+ * If shell reference is not set, prints ERROR_MSG_NULL_SHELL
+ * 
+ * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that
+ * point
+ * 
+ * @author boyang
+ * 
+ */
 public class PipingTool extends ATool implements IPipingTool {
 	private Shell shell;
     private File pipeWorkingDirectory;
@@ -25,8 +39,11 @@ public class PipingTool extends ATool implements IPipingTool {
 
     /**
      * Pipe the stdout of *from* to stdin of *to*
-     * Currently the method is not in complete form
-     * And it's not used by system execution
+     * 
+     * Currently the method is not used by system execution, as the other form, pipe(String, ITool),
+     * is enough for piping
+     * 
+     * ASSUMPTION: stdin for the from tool is empty 
      * 
      * @param from
      * @param to
@@ -41,6 +58,7 @@ public class PipingTool extends ATool implements IPipingTool {
 
 	/**
      * Pipe the stdout to stdin of *to*
+     * stdout becomes the stdin content of to, and the output of to is returned by the method
      * 
      * @param stdout
      * @param to
@@ -57,6 +75,13 @@ public class PipingTool extends ATool implements IPipingTool {
     /**
      * Executes the tool with args provided in the constructor
      * 
+     * If any of the command encounters error (i.e. exit with non-0 code), stop piping and print generated output up to that point 
+     * 
+     * If any of the command string given is not valid, it prints ERROR_MSG_NULL_CMD
+     * 
+     * If shell reference is not set, prints ERROR_MSG_NULL_SHELL
+     * 
+     * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that point
      *
      * @param workingDir
      * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
@@ -100,6 +125,10 @@ public class PipingTool extends ATool implements IPipingTool {
     	return output;
     }
     
+    /**
+     * set the reference to a shell instance so that pipingTool has access to its public methods
+     * @param shell the shell to be set
+     */
     public void setShell(Shell shell) {
     	this.shell = shell;
     }
