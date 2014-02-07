@@ -47,18 +47,7 @@ public class PipingToolTest {
 		Shell shell = new Shell();
 		String[] args;
 		String output;
-		
-		// the case where shell is not set
-		args = new String[]{"echo foo", "cat -"};
-		pipingTool = new PipingTool(args);
-		
-		output = pipingTool.execute(shell.getWorkingDirectory(), "");
-		System.out.println("aaa");
-		assertEquals(1, pipingTool.getStatusCode());
-		assertEquals(PipingTool.ERROR_MSG_NULL_SHELL + System.lineSeparator(), output);
-		
-		
-		
+
 		args = new String[]{"echo foo", "cat -"};
 		pipingTool = new PipingTool(args);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
