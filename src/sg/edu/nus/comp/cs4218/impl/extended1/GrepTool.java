@@ -44,6 +44,13 @@ public class GrepTool extends ATool implements IGrepTool {
         super(arguments);
     }
 
+    /**
+     * Get count of matching lines
+     *
+     * @param pattern
+     * @param input
+     * @return count of matching lines
+     */
     @Override
     public int getCountOfMatchingLines(String pattern, String input) {
         if (pattern == null || input == null) {
@@ -80,12 +87,27 @@ public class GrepTool extends ATool implements IGrepTool {
         return lineCount;
     }
 
+    /**
+     * Get only matching lines
+     *
+     * @param pattern
+     * @param input
+     * @return matching lines
+     */
     @Override
     public String getOnlyMatchingLines(String pattern, String input) {
         reset();
         return grep(pattern, input);
     }
 
+    /**
+     * Get matching lines with trailing context
+     *
+     * @param option_A NUM lines of trailing context after matching lines
+     * @param pattern
+     * @param input
+     * @return matching lines with trailing context
+     */
     @Override
     public String getMatchingLinesWithTrailingContext(int option_A, String pattern, String input) {
         reset();
@@ -93,6 +115,13 @@ public class GrepTool extends ATool implements IGrepTool {
         return grep(pattern, input);
     }
 
+    /**
+     * Get matching lines with leading context
+     * @param option_B NUM lines of leading context before matching lines
+     * @param pattern
+     * @param input
+     * @return matching lines with leading context
+     */
     @Override
     public String getMatchingLinesWithLeadingContext(int option_B, String pattern, String input) {
         reset();
@@ -100,6 +129,13 @@ public class GrepTool extends ATool implements IGrepTool {
         return grep(pattern, input);
     }
 
+    /**
+     * Get matching lines with output context
+     * @param option_C NUM lines of output context
+     * @param pattern
+     * @param input
+     * @return matching lines with output context
+     */
     @Override
     public String getMatchingLinesWithOutputContext(int option_C, String pattern, String input) {
         reset();
@@ -107,6 +143,12 @@ public class GrepTool extends ATool implements IGrepTool {
         return grep(pattern, input);
     }
 
+    /**
+     * Get only matching parts of matching lines
+     * @param pattern
+     * @param input
+     * @return matching parts of matching lines
+     */
     @Override
     public String getMatchingLinesOnlyMatchingPart(String pattern, String input) {
         reset();
@@ -114,6 +156,12 @@ public class GrepTool extends ATool implements IGrepTool {
         return grep(pattern, input);
     }
 
+    /**
+     * Get only non matching lines
+     * @param pattern
+     * @param input
+     * @return non matching lines
+     */
     @Override
     public String getNonMatchingLines(String pattern, String input) {
         reset();
@@ -121,12 +169,25 @@ public class GrepTool extends ATool implements IGrepTool {
         return grep(pattern, input);
     }
 
+    /**
+     * Get help text
+     * @return help text
+     */
     @Override
     public String getHelp() {
         statusSuccess();
         return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]" + System.lineSeparator();
     }
 
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that point
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
     @Override
     public String execute(File workingDir, String stdin) {
         int i = 0;
@@ -204,12 +265,22 @@ public class GrepTool extends ATool implements IGrepTool {
         return output.toString();
     }
 
+    /**
+     * Reset instance variables
+     */
     private void reset() {
         setStatusCode(0);
         count = onlyMatching = invertMatch = false;
         afterContext = beforeContext = 0;
     }
 
+    /**
+     * Grep given path from working directory with pattern
+     * @param pattern
+     * @param pathname
+     * @param workingDir
+     * @return matches
+     */
     private String grepPath(String pattern, String pathname, File workingDir) {
         try {
             byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));
@@ -221,6 +292,10 @@ public class GrepTool extends ATool implements IGrepTool {
         }
     }
 
+    /**
+     * Circular queue with fixed limit
+     * @param <E>
+     */
     public class CircularQueue<E> extends LinkedList<E> {
         private int limit;
 
@@ -238,6 +313,12 @@ public class GrepTool extends ATool implements IGrepTool {
         }
     }
 
+    /**
+     * Grep for pattern in given input
+     * @param pattern
+     * @param input
+     * @return matches
+     */
     private String grep(String pattern, String input) {
         if (pattern == null || input == null) {
             statusError();

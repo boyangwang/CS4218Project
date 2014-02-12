@@ -16,7 +16,7 @@ public class CommandParser {
 	private final static char BQUOTE_CHAR = '`';
 	private final static char PIPE_CHAR = '|';
 	/**
-	 * to parse user input and return an instance of ITool for execution
+	 * parse user input and return an instance of ITool for execution
 	 * @param rawInput user command
 	 * @return ITool if user command is valid, null otherwise
 	 */
@@ -141,7 +141,7 @@ public class CommandParser {
 	/**
      * Parse inputString and array of token strings
      * @param str the user input string
-     * @return array of parsed token strings, might be empty
+     * @return array of parsed token strings (can be empty)
      */
     private static String[] tokenizeString(String str) {
     	ArrayList<String> out = new ArrayList<String>();
@@ -190,7 +190,11 @@ public class CommandParser {
             return Arrays.copyOfRange(tokens, 1, tokens.length);
         }
     }
-
+	/**
+	 * return text determine which tool to execute
+	 * @param tokens array of tokens parsed from user input
+	 * @return string determine the tool to execute
+	 */
     private static String getCommand(String[] tokens) {
         if (tokens.length > 0) {
             return tokens[0];
