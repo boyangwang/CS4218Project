@@ -18,22 +18,29 @@ public class COMMToolTest {
 	private ICommTool commtool;
 	
 	@Before
+	@CORRECTED
 	public void setUp() throws Exception {
-		commtool = new CommTool();
+		
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		commtool = null;
 	}
-
+	
+	@CORRECTED
 	@Test
 	public void testGetHelp() {
 		String result = commtool.getHelp();
-		assertTrue(result.startsWith("NAME\n\ncomm - compare two sorted files line by line\n\n"));
-		assertTrue(result.endsWith("-help\tBrief information about supported options\n"));
-		assertTrue(result.contains("FILE1\tName of the file 1\nFILE2\tName of the file 2\n\n"));
-		assertTrue(result.contains("no options, produce three-column output. Col"));
+		assertTrue(result.equals("comm : Compares two sorted files line by line. With no options, produce three-column output. Column one\n"
+				+ "contains lines unique to FILE1, column two contains lines unique to FILE2, and column three contains lines\n"
+				+ "common to both files.\n\n"
+				+ "Command Format - comm [OPTIONS] FILE1 FILE2\n"
+				+ "FILE1 - Name of the file 1\n"
+				+ "FILE2 - Name of the file 2\n"
+				+ "-c : check that the input is correctly sorted, even if all input lines are pairable\n"
+				+ "-d : do not check that the input is correctly sorted\n"
+				+ "-help : Brief information about supported options\n"));
 	}
 	
 	@Test
