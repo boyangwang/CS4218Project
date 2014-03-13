@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.extended2.ICutTool;
-import sg.nus.edu.comp.impl.cs4218.CutTool;
 
 public class CUTToolTest {
     

@@ -1,12 +1,12 @@
-package sg.nus.edu.comp.impl.cs4218;
+package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import java.io.File;
 
-import sg.edu.nus.comp.cs4218.extended2.IWcTool;
+import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 
-public class WcTool implements IWcTool {
+public class CutTool implements ICutTool {
 
-	public WcTool() {
+	public CutTool() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -23,19 +23,14 @@ public class WcTool implements IWcTool {
 	}
 
 	@Override
-	public String getCharacterCount(String input) {
+	public String cutSpecfiedCharacters(String list, String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getWordCount(String input) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getNewLineCount(String input) {
+	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
+			String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}

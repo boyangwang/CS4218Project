@@ -1,10 +1,14 @@
-package sg.nus.edu.comp.impl.cs4218;
+package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import java.io.File;
 
-import sg.edu.nus.comp.cs4218.extended2.ICommTool;
+import sg.edu.nus.comp.cs4218.extended2.IWcTool;
 
-public class CommTool implements ICommTool {
+public class WcTool implements IWcTool {
+
+	public WcTool() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -19,19 +23,19 @@ public class CommTool implements ICommTool {
 	}
 
 	@Override
-	public String compareFiles(String input1, String input2) {
+	public String getCharacterCount(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String compareFilesCheckSortStatus(String input1, String input2) {
+	public String getWordCount(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
+	public String getNewLineCount(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -10,10 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
-import sg.nus.edu.comp.impl.cs4218.PasteTool;
 
 public class PASTEToolTest {
 	 private IPasteTool pastetool; 

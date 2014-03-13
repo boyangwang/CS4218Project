@@ -1,12 +1,12 @@
-package sg.nus.edu.comp.impl.cs4218;
+package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import java.io.File;
 
-import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
+import sg.edu.nus.comp.cs4218.extended2.ISortTool;
 
-public class PasteTool implements IPasteTool {
+public class SortTool implements ISortTool {
 
-	public PasteTool() {
+	public SortTool() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -23,13 +23,13 @@ public class PasteTool implements IPasteTool {
 	}
 
 	@Override
-	public String pasteSerial(String[] input) {
+	public String sortFile(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String pasteUseDelimiter(String delim, String[] input) {
+	public String checkIfSorted(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}

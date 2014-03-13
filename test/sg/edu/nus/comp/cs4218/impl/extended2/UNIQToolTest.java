@@ -11,8 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import sg.nus.edu.comp.impl.cs4218.UniqTool;
-
 public class UNIQToolTest {
 
 	private UniqTool uniqtool;
@@ -119,7 +117,7 @@ public class UNIQToolTest {
 
 	@Test
 	public void getUniqueSkipNumMaxNumTest(){
-		String input ="test1\nhello\nHello\n叉烧包\n豆沙�?";
+		String input ="test1\nhello\nHello\n叉烧包\n豆沙�?";
 		String result = uniqtool.getUniqueSkipNum(20,false, input);
 		assertEquals(result.compareTo("test1\n"), 0);
 		result = uniqtool.getUniqueSkipNum(20,true, input);

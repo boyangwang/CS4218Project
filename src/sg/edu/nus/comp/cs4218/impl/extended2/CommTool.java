@@ -1,14 +1,10 @@
-package sg.nus.edu.comp.impl.cs4218;
+package sg.edu.nus.comp.cs4218.impl.extended2;
 
 import java.io.File;
 
-import sg.edu.nus.comp.cs4218.extended2.ICutTool;
+import sg.edu.nus.comp.cs4218.extended2.ICommTool;
 
-public class CutTool implements ICutTool {
-
-	public CutTool() {
-		// TODO Auto-generated constructor stub
-	}
+public class CommTool implements ICommTool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -23,14 +19,19 @@ public class CutTool implements ICutTool {
 	}
 
 	@Override
-	public String cutSpecfiedCharacters(String list, String input) {
+	public String compareFiles(String input1, String input2) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
-			String input) {
+	public String compareFilesCheckSortStatus(String input1, String input2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
 		// TODO Auto-generated method stub
 		return null;
 	}
