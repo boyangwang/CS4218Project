@@ -108,6 +108,7 @@ public class UniqTool extends ATool implements IUniqTool {
         while ((read = is.read(buf)) != -1) {
             sb.append(new String(Arrays.copyOf(buf, read), StandardCharsets.UTF_8));
         }
+        is.close();
         return sb.toString();
     }
 

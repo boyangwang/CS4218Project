@@ -185,9 +185,9 @@ public class UNIQToolTest {
 	public void getUniqueSkipNumMinNumTest() {
         uniqtool = defaultTool();
 		String input = "test1\nhello\nHello\n叉烧包\n豆沙包\n";
-		String result = uniqtool.getUniqueSkipNum(0,false, input);
+		String result = uniqtool.getUniqueSkipNum(0, false, input);
 		assertEquals(result.compareTo("test1\nhello\n叉烧包\n豆沙包\n"), 0);
-		result = uniqtool.getUniqueSkipNum(0,true, input);
+		result = uniqtool.getUniqueSkipNum(0, true, input);
 		assertEquals(result.compareTo("test1\nhello\nHello\n叉烧包\n豆沙包\n"), 0);
 	}
 
@@ -198,9 +198,9 @@ public class UNIQToolTest {
 	public void getUniqueSkipNumMaxNumTest(){
         uniqtool = defaultTool();
 		String input ="test1\nhello\nHello\n叉烧包\n豆沙�?";
-		String result = uniqtool.getUniqueSkipNum(20,false, input);
+		String result = uniqtool.getUniqueSkipNum(20, false, input);
 		assertEquals(result.compareTo("test1\n"), 0);
-		result = uniqtool.getUniqueSkipNum(20,true, input);
+		result = uniqtool.getUniqueSkipNum(20, true, input);
 		assertEquals(result.compareTo("test1\n"), 0);
 	}
 

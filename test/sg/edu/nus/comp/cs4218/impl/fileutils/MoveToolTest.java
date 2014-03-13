@@ -25,6 +25,7 @@ public class MoveToolTest {
                 while ((read = is.read(buf)) != -1) {
                     baos.write(buf, 0, read);
                 }
+                is.close();
                 return baos.toByteArray();
             } catch (FileNotFoundException e) {
                 System.err.println("unit test error: " + e.toString());
@@ -47,22 +48,22 @@ public class MoveToolTest {
         }
     }
 
-    private boolean compareByteArrays(byte[] buf1, byte[] buf2) {
-        if (buf1 == null && buf2 == null) {
-            return true;
-        } else if (buf1 == null || buf2 == null) {
-            return false;
-        } else if (buf1.length != buf2.length) {
-            return false;
-        } else {
-            for (int i = 0; i < buf1.length; i++) {
-                if (buf1[i] != buf2[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
+//    private boolean compareByteArrays(byte[] buf1, byte[] buf2) {
+//        if (buf1 == null && buf2 == null) {
+//            return true;
+//        } else if (buf1 == null || buf2 == null) {
+//            return false;
+//        } else if (buf1.length != buf2.length) {
+//            return false;
+//        } else {
+//            for (int i = 0; i < buf1.length; i++) {
+//                if (buf1[i] != buf2[i]) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
+//    }
 
     @Before
     public void before() {

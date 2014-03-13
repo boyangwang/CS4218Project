@@ -6,13 +6,9 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 import static org.junit.Assert.*;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sg.edu.nus.comp.cs4218.ITool;
-import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
@@ -86,7 +82,6 @@ public class PipingToolTest {
 	@Test
 	public void testPipeIToolITool() {
 		pipingTool = new PipingTool(new String[]{});
-		Shell shell = new Shell();
 		
 		EchoTool from = new EchoTool(new String[]{"foo"});
 		CatTool to = new CatTool(new String[]{"-"});
@@ -102,7 +97,6 @@ public class PipingToolTest {
 	@Test
 	public void testPipeStringITool() {
 		pipingTool = new PipingTool(new String[]{});
-		Shell shell = new Shell();
 		
 		String input;
 		String result;
