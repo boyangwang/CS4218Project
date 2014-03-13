@@ -4,13 +4,10 @@ import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
-import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 

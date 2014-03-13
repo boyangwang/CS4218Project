@@ -9,10 +9,28 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
     private final static int BUF_SIZE = 4096;
+    private final static String ERR_NUMFMT = "Error: NUM has to be a positive number.";
+    private final static String ERR_INVALID_ARG = "Error: Invalid option.";
+    private final static String ERR_NOT_FOUND = "Error: FILE is not found.";
+    private final static String ERR_MISSING_PARAM = "Error: Must supply a skip parameter with -f.";
+    private final static String ERR_IO = "Error: Generic IO Error.";
 
 	public UniqTool(String[] arguments) {
         super(arguments);
 	}
+
+    private boolean isNonNegativeInteger(String str) {
+        int val;
+        try {
+            val = Integer.parseInt(str);
+            if (val < 0) {
+                return false;
+            }
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
 
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -30,13 +48,13 @@ public class UniqTool extends ATool implements IUniqTool {
                 switch (arg) {
                     case "-f":
                         if (++i < args.length) {
-                            try {
+                            if (isNonNegativeInteger(args[i])) {
                                 skip = Integer.parseInt(args[i]);
-                            } catch (NumberFormatException ex) {
-                                return "Skip parameter must be an integer.";
+                            } else {
+                                return ERR_NUMFMT;
                             }
                         } else {
-                            return "Must supply a skip parameter with -f.";
+                            return ERR_MISSING_PARAM;
                         }
                         break;
 
@@ -49,7 +67,7 @@ public class UniqTool extends ATool implements IUniqTool {
                         break;
 
                     default:
-                        return "Invalid argument.";
+                        return ERR_INVALID_ARG;
                 }
             } else {
                 file = arg;
@@ -61,18 +79,19 @@ public class UniqTool extends ATool implements IUniqTool {
         if (file != null && !help) {
             File target;
             try {
-                target = new File(workingDir.getCanonicalPath() + "/" + file);
+                target = workingDir.toPath().resolve(file).toFile();
                 String contents = this.readContentsOfFile(target);
 
                 statusSuccess();
                 return this.getUniqueSkipNum(skip, checkCase, contents);
             } catch (FileNotFoundException ex) {
-                System.out.println("File not found.");
-                return "";
+                return ERR_NOT_FOUND;
             } catch (IOException e) {
-                System.out.println("An error occurred processing this path.");
-                return "";
+                return ERR_IO;
             }
+        } else if (stdin != null && !stdin.equals("")) {
+            statusSuccess();
+            return this.getUniqueSkipNum(skip, checkCase, stdin);
         } else {
             statusSuccess();
             return this.getHelp();
@@ -89,6 +108,7 @@ public class UniqTool extends ATool implements IUniqTool {
         while ((read = is.read(buf)) != -1) {
             sb.append(new String(Arrays.copyOf(buf, read), StandardCharsets.UTF_8));
         }
+        is.close();
         return sb.toString();
     }
 
@@ -99,8 +119,6 @@ public class UniqTool extends ATool implements IUniqTool {
 
 	@Override
 	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
-        input = input.trim();  // Remove leading/trailing whitespace to prevent blank lines.
-
         String[] lines = input.split("\n");
         StringBuilder sb = new StringBuilder();
 
@@ -109,24 +127,19 @@ public class UniqTool extends ATool implements IUniqTool {
             return "";
         }
 
-        // The first line is always unique.
-        String firstLine = lines[0].trim();
-        sb.append(String.format("%s\n", firstLine));
-        String lastLine = skipFields(num, firstLine);
-
         // Compare all other lines against the last line.
-        for (int i = 1; i < lines.length; i++) {
-            String line = lines[i].trim();
-            line = skipFields(num, line);
+        String lastLine = null;
+        for (String line : lines) {
+            String skippedLine = skipFields(num, line);
 
             boolean equals;
             if (checkCase) {
-                equals = line.equals(lastLine);
+                equals = skippedLine.equals(lastLine);
             } else {
-                equals = line.equalsIgnoreCase(lastLine);
+                equals = skippedLine.equalsIgnoreCase(lastLine);
             }
             if (!equals) {
-                lastLine = line;
+                lastLine = skippedLine;
                 sb.append(String.format("%s\n", line));
             }
         }
@@ -137,8 +150,16 @@ public class UniqTool extends ATool implements IUniqTool {
         if (skipNum == 0) {
             return str;
         } else {
-            int ws = Math.min(str.indexOf(' '), str.indexOf('\t'));
-            if (ws < 0) {
+            int ws;
+            int spIndex = str.indexOf(' ');
+            int tabIndex = str.indexOf('\t');
+            if (spIndex > 0 && tabIndex > 0) {
+                ws = Math.min(spIndex, tabIndex);
+            } else if (spIndex > 0) {
+                ws = spIndex;
+            } else if (tabIndex > 0) {
+                ws = tabIndex;
+            } else {
                 return "";
             }
             while (str.charAt(ws) == ' ' || str.charAt(ws) == '\t') {

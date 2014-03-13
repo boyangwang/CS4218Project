@@ -26,6 +26,7 @@ public class CopyToolTest {
                 while ((read = is.read(buf)) != -1) {
                     baos.write(buf, 0, read);
                 }
+                is.close();
                 return baos.toByteArray();
             } catch (FileNotFoundException e) {
                 System.err.println("unit test error: " + e.toString());

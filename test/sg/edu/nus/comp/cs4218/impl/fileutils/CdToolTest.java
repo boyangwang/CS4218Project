@@ -10,21 +10,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
-import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.Shell;
-
-import javax.swing.filechooser.FileSystemView;
 
 public class CdToolTest {
     private ICdTool cdTool;
-    private Shell sh;
 
     /**
      * CdTool is integral to the shell, and cannot be tested otherwise.
      */
     @Before
     public void before() {
-        sh = new Shell();
         cdTool = new CdTool(new String[0]);
     }
 

@@ -5,8 +5,6 @@ import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.CommandParser;
 import sg.edu.nus.comp.cs4218.impl.Logging;
-import sg.edu.nus.comp.cs4218.impl.Shell;
-
 import java.io.File;
 
 /**

@@ -2,9 +2,6 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.After;

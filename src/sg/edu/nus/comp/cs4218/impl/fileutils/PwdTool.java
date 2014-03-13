@@ -3,7 +3,6 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import java.io.File;
 import java.io.IOException;
 
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
 

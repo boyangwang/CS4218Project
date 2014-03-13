@@ -6,9 +6,6 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Random;
-
 import static org.junit.Assert.*;
 
 public class DeleteToolTest {

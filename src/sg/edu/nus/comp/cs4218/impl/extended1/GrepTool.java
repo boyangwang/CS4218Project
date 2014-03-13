@@ -350,6 +350,7 @@ public class GrepTool extends ATool implements IGrepTool {
         while (scanner.hasNextLine()) {
             if (Thread.interrupted()) {
                 statusSuccess();
+                scanner.close();
                 return output.toString();
             }
 
