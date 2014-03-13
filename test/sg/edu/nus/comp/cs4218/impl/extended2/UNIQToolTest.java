@@ -245,7 +245,7 @@ public class UNIQToolTest {
 //		assertEquals(result.compareTo("Hello World\nTest\nBEST\n"), 0);
 
         // The last specified parameter is sticky.
-        assertTrue(result.equals("Hello World\n"));
+        assertTrue(result.equals(" \nHello World\nTest\n"));
 
 		Files.delete(file.toPath());
 	}
@@ -267,7 +267,7 @@ public class UNIQToolTest {
 //		assertEquals(result.compareTo("Hello World\nTEST\n"), 0);
 
         // The last specified parameter is sticky.
-        assertTrue(result.equals("Hello World\n"));
+        assertTrue(result.equals(" \nHello World\nTEST\n"));
 		Files.delete(file.toPath());
 	}
 
@@ -283,7 +283,7 @@ public class UNIQToolTest {
         String[] args = new String[]{file.getName()};
         uniqtool = new UniqTool(args);
 		String result = uniqtool.execute(file.getParentFile(), "");
-		assertEquals(result.compareTo("Hello World\nhello World\nTest\ntest\n"), 0);
+		assertEquals(result.compareTo(" \nHello World\nhello World\nTest\ntest\n"), 0);
 		Files.delete(file.toPath());
 	}
 
@@ -299,7 +299,7 @@ public class UNIQToolTest {
         String[] args = new String[]{"-i", file.getName()};
         uniqtool = new UniqTool(args);
 		String result = uniqtool.execute(file.getParentFile(), "");
-		assertEquals(result.compareTo("Hello World\nTEST\n"), 0);
+		assertEquals(result.compareTo(" \nHello World\nTEST\n"), 0);
 		Files.delete(file.toPath());
 	}
 

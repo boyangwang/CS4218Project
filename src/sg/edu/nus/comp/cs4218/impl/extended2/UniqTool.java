@@ -118,8 +118,6 @@ public class UniqTool extends ATool implements IUniqTool {
 
 	@Override
 	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
-        input = input.trim();  // Remove leading/trailing whitespace to prevent blank lines.
-
         String[] lines = input.split("\n");
         StringBuilder sb = new StringBuilder();
 
@@ -128,24 +126,19 @@ public class UniqTool extends ATool implements IUniqTool {
             return "";
         }
 
-        // The first line is always unique.
-        String firstLine = lines[0].trim();
-        sb.append(String.format("%s\n", firstLine));
-        String lastLine = skipFields(num, firstLine);
-
         // Compare all other lines against the last line.
-        for (int i = 1; i < lines.length; i++) {
-            String line = lines[i].trim();
-            line = skipFields(num, line);
+        String lastLine = null;
+        for (String line : lines) {
+            String skippedLine = skipFields(num, line);
 
             boolean equals;
             if (checkCase) {
-                equals = line.equals(lastLine);
+                equals = skippedLine.equals(lastLine);
             } else {
-                equals = line.equalsIgnoreCase(lastLine);
+                equals = skippedLine.equalsIgnoreCase(lastLine);
             }
             if (!equals) {
-                lastLine = line;
+                lastLine = skippedLine;
                 sb.append(String.format("%s\n", line));
             }
         }
@@ -156,8 +149,16 @@ public class UniqTool extends ATool implements IUniqTool {
         if (skipNum == 0) {
             return str;
         } else {
-            int ws = Math.min(str.indexOf(' '), str.indexOf('\t'));
-            if (ws < 0) {
+            int ws;
+            int spIndex = str.indexOf(' ');
+            int tabIndex = str.indexOf('\t');
+            if (spIndex > 0 && tabIndex > 0) {
+                ws = Math.min(spIndex, tabIndex);
+            } else if (spIndex > 0) {
+                ws = spIndex;
+            } else if (tabIndex > 0) {
+                ws = tabIndex;
+            } else {
                 return "";
             }
             while (str.charAt(ws) == ' ' || str.charAt(ws) == '\t') {
