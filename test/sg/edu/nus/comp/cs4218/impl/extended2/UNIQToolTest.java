@@ -6,11 +6,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
 public class UNIQToolTest {
 	private UniqTool uniqtool;
 
     /**
-     * Edited.
+     * @CORRECTED
      * @throws Exception
      */
 	@Before
@@ -28,7 +33,7 @@ public class UNIQToolTest {
     }
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void testGetHelpTest() {
@@ -40,7 +45,7 @@ public class UNIQToolTest {
     }
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueOneLineTest() {
@@ -53,7 +58,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueDifferentCaseTest() {
@@ -66,7 +71,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueManySameLineTest() {
@@ -79,7 +84,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSpecialCharacterTest() {
@@ -98,7 +103,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSkipNumOneLineTest() {
@@ -111,7 +116,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSkipNumDifferentCaseTest() {
@@ -132,7 +137,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSkipNumManySameLineTest() {
@@ -153,7 +158,7 @@ public class UNIQToolTest {
     }
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSkipNumSpecialCharacterTest(){
@@ -174,7 +179,7 @@ public class UNIQToolTest {
     }
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSkipNumMinNumTest() {
@@ -187,7 +192,7 @@ public class UNIQToolTest {
 	}
 
     /**
-     * Edited.
+     * @CORRECTED
      */
 	@Test
 	public void getUniqueSkipNumMaxNumTest(){
@@ -199,91 +204,146 @@ public class UNIQToolTest {
 		assertEquals(result.compareTo("test1\n"), 0);
 	}
 
-//	@Test
-//	public void executeNonNumTest(){
-//		String input = "-i -f a text.txt";
-//		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")),input);
-//		assertEquals(result.compareTo("Error: NUM has to be a positive number"), 0);
-//		assertEquals(uniqtool.getStatusCode(),1);
-//	}
-//
-//	@Test
-//	public void executeNegNumTest(){
-//		String input = "-i -f -2 text.txt";
-//		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")),input);
-//		assertEquals(result.compareTo("Error: NUM has to be a positive number"), 0);
-//		assertEquals(uniqtool.getStatusCode(),1);
-//	}
-//
-//	@Test
-//	public void executeGetUniqueSkipNumMultipleSameOptionTest() throws IOException{
-//		File file = Files.createTempFile("tempFile", ".tmp").toFile();
-//		String input = " \nHello World\nhello World\nTest\ntest\njest\nBEST";
-//		Files.write(file.toPath(), input.getBytes(),  StandardOpenOption.CREATE);
-//		input = "-f 2 -f 3 -f 1 " + file.getName();
-//		String result = uniqtool.execute(file.getParentFile(),input);
+    /**
+     * @CORRECTED
+     */
+	@Test
+	public void executeNonNumTest(){
+        String[] args = new String[]{"-i", "-f", "a", "text.txt"};
+		uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")), "");
+		assertTrue(result.equals("Error: NUM has to be a positive number."));
+		assertEquals(uniqtool.getStatusCode(),1);
+	}
+
+    /**
+     * @CORRECTED
+     */
+	@Test
+	public void executeNegNumTest(){
+        String[] args = new String[]{"-i", "-f", "-2", "text.txt"};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")), "");
+        assertTrue(result.equals("Error: NUM has to be a positive number."));
+		assertEquals(uniqtool.getStatusCode(),1);
+	}
+
+    /**
+     * @CORRECTED
+     * @throws IOException
+     */
+	@Test
+	public void executeGetUniqueSkipNumMultipleSameOptionTest() throws IOException {
+		File file = Files.createTempFile("tempFile", ".tmp").toFile();
+		String fileContents = " \nHello World\nhello World\nTest\ntest\njest\nBEST";
+		Files.write(file.toPath(), fileContents.getBytes(), StandardOpenOption.CREATE);
+        String[] args = new String[]{"-f", "2", "-f", "3", "-f", "1", file.getName()};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(file.getParentFile(), "");
+
+        // Original assert makes no sense for any interpretation of input arguments.
 //		assertEquals(result.compareTo("Hello World\nTest\nBEST\n"), 0);
-//		Files.delete(file.toPath());
-//	}
-//
-//	@Test
-//	public void executeGetUniqueSkipNumMultipleSameOptionIgnoreCaseTest() throws IOException{
-//		File file = Files.createTempFile("tempFile", ".tmp").toFile();
-//		String input = " \nHello World\nhello World\nTEST\ntest\njest\nBEST";
-//		Files.write(file.toPath(), input.getBytes(),  StandardOpenOption.CREATE);
-//		input = "-f 2 -i -f 3 -f 1 " + file.getName();
-//		String result = uniqtool.execute(file.getParentFile(),input);
+
+        // The last specified parameter is sticky.
+        assertTrue(result.equals("Hello World\n"));
+
+		Files.delete(file.toPath());
+	}
+
+    /**
+     * @CORRECTED
+     * @throws IOException
+     */
+	@Test
+	public void executeGetUniqueSkipNumMultipleSameOptionIgnoreCaseTest() throws IOException{
+		File file = Files.createTempFile("tempFile", ".tmp").toFile();
+		String fileContents = " \nHello World\nhello World\nTEST\ntest\njest\nBEST";
+		Files.write(file.toPath(), fileContents.getBytes(),  StandardOpenOption.CREATE);
+        String[] args = new String[]{"-f", "2", "-i", "-f", "3", "-f", "1", file.getName()};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(file.getParentFile(), "");
+
+        // Original assert makes no sense for any interpretation of input arguments.
 //		assertEquals(result.compareTo("Hello World\nTEST\n"), 0);
-//		Files.delete(file.toPath());
-//	}
-//
-//	@Test
-//	public void executeGetUniqueTest() throws IOException{
-//		File file = Files.createTempFile("tempFile", ".tmp").toFile();
-//		String input = " \nHello World\nhello World\nTest\ntest";
-//		Files.write(file.toPath(), input.getBytes(),  StandardOpenOption.CREATE);
-//		input = " " + file.getName();
-//		String result = uniqtool.execute(file.getParentFile(),input);
-//		assertEquals(result.compareTo("Hello World\nhello World\nTest\ntest\n"), 0);
-//		Files.delete(file.toPath());
-//	}
-//
-//	@Test
-//	public void executeGetUniqueIgnoreCaseTest() throws IOException{
-//		File file = Files.createTempFile("tempFile", ".tmp").toFile();
-//		String input = " \nHello World\nhello World\nTEST\ntest";
-//		Files.write(file.toPath(), input.getBytes(),  StandardOpenOption.CREATE);
-//		input = "-i " + file.getName();
-//		String result = uniqtool.execute(file.getParentFile(),input);
-//		assertEquals(result.compareTo("Hello World\nTEST\n"), 0);
-//		Files.delete(file.toPath());
-//	}
-//
-//	@Test
-//	public void executeEmptyFileTest() throws IOException {
-//		File file = Files.createTempFile("tempFile", ".tmp").toFile();
-//		String input = "-f 2 -i -f 3 -f 1 " + file.getName();
-//		String result = uniqtool.execute(file.getParentFile(),input);
-//		assertEquals("\n", result);
-//		Files.delete(file.toPath());
-//	}
-//
-//	@Test
-//	public void executeInvalidOptionTest() throws IOException {
-//		String input = "-f 2 -i -f 3 -f 1 -a temp.txt";
-//		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")),input);
-//		assertEquals("Error: Invalid option", result);
-//		assertEquals(uniqtool.getStatusCode(),1);
-//	}
-//
-//	@Test
-//	public void executeInvalidFileNameTest() {
-//		String input = "-f 2 -i -f 3 -f 1 temp.txt";
-//		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")),input);
-//		assertEquals("Error: FILE is not found", result);
-//		assertEquals(uniqtool.getStatusCode(),1);
-//	}
-//
+
+        // The last specified parameter is sticky.
+        assertTrue(result.equals("Hello World\n"));
+		Files.delete(file.toPath());
+	}
+
+    /**
+     * @CORRECTED
+     * @throws IOException
+     */
+	@Test
+	public void executeGetUniqueTest() throws IOException{
+		File file = Files.createTempFile("tempFile", ".tmp").toFile();
+		String fileContents = " \nHello World\nhello World\nTest\ntest";
+		Files.write(file.toPath(), fileContents.getBytes(),  StandardOpenOption.CREATE);
+        String[] args = new String[]{file.getName()};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(file.getParentFile(), "");
+		assertEquals(result.compareTo("Hello World\nhello World\nTest\ntest\n"), 0);
+		Files.delete(file.toPath());
+	}
+
+    /**
+     * @CORRECTED
+     * @throws IOException
+     */
+	@Test
+	public void executeGetUniqueIgnoreCaseTest() throws IOException{
+		File file = Files.createTempFile("tempFile", ".tmp").toFile();
+		String input = " \nHello World\nhello World\nTEST\ntest";
+		Files.write(file.toPath(), input.getBytes(),  StandardOpenOption.CREATE);
+        String[] args = new String[]{"-i", file.getName()};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(file.getParentFile(), "");
+		assertEquals(result.compareTo("Hello World\nTEST\n"), 0);
+		Files.delete(file.toPath());
+	}
+
+    /**
+     * @CORRECTED
+     * @throws IOException
+     */
+	@Test
+	public void executeEmptyFileTest() throws IOException {
+		File file = Files.createTempFile("tempFile", ".tmp").toFile();
+        String[] args = new String[]{"-f", "2", "-i", "-f", "3", "-f", "1", file.getName()};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(file.getParentFile(), "");
+		assertEquals("\n", result);
+		Files.delete(file.toPath());
+	}
+
+    /**
+     * @CORRECTED
+     * @throws IOException
+     */
+	@Test
+	public void executeInvalidOptionTest() throws IOException {
+        String[] args = new String[]{"-f", "2", "-i", "-f", "3", "-f", "1", "-a", "temp.txt"};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")), "");
+		assertEquals("Error: Invalid option.", result);
+		assertEquals(uniqtool.getStatusCode(),1);
+	}
+
+    /**
+     * @CORRECTED
+     */
+	@Test
+	public void executeInvalidFileNameTest() {
+        String[] args = new String[]{"-f", "2", "-i", "-f", "3", "-f", "1", "temp.txt"};
+        uniqtool = new UniqTool(args);
+		String result = uniqtool.execute(new File(System.getProperty("java.io.tmpdir")), "");
+		assertEquals("Error: FILE is not found.", result);
+		assertEquals(uniqtool.getStatusCode(), 1);
+	}
+
+    // The following nonsensical tests have been removed.
+
 //	@Test
 //	public void executeFileStdinWithOptionTest() throws IOException {
 //		File file = Files.createTempFile("tempFile", ".tmp").toFile();
@@ -314,4 +374,53 @@ public class UNIQToolTest {
 //		assertEquals(uniqtool.getStatusCode(),1);
 //		Files.delete(dir.toPath());
 //	}
+
+    // These are our own tests.
+
+    private File tempDir() {
+        return new File(System.getProperty("java.io.tmpdir"));
+    }
+
+    /**
+     * Tool should accept data from stdin.
+     */
+    @Test
+    public void accpetsDataFromStdin() {
+        String[] args = new String[]{};
+        uniqtool = new UniqTool(args);
+        String result = uniqtool.execute(tempDir(), "test");
+
+        assertTrue(result.equals("test\n"));
+        assertEquals(uniqtool.getStatusCode(), 0);
+    }
+
+    /**
+     * Tool should prefer data from file when both inputs are given.
+     * Data from stdin is ignored.
+     * @throws IOException
+     */
+    @Test
+    public void prefersDataFromFile() throws IOException {
+        // Temp file.
+        String fileData = "file";
+        File file = Files.createTempFile("tempFile", ".tmp").toFile();
+        Files.write(file.toPath(), fileData.getBytes(),  StandardOpenOption.CREATE);
+
+        String[] args = new String[]{file.getName()};
+        uniqtool = new UniqTool(args);
+        String result = uniqtool.execute(file.getParentFile(), "stdin");
+
+        assertTrue(result.equals("file\n"));
+        assertEquals(uniqtool.getStatusCode(), 0);
+    }
+
+    @Test
+    public void stdinSupportsArguments() {
+        String[] args = new String[]{"-i", "-f", "1"};
+        uniqtool = new UniqTool(args);
+        String result = uniqtool.execute(tempDir(), "i hello\nb Hello\ntest\nc world");
+
+        assertTrue(result.equals("i hello\ntest\nc world\n"));
+        assertEquals(uniqtool.getStatusCode(), 0);
+    }
 }

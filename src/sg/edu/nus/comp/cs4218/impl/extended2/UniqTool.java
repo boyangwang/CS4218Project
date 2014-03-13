@@ -9,10 +9,28 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class UniqTool extends ATool implements IUniqTool {
     private final static int BUF_SIZE = 4096;
+    private final static String ERR_NUMFMT = "Error: NUM has to be a positive number.";
+    private final static String ERR_INVALID_ARG = "Error: Invalid option.";
+    private final static String ERR_NOT_FOUND = "Error: FILE is not found.";
+    private final static String ERR_MISSING_PARAM = "Error: Must supply a skip parameter with -f.";
+    private final static String ERR_IO = "Error: Generic IO Error.";
 
 	public UniqTool(String[] arguments) {
         super(arguments);
 	}
+
+    private boolean isNonNegativeInteger(String str) {
+        int val;
+        try {
+            val = Integer.parseInt(str);
+            if (val < 0) {
+                return false;
+            }
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
+    }
 
 	@Override
 	public String execute(File workingDir, String stdin) {
@@ -30,13 +48,13 @@ public class UniqTool extends ATool implements IUniqTool {
                 switch (arg) {
                     case "-f":
                         if (++i < args.length) {
-                            try {
+                            if (isNonNegativeInteger(args[i])) {
                                 skip = Integer.parseInt(args[i]);
-                            } catch (NumberFormatException ex) {
-                                return "Skip parameter must be an integer.";
+                            } else {
+                                return ERR_NUMFMT;
                             }
                         } else {
-                            return "Must supply a skip parameter with -f.";
+                            return ERR_MISSING_PARAM;
                         }
                         break;
 
@@ -49,7 +67,7 @@ public class UniqTool extends ATool implements IUniqTool {
                         break;
 
                     default:
-                        return "Invalid argument.";
+                        return ERR_INVALID_ARG;
                 }
             } else {
                 file = arg;
@@ -67,12 +85,13 @@ public class UniqTool extends ATool implements IUniqTool {
                 statusSuccess();
                 return this.getUniqueSkipNum(skip, checkCase, contents);
             } catch (FileNotFoundException ex) {
-                System.out.println("File not found.");
-                return "";
+                return ERR_NOT_FOUND;
             } catch (IOException e) {
-                System.out.println("An error occurred processing this path.");
-                return "";
+                return ERR_IO;
             }
+        } else if (stdin != null && !stdin.equals("")) {
+            statusSuccess();
+            return this.getUniqueSkipNum(skip, checkCase, stdin);
         } else {
             statusSuccess();
             return this.getHelp();
