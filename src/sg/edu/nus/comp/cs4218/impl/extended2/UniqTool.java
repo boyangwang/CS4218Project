@@ -79,7 +79,7 @@ public class UniqTool extends ATool implements IUniqTool {
         if (file != null && !help) {
             File target;
             try {
-                target = new File(workingDir.getCanonicalPath() + "/" + file);
+                target = workingDir.toPath().resolve(file).toFile();
                 String contents = this.readContentsOfFile(target);
 
                 statusSuccess();
