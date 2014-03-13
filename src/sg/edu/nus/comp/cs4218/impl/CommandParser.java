@@ -4,6 +4,7 @@ package sg.edu.nus.comp.cs4218.impl;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
 
 import java.util.ArrayList;
@@ -62,6 +63,9 @@ public class CommandParser {
 
             case "grep":
                 return new GrepTool(argList);
+
+            case "uniq":
+                return new UniqTool(argList);
 
             default:
                 Logging.logger(System.out).writeLog(Logging.ERROR, "Cannot parse " + trimmedCmd);
