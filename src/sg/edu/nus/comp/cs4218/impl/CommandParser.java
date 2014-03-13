@@ -6,6 +6,7 @@ import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
+import sg.nus.edu.comp.impl.cs4218.WcTool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +64,9 @@ public class CommandParser {
 
             case "grep":
                 return new GrepTool(argList);
+                
+            case "wc":
+            	return new WcTool(argList);
 
             case "uniq":
                 return new UniqTool(argList);
