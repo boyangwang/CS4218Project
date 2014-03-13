@@ -29,15 +29,16 @@ public class UniqTool implements IUniqTool {
 	}
 
 	@Override
-	public String getUniqueSkipNum(int NUM, boolean checkCase, String input) {
+	public String getUniqueSkipNum(int num, boolean checkCase, String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
+		return "NAME\n\nuniq - report or omit repeated lines\n-help\tBrief information about supported options\n-f " +
+               "NUM\tSkips NUM fields on each line before checking for uniqueness separated from each other by at "  +
+               "least one space or";
 	}
 
 }
