@@ -23,7 +23,7 @@ public class WCToolTest {
 
 	@Before
 	public void setUp() throws Exception {
-		wctool = new WcTool();
+		wctool = new WcTool(null);
 	}
 
 	@After
@@ -54,8 +54,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("tempFile", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " -m "+tempFile.getAbsolutePath());
-		assertEquals("45\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{"-m", tempFile.getAbsolutePath()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("45\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -64,8 +65,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("tempFile", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " -w "+tempFile.getAbsolutePath());
-		assertEquals("9\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{"-w", tempFile.getAbsolutePath()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("9\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -74,8 +76,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("tempFile", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " -l "+tempFile.getAbsolutePath());
-		assertEquals("1\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{"-l", tempFile.getAbsolutePath()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -84,8 +87,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("tempFile", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " -l -w "+tempFile.getAbsolutePath());
-		assertEquals("1\t9\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{"-l", "-w", tempFile.getAbsolutePath()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t9\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -94,8 +98,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("tempFile", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " "+tempFile.getAbsolutePath());
-		assertEquals("1\t9\t45\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{tempFile.getAbsolutePath()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t9\t45\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -104,8 +109,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("tempFile", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " "+tempFile.getName());
-		assertEquals("1\t9\t45\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{tempFile.getName()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t9\t45\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -116,8 +122,9 @@ public class WCToolTest {
 		File tempFile2 = Files.createTempFile("tempFile2T", ".tmp").toFile();
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
 		Files.write(tempFile2.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " "+tempFile.getName()+" "+tempFile2.getName());
-		assertEquals("1\t9\t45\t"+tempFile.getName()+"\n1\t9\t45\t"+tempFile2.getName(), msg);
+		wctool = new WcTool(new String[]{tempFile.getName(), tempFile2.getName()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t9\t45\t"+tempFile.getName()+"\n1\t9\t45\t"+tempFile2.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 		Files.delete(tempFile2.toPath());
 	}
@@ -129,8 +136,9 @@ public class WCToolTest {
 		File tempFile2 = Files.createTempFile("tempFile2T", ".tmp").toFile();
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
 		Files.write(tempFile2.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " -l -w "+tempFile.getName()+" "+tempFile2.getName());
-		assertEquals("1\t9\t"+tempFile.getName()+"\n1\t9\t"+tempFile2.getName(), msg);
+		wctool = new WcTool(new String[]{"-l", "-w", tempFile.getName(), tempFile2.getName()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t9\t"+tempFile.getName()+"\n1\t9\t"+tempFile2.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 		Files.delete(tempFile2.toPath());
 	}
@@ -140,8 +148,9 @@ public class WCToolTest {
 		File tempFile = Files.createTempFile("temp File", ".tmp").toFile();
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
-		String msg = wctool.execute(tempWorkingDir, " "+tempFile.getName());
-		assertEquals("1\t9\t45\t"+tempFile.getName(), msg);
+		wctool = new WcTool(new String[]{tempFile.getName()});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals("1\t9\t45\t"+tempFile.getName()+System.lineSeparator(), msg);
 		Files.delete(tempFile.toPath());
 	}
 	
@@ -149,9 +158,9 @@ public class WCToolTest {
     public void getHelpTest() {
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
         String helpText = wctool.getHelp();
-        assertEquals(helpText, wctool.execute(tempWorkingDir, "-help"));
-        assertEquals(helpText, wctool.execute(tempWorkingDir, "-help abcde"));
-        assertEquals(helpText, wctool.execute(tempWorkingDir, "-d ., -s -help abcde"));
+        assertEquals(helpText, new WcTool(new String[]{"-help"}).execute(tempWorkingDir, null));
+        assertEquals(helpText, new WcTool(new String[]{"-help", "abcde"}).execute(tempWorkingDir, null));
+        assertEquals(String.format("wc: illegal option -- d%n"), new WcTool(new String[]{"-d", ".,", "-s", "-help", "abcde"}).execute(tempWorkingDir, null));
     }
 	
 	@Test
@@ -160,8 +169,9 @@ public class WCToolTest {
 		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);
 		File tempWorkingDir = new File(System.getProperty("java.io.tmpdir"));
 		String tempName = "tempFile.tmp " + "test";
-		String msg = wctool.execute(tempWorkingDir, tempName);
-		assertEquals("Error: SOURCE file not found", msg);
+		wctool = new WcTool(new String[]{tempName});
+		String msg = wctool.execute(tempWorkingDir, null);
+		assertEquals(String.format("Error: SOURCE file not found%n"), msg);
 		assertTrue(wctool.getStatusCode() != 0);
 	}
 
