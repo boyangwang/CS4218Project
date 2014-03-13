@@ -286,8 +286,10 @@ public class GrepTool extends ATool implements IGrepTool {
             byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));
             return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
         } catch (NoSuchFileException e) {
+        	statusError();
             return String.format("grep: %s: No such file or directory%n", pathname);
         } catch (IOException e) {
+        	statusError();
             return String.format("grep: %s: %s%n", pathname, e);
         }
     }
