@@ -5,7 +5,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.File;
-import java.lang.reflect.Field;
 
 /**
  * Changes CWD.

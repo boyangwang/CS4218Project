@@ -143,9 +143,18 @@ public class CdToolTest {
      */
     @Test
     public void cdCurrent() throws IOException {
-        String expected = System.getProperty("user.dir");
+    	String expected = System.getProperty("user.dir");
         File result = cdTool.changeDirectory(".");
         assertEquals(result.getCanonicalPath(), expected);
         assertEquals(cdTool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void toolExecute() {
+    	CdTool tool = new CdTool(new String[]{"."}, new Shell());
+    	String result = tool.execute(new File(System.getProperty("user.dir")), "");
+    	String expected = System.getProperty("user.dir");
+    	assertEquals(expected, result);
+    	assertEquals(0, cdTool.getStatusCode());
     }
 }
