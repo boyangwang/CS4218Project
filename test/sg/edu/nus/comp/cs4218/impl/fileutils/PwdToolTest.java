@@ -107,5 +107,19 @@ public class PwdToolTest {
         assertNull(result);
         assertNotEquals(pwdtool.getStatusCode(), 0);
     }
+    
+    /**
+     * MUT: execute()
+     * @throws IOException
+     */
+    @Test
+    public void toolExecute() throws IOException {
+    	File path = new File(".");
+    	PwdTool tool = new PwdTool(new String[0]);
+    	String result = tool.execute(path, "");
+        String expected = new File(System.getProperty("user.dir")).getCanonicalPath();
+    	assertEquals(expected, result);
+    	assertEquals(tool.getStatusCode(), 0);
+    }
 
 }
