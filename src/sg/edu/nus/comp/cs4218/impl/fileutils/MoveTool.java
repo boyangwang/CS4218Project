@@ -31,9 +31,9 @@ public class MoveTool extends ATool implements IMoveTool {
         if (!from.canRead()) {
             return false;
         }
-        
-        if (!to.getParentFile().canWrite()) {
-        	return false;
+
+        if (to.exists() && !to.canWrite()) {
+            return false;
         }
 
         if (from.isDirectory()) {

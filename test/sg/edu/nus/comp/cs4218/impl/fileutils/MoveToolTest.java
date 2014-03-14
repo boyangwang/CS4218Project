@@ -140,7 +140,7 @@ public class MoveToolTest {
 
         boolean result = moveTool.move(f, dest);
         String contents = fileGetString(dest);
-        assertEquals(contents, "");
+        assertEquals("", contents);
         assertFalse(result);
         assertNotEquals(moveTool.getStatusCode(), 0);
 

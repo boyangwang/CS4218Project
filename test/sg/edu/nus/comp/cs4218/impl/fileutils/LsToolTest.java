@@ -131,6 +131,12 @@ public class LsToolTest {
     	
     	assertEquals(expected.toString(),result);
     	assertEquals(0, tool.getStatusCode());
+    	
+    	for (String name : files) {
+    		File f = new File(String.format("%s%s%s", "testDir", File.separator, name));
+    		f.delete();
+    	}
+    	dir.delete();
     }
     
     
