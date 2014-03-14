@@ -3,14 +3,17 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MoveToolTest {
     IMoveTool moveTool;
@@ -144,6 +147,57 @@ public class MoveToolTest {
         dest.setWritable(true);
         dest.delete();
         f.delete();
+    }
+    
+    @Test
+    public void toolExecuteMove() throws IOException {
+    	Random rand = new Random();
+    	
+    	File source = new File("testSrc");
+    	source.createNewFile();
+        byte[] ref = new byte[131072];
+        FileOutputStream fos = new FileOutputStream(source);
+        for (int i = 0; i < 131072; i++) {
+            byte b = (byte)rand.nextInt(255);
+            fos.write(b);
+            ref[i] = b;
+        }
+        fos.close();
+        
+        File dir = new File("testDir");
+        dir.mkdir();
+        
+        String destPath = String.format("testDir%stestDest", File.separator);
+        File dest = new File(destPath);
+        
+        MoveTool tool = new MoveTool(new String[]{"testSrc", destPath});
+        tool.execute(new File(System.getProperty("user.dir")), "");
+        
+        assertFalse(source.exists());
+        assertTrue(dest.exists());
+        byte[] result = fileGetContents(dest);
+        assertTrue(compareByteArrays(ref, result));
+        assertEquals(0, tool.getStatusCode());
+        
+        dest.delete();
+        dir.delete();
+    }
+    
+    private boolean compareByteArrays(byte[] buf1, byte[] buf2) {
+        if (buf1 == null && buf2 == null) {
+            return true;
+        } else if (buf1 == null || buf2 == null) {
+            return false;
+        } else if (buf1.length != buf2.length) {
+            return false;
+        } else {
+            for (int i = 0; i < buf1.length; i++) {
+                if (buf1[i] != buf2[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
 }
