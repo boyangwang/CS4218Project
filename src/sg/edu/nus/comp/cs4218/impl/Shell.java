@@ -19,6 +19,7 @@ import java.util.Scanner;
  * instance can be implemented in Java
  */
 public class Shell implements IShell {
+	String LINE_SEPARATOR = System.lineSeparator();
     private static Shell ref = null;
 
     public static Shell getInstance() {
@@ -233,7 +234,7 @@ public class Shell implements IShell {
      * until ctrl-d<newlinechar> is encountered
 	 * @return string containing the text user inputs, excluding ctrl-d
      */
-	private static String readFromUserInput() {
+	private String readFromUserInput() {
     	@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
     	StringBuilder sb = new StringBuilder();
@@ -244,7 +245,7 @@ public class Shell implements IShell {
     			sb.append(realArg);
     			break;
     		}else{
-    			sb.append(str + "\n");
+    			sb.append(str + LINE_SEPARATOR );
     		}
     		str= sc.nextLine();
     	}
