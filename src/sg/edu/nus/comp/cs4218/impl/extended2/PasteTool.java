@@ -14,6 +14,10 @@ public class PasteTool extends ATool implements IPasteTool {
 	String LINE_SEPARATOR = System.lineSeparator();
 	//String LINE_SEPARATOR = "\n";
 
+	String ERROR_NO_DELIMITER = "Error: please specify delimiter" + LINE_SEPARATOR;
+	String ERROR_INVALID_OPTION = "Error: unknown option %s " + LINE_SEPARATOR;
+	String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s " + LINE_SEPARATOR;
+
 	public PasteTool(String[] arguments) {
         super(arguments);
 	}
@@ -39,13 +43,13 @@ public class PasteTool extends ATool implements IPasteTool {
 						}
 						i++;
 					}else{
-						return "Error: please specify delimiter" + LINE_SEPARATOR;
+						return ERROR_NO_DELIMITER;
 					};
 				}else if (args[i].compareTo("-help")==0){
 					return getHelp();
 					
 				}else{
-					return "Error: unknown option " + args[i] + LINE_SEPARATOR;
+					return String.format(ERROR_INVALID_OPTION, args[i]);
 				}
 			}else{
 				if (args[i].compareTo("-")==0){
@@ -59,7 +63,7 @@ public class PasteTool extends ATool implements IPasteTool {
 					try {
 						filesContent.add(readContentsOfFile(target));
 					} catch (IOException e) {
-						return "Error: cannot read file " + args[i] + LINE_SEPARATOR;
+						return String.format(ERROR_FILE_INACCESSIBLE, args[i]);
 					}
 				}
 			}
