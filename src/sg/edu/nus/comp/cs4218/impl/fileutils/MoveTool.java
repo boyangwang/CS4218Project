@@ -49,53 +49,6 @@ public class MoveTool extends ATool implements IMoveTool {
         }
     }
 
-//    private boolean validSource(File candidate) {
-//        try {
-//            if (!candidate.exists()) {
-//                return false;
-//            }
-//
-//            if (!candidate.canRead()) {
-//                return false;
-//            }
-//
-//            if (!candidate.canWrite()) {
-//                return false;
-//            }
-//        } catch (Exception ex) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
-//
-//    private boolean validDest(File candidate) {
-//        try {
-//            if (!candidate.canWrite()) {
-//                return false;
-//            }
-//
-//            if (candidate.isDirectory()) {
-//                return false;
-//            }
-//        } catch (Exception ex) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
-//
-//    /**
-//     * Tries to remove a partially copied file in case of failure.
-//     *
-//     * @param trash The file to remove.
-//     */
-//    private void cleanup(File trash) {
-//        if (trash.exists() && trash.canWrite()) {
-//            trash.delete();
-//        }
-//    }
-
     /**
      * Executes the tool with args provided in the constructor
      *
