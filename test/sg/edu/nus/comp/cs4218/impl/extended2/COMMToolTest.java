@@ -19,9 +19,11 @@ public class COMMToolTest {
 	private ICommTool commtool;
 
 	@Before
-	@CORRECTED
+	/**
+	 * @CORRECTED setup has to be done specific to each test
+	 * @throws Exception
+	 */
 	public void setUp() throws Exception {
-		commtool = new CommTool(null);
 	}
 
 	@After
@@ -29,7 +31,9 @@ public class COMMToolTest {
 		commtool = null;
 	}
 
-	@CORRECTED
+	/**
+	 * @CORRECTED the help msg is copied from projecet specs
+	 */
 	@Test
 	public void testGetHelp() {
 		String result = commtool.getHelp();
@@ -159,8 +163,10 @@ public class COMMToolTest {
 				input2);
 		assertEquals(expected.compareTo(result), 0);
 	}
-
-	@CORRECTED
+	/**
+	 * @CORRECTED when there is no option, by default "file not sorted" should be printed
+	 * @throws IOException
+	 */
 	@Test
 	public void executeNoOptionTest() throws IOException {
 		// Test expected behavior
@@ -179,8 +185,6 @@ public class COMMToolTest {
 				new String[] { file1.getName(), file2.getName() });
 		String result = commtool.execute(tempFolder, " " + file1.getName()
 				+ " " + file2.getName());
-		System.out.println(temp);
-		System.out.println(result);
 		assertEquals(true, result.contains(temp));
 		Files.delete(file1.toPath());
 		Files.delete(file2.toPath());
@@ -210,8 +214,10 @@ public class COMMToolTest {
 		Files.delete(file2.toPath());
 		Files.delete(tempFolder.toPath());
 	}
-
-	@CORRECTED
+	/**
+	 * @CORRECTED when there are two flags, the first one take effect
+	 * @throws IOException
+	 */
 	@Test
 	public void executeTwoOptionTest() throws IOException {
 		// Test expected behavior
@@ -230,8 +236,6 @@ public class COMMToolTest {
 				file2.getName() });
 		String result = commtool.execute(tempFolder, "-d -c " + file1.getName()
 				+ " " + file2.getName());
-		System.out.println(temp);
-		System.out.println(result);
 		assertEquals(true, result.contains(temp));
 		Files.delete(file1.toPath());
 		Files.delete(file2.toPath());
@@ -291,8 +295,10 @@ public class COMMToolTest {
 		Files.delete(file2.toPath());
 		Files.delete(tempFolder.toPath());
 	}
-
-	@CORRECTED
+	/**
+	 * @CORRECTED if file name contains space, must be wrapped in quotes
+	 * @throws IOException
+	 */
 	@Test
 	public void executeEmptyFileTest() throws IOException {
 		// Test expected behavior
@@ -396,8 +402,6 @@ public class COMMToolTest {
 		String result = commtool.execute(file.getParentFile(),
 				"-d " + file.getName() + " " + file.getName());
 		String expected = "\t\t\t\thello world\n\t\t\t\tthis is a test\n\t\t\t\tfile\n";
-		System.out.println(result);
-		System.out.println(expected);
 		assertEquals(true, result.contains(expected));
 		Files.delete(file.toPath());
 	}

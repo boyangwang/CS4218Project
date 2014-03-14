@@ -87,19 +87,15 @@ public class CommTool extends ATool implements ICommTool {
     		}
 		}
 		catch (InvalidPathException e) {
-			System.out.println("File invalid.");
 			return "File invalid.";
 		}
         catch (FileNotFoundException ex) {
-            System.out.println("File not found.");
             return "File not found.";
         } 
         catch (IOException e) {
-            System.out.println("An error occurred processing this path.");
             return "An error occurred processing this path.";
         }
 		catch (Exception e) {
-			System.out.println("An "+ e +" error has occured");
 			return "An "+ e +" error has occured";
 		}
         
