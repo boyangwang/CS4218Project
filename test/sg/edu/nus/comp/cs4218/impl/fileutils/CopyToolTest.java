@@ -3,9 +3,12 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -174,6 +177,33 @@ public class CopyToolTest {
 
         f.delete();
         dest.delete();
+    }
+    
+    @Test
+    public void testCleanup() throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	File f = new File("testFile");
+        f.createNewFile();
+        
+        Method cleanup = copyTool.getClass().getDeclaredMethod("cleanup", new Class[]{File.class});
+        cleanup.setAccessible(true);
+        cleanup.invoke(copyTool, f);
+        
+        assertFalse(f.exists());
+    }
+    
+    @Test
+    public void toolExecute() throws IOException {
+    	File f = new File("testFile");
+        f.createNewFile();
+        
+    	CopyTool tool = new CopyTool(new String[]{"testFile", "nonExistent"});
+    	String result = tool.execute(new File(System.getProperty("user.dir")), "");
+    	
+    	assertEquals("", result);
+    	assertEquals(0, tool.getStatusCode());
+    	
+    	File dest = new File("nonExistent");
+    	dest.delete();
     }
 
     /**

@@ -150,11 +150,10 @@ public class CdToolTest {
     }
     
     @Test
-    public void toolExecute() {
+    public void toolExecute() throws IOException {
     	CdTool tool = new CdTool(new String[]{"."}, new Shell());
     	String result = tool.execute(new File(System.getProperty("user.dir")), "");
-    	String expected = System.getProperty("user.dir");
-    	assertEquals(expected, result);
+    	assertEquals("", result);
     	assertEquals(0, cdTool.getStatusCode());
     }
 }

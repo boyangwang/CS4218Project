@@ -112,4 +112,26 @@ public class LsToolTest {
         assertNotEquals(lsTool.getStatusCode(), 0);
         f.delete();
     }
+    
+    @Test
+    public void toolExecuteListFiles() throws IOException {
+    	String[] files = new String[]{"a", "b", "c", "d"};
+    	StringBuilder expected = new StringBuilder();
+    	
+    	File dir = new File("testDir");
+    	dir.mkdir();
+    	for (String name : files) {
+    		File f = new File(String.format("%s%s%s", "testDir", File.separator, name));
+    		f.createNewFile();
+    		expected.append(String.format("%s\n", name));
+    	}
+    	
+    	LsTool tool = new LsTool(new String[]{"testDir"});
+    	String result = tool.execute(new File(System.getProperty("user.dir")), "");
+    	
+    	assertEquals(expected.toString(),result);
+    	assertEquals(0, tool.getStatusCode());
+    }
+    
+    
 }

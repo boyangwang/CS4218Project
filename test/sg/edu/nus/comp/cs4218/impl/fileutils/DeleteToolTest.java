@@ -3,9 +3,11 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
 
 import java.io.*;
+
 import static org.junit.Assert.*;
 
 public class DeleteToolTest {
@@ -150,4 +152,20 @@ public class DeleteToolTest {
 //        f.setExecutable(true);
 //        dir.delete();
 //    }
+    
+    @Test
+    public void toolExecute() {
+    	
+    	File dir = new File("testDir");
+        dir.mkdir();
+
+        DeleteTool tool = new DeleteTool(new String[]{"testDir"});
+        String result = tool.execute(new File(System.getProperty("user.dir")), "");
+        
+        assertFalse(dir.exists());
+        assertEquals("", result);
+        assertEquals(0, deleteTool.getStatusCode());
+
+        dir.delete();
+    }
 }

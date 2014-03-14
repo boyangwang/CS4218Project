@@ -117,7 +117,7 @@ public class PwdToolTest {
     	File path = new File(".");
     	PwdTool tool = new PwdTool(new String[0]);
     	String result = tool.execute(path, "");
-        String expected = new File(System.getProperty("user.dir")).getCanonicalPath();
+        String expected = new File(System.getProperty("user.dir")).getCanonicalPath() + "\n";
     	assertEquals(expected, result);
     	assertEquals(tool.getStatusCode(), 0);
     }
