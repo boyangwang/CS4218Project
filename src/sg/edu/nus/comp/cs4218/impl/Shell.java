@@ -3,7 +3,9 @@ package sg.edu.nus.comp.cs4218.impl;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,15 +19,7 @@ import java.util.Scanner;
  * instance can be implemented in Java
  */
 public class Shell implements IShell {
-    private static Shell ref = null;
-
-    public static Shell getInstance() {
-        if (ref == null) {
-            ref = new Shell(null);
-        }
-        return ref;
-    }
-
+	String LINE_SEPARATOR = System.lineSeparator();
 	/**
 	 * TaskExecution Thread
 	 */
@@ -57,6 +51,7 @@ public class Shell implements IShell {
             } catch (IOException e) {
                 // TODO:
             }
+
         }
 		/**
 		 * print output stream to console
@@ -82,17 +77,8 @@ public class Shell implements IShell {
      */
     private File cwd = null;    
     public Shell() {
-    	init();
-        Shell.ref = this;
-    }
-
-    private Shell(String magic) {
-        init();
-    }
-
-    private void init() {
-        String userDir = System.getProperty("user.dir");
-        cwd = new File(userDir);
+    	String userDir = System.getProperty("user.dir");
+    	cwd = new File(userDir);
     }
 
     /**
@@ -167,7 +153,7 @@ public class Shell implements IShell {
 
 	@Override
 	public ITool parse(String commandline) {
-		return CommandParser.parse(commandline);
+		return CommandParser.parse(commandline, this);
 	}
 
 	@Override
@@ -176,7 +162,7 @@ public class Shell implements IShell {
 			return null;
 		}
 		String stdin = "";
-		if(tool instanceof IGrepTool || tool instanceof ICatTool){
+		if(tool instanceof IGrepTool || tool instanceof ICatTool || tool instanceof IPasteTool){
 			ATool aTool = (ATool) tool;
 			int argLength = aTool.args.length;
 			boolean alreadyReadFromStdin = false;;
@@ -222,7 +208,7 @@ public class Shell implements IShell {
      */
 	public static void main(String[] args){
         Logging.logger(System.out).setLevel(Logging.ALL);
-		Shell sh = Shell.getInstance();
+		Shell sh = new Shell();
         sh.run();
 	}
 
@@ -231,7 +217,7 @@ public class Shell implements IShell {
      * until ctrl-d<newlinechar> is encountered
 	 * @return string containing the text user inputs, excluding ctrl-d
      */
-	private static String readFromUserInput() {
+	private String readFromUserInput() {
     	@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
     	StringBuilder sb = new StringBuilder();
@@ -242,7 +228,7 @@ public class Shell implements IShell {
     			sb.append(realArg);
     			break;
     		}else{
-    			sb.append(str + "\n");
+    			sb.append(str + LINE_SEPARATOR );
     		}
     		str= sc.nextLine();
     	}

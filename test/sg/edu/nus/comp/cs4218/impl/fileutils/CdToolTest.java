@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
 
 public class CdToolTest {
     private ICdTool cdTool;
@@ -19,7 +20,8 @@ public class CdToolTest {
      */
     @Before
     public void before() {
-        cdTool = new CdTool(new String[0]);
+        Shell shell = new Shell();
+        cdTool = new CdTool(new String[0], shell);
     }
 
     @After
@@ -141,9 +143,17 @@ public class CdToolTest {
      */
     @Test
     public void cdCurrent() throws IOException {
-        String expected = System.getProperty("user.dir");
+    	String expected = System.getProperty("user.dir");
         File result = cdTool.changeDirectory(".");
         assertEquals(result.getCanonicalPath(), expected);
         assertEquals(cdTool.getStatusCode(), 0);
+    }
+    
+    @Test
+    public void toolExecute() throws IOException {
+    	CdTool tool = new CdTool(new String[]{"."}, new Shell());
+    	String result = tool.execute(new File(System.getProperty("user.dir")), "");
+    	assertEquals("", result);
+    	assertEquals(0, cdTool.getStatusCode());
     }
 }

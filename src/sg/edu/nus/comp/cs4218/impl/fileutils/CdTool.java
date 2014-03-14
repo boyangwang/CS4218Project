@@ -5,7 +5,6 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.File;
-import java.lang.reflect.Field;
 
 /**
  * Changes CWD.
@@ -15,14 +14,16 @@ import java.lang.reflect.Field;
  */
 public class CdTool extends ATool implements ICdTool {
     private File workingDir;
+    private Shell shell;
 
     /**
      * Constructor
      *
      * @param arguments Arguments the tool is going to be executed with.
      */
-    public CdTool(String[] arguments) {
+    public CdTool(String[] arguments, Shell shell) {
         super(arguments);
+        this.shell = shell;
         workingDir = new File(System.getProperty("user.dir"));
     }
 
@@ -105,7 +106,7 @@ public class CdTool extends ATool implements ICdTool {
             return "";
         }
 
-        Shell.getInstance().changeWorkingDirectory(candidateDir);
+        shell.changeWorkingDirectory(candidateDir);
 
         statusSuccess();
         return "";

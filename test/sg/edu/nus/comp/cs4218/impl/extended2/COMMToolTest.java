@@ -13,9 +13,10 @@ import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.extended2.ICommTool;
 import sg.edu.nus.comp.cs4218.impl.CommandParser;
+import sg.edu.nus.comp.cs4218.impl.Shell;
 
 public class COMMToolTest {
-
+    private Shell shell;
 	private ICommTool commtool;
 
 	@Before
@@ -23,7 +24,10 @@ public class COMMToolTest {
 	 * @CORRECTED setup has to be done specific to each test
 	 * @throws Exception
 	 */
+
 	public void setUp() throws Exception {
+        shell = new Shell();
+		commtool = new CommTool(null);
 	}
 
 	@After
@@ -32,7 +36,11 @@ public class COMMToolTest {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * @CORRECTED the help msg is copied from projecet specs
+=======
+	 * @CORRECTED
+>>>>>>> 6f09c1f0bb7d5ade57b62883f3206f8070c0b01c
 	 */
 	@Test
 	public void testGetHelp() {
@@ -163,8 +171,10 @@ public class COMMToolTest {
 				input2);
 		assertEquals(expected.compareTo(result), 0);
 	}
+	
 	/**
 	 * @CORRECTED when there is no option, by default "file not sorted" should be printed
+
 	 * @throws IOException
 	 */
 	@Test
@@ -206,7 +216,7 @@ public class COMMToolTest {
 		Files.write(file2.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		temp = "\t\tbaby\n\t\t\t\thello world\nthis is a test\nfile\n";
 		commtool = (ICommTool)CommandParser.parse("comm " + "-d " + file1.getName()
-				+ " " + file2.getName()); 
+				+ " " + file2.getName(), shell);
 		String result = commtool.execute(tempFolder, "-d " + file1.getName()
 				+ " " + file2.getName());
 		assertEquals(temp.compareTo(result), 0);
@@ -214,6 +224,7 @@ public class COMMToolTest {
 		Files.delete(file2.toPath());
 		Files.delete(tempFolder.toPath());
 	}
+
 	/**
 	 * @CORRECTED when there are two flags, the first one take effect
 	 * @throws IOException
@@ -247,7 +258,7 @@ public class COMMToolTest {
 		// Test expected behavior
 		// only have help in the option, no file names
 		
-		commtool = (ICommTool)CommandParser.parse("comm " + "-help");
+		commtool = (ICommTool)CommandParser.parse("comm " + "-help", shell);
 		
 		String result = commtool.execute(
 				new File(System.getProperty("java.io.tmpdir")), "-help");
@@ -278,7 +289,7 @@ public class COMMToolTest {
 		temp = "baby\nhello world";
 		Files.write(file2.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		
-		commtool = (ICommTool)CommandParser.parse("comm " + "-d -help -c" + file1.getName() + " " + file2.getName());		
+		commtool = (ICommTool)CommandParser.parse("comm " + "-d -help -c" + file1.getName() + " " + file2.getName(), shell);
 		
 		String result = commtool.execute(tempFolder,
 				"-d -help -c" + file1.getName() + " " + file2.getName());
@@ -295,6 +306,7 @@ public class COMMToolTest {
 		Files.delete(file2.toPath());
 		Files.delete(tempFolder.toPath());
 	}
+
 	/**
 	 * @CORRECTED if file name contains space, must be wrapped in quotes
 	 * @throws IOException
@@ -312,7 +324,7 @@ public class COMMToolTest {
 		Files.write(file1.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		
 		commtool = (ICommTool)CommandParser.parse("comm " + "-d -c " + file1.getName()
-				+ " " + file2.getName()); 
+				+ " " + file2.getName(), shell);
 		
 		String result = commtool.execute(tempFolder, "-d -c " + file1.getName()
 				+ " " + file2.getName());
@@ -335,7 +347,7 @@ public class COMMToolTest {
 		Files.write(file1.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		temp = "baby\nhello world";
 		Files.write(file2.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
-		commtool = (ICommTool)CommandParser.parse("comm " + "-d -i -c " + file1.getName() + " " + file2.getName());
+		commtool = (ICommTool)CommandParser.parse("comm " + "-d -i -c " + file1.getName() + " " + file2.getName(), shell);
 		String result = commtool.execute(tempFolder,
 				"-d -i -c " + file1.getName() + " " + file2.getName());
 		
@@ -363,7 +375,7 @@ public class COMMToolTest {
 		Files.write(file2.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		
 		commtool = (ICommTool)CommandParser.parse("comm " + "-d -c " + file1.getName()
-				+ " " + file2.getName()); 
+				+ " " + file2.getName(), shell);
 		
 		String result = commtool.execute(tempFolder, "-d -c " + file1.getName()
 				+ " " + file2.getName());
@@ -381,7 +393,7 @@ public class COMMToolTest {
 		String temp = "hello world\nthis is a test\nfile";
 		Files.write(file.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		
-		commtool = (ICommTool)CommandParser.parse("comm \"" + file.getName() + "\" \"" + file.getName() + "\"");
+		commtool = (ICommTool)CommandParser.parse("comm \"" + file.getName() + "\" \"" + file.getName() + "\"", shell);
 		
 		String result = commtool.execute(file.getParentFile(), file.getName()
 				+ " " + file.getName());
@@ -397,7 +409,7 @@ public class COMMToolTest {
 		Files.write(file.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 
 		commtool = (ICommTool) (CommandParser.parse("comm " + "-d \""
-				+ file.getName() + "\" \"" + file.getName() + "\""));
+				+ file.getName() + "\" \"" + file.getName() + "\"", shell));
 
 		String result = commtool.execute(file.getParentFile(),
 				"-d " + file.getName() + " " + file.getName());
@@ -412,7 +424,7 @@ public class COMMToolTest {
 		String temp = "hello world\nthis is a test\nfile";
 		Files.write(file.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
 		
-		commtool = (ICommTool)CommandParser.parse("comm " + "-c \"" + file.getName() + "\" \"" + file.getName() + "\"");
+		commtool = (ICommTool)CommandParser.parse("comm " + "-c \"" + file.getName() + "\" \"" + file.getName() + "\"", shell);
 		
 		String result = commtool.execute(file.getParentFile(),
 				"-c " + file.getName() + " " + file.getName());

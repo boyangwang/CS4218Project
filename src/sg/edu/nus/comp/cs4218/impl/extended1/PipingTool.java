@@ -5,6 +5,8 @@ import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 import sg.edu.nus.comp.cs4218.impl.CommandParser;
 import sg.edu.nus.comp.cs4218.impl.Logging;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
 import java.io.File;
 
 /**
@@ -19,6 +21,7 @@ import java.io.File;
  */
 public class PipingTool extends ATool implements IPipingTool {
     private File pipeWorkingDirectory = new File(System.getProperty("user.dir"));
+    private Shell shell;
 	public static final String ERROR_MSG_NULL_SHELL = "Shell internal error- Null shell reference";
 	public static final String ERROR_MSG_NULL_CMD = "Shell internal error- Null cmd reference";
 	
@@ -27,8 +30,9 @@ public class PipingTool extends ATool implements IPipingTool {
      *
      * @param arguments arguments is the array of commands, connected by pipe operator and parsed by CommandParser
      */
-    public PipingTool(String[] arguments) {
+    public PipingTool(String[] arguments, Shell shell) {
         super(arguments);
+        this.shell = shell;
     }
 
     /**
@@ -91,7 +95,7 @@ public class PipingTool extends ATool implements IPipingTool {
                 return output;
             }
 
-    		command = CommandParser.parse(args[i]);
+    		command = CommandParser.parse(args[i], shell);
     		
     		if (command == null) {
     			Logging.logger(System.out).writeLog(5, args[i]);

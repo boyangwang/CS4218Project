@@ -4,7 +4,9 @@ package sg.edu.nus.comp.cs4218.impl;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.PasteTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.CommTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.SortTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
@@ -23,7 +25,7 @@ public class CommandParser {
 	 * @param rawInput user command
 	 * @return ITool if user command is valid, null otherwise
 	 */
-    public static ITool parse(String rawInput) {
+    public static ITool parse(String rawInput, Shell shell) {
     	String trimmedCmd = rawInput.trim();
         // at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
     	if (!verifyCommand(trimmedCmd)) {
@@ -31,7 +33,7 @@ public class CommandParser {
     	}
     	String[] argList = tokenizePipeCommands(trimmedCmd);
         if (argList != null) {
-            return new PipingTool(argList);
+            return new PipingTool(argList, shell);
         }
 
         String[] tokens = tokenizeString(trimmedCmd);
@@ -43,7 +45,7 @@ public class CommandParser {
                 return new CatTool(argList);
 
             case "cd":
-                return new CdTool(argList);
+                return new CdTool(argList, shell);
 
             case "copy":
                 return new CopyTool(argList);
@@ -60,6 +62,8 @@ public class CommandParser {
             case "move":
                 return new MoveTool(argList);
 
+            case "paste":
+                return new PasteTool(argList);
             case "pwd":
                 return new PwdTool(argList);
 
@@ -71,8 +75,13 @@ public class CommandParser {
 
             case "uniq":
                 return new UniqTool(argList);
+
             case "comm":
             	return new CommTool(argList);
+            	
+            case "sort":
+            	return new SortTool(argList);
+
             default:
                 Logging.logger(System.out).writeLog(Logging.ERROR, "Cannot parse " + trimmedCmd);
                 return null;

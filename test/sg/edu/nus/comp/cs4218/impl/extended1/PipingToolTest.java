@@ -45,32 +45,32 @@ public class PipingToolTest {
 		String output;
 
 		args = new String[]{"echo foo", "cat -"};
-		pipingTool = new PipingTool(args);
+		pipingTool = new PipingTool(args, shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals("foo" + System.lineSeparator(), output);
 		
 		args = new String[]{"echo foo", "echo bar", "cat -"};
-		pipingTool = new PipingTool(args);
+		pipingTool = new PipingTool(args, shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(0, pipingTool.getStatusCode());
 		assertEquals("bar" + System.lineSeparator(), output);
 		
 		// cases where one or more of the commands are null
 		args = new String[]{"echo foo", ""};
-		pipingTool = new PipingTool(args);
+		pipingTool = new PipingTool(args, shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
 		
 		args = new String[]{"", "echo foo"};
-		pipingTool = new PipingTool(args);
+		pipingTool = new PipingTool(args, shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
 		
 		args = new String[]{"echo foo", "", ""};
-		pipingTool = new PipingTool(args);
+		pipingTool = new PipingTool(args, shell);
 		output = pipingTool.execute(shell.getWorkingDirectory(), "");
 		assertEquals(1, pipingTool.getStatusCode());
 		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);
@@ -81,7 +81,7 @@ public class PipingToolTest {
 	 */
 	@Test
 	public void testPipeIToolITool() {
-		pipingTool = new PipingTool(new String[]{});
+		pipingTool = new PipingTool(new String[]{}, new Shell());
 		
 		EchoTool from = new EchoTool(new String[]{"foo"});
 		CatTool to = new CatTool(new String[]{"-"});
@@ -96,7 +96,7 @@ public class PipingToolTest {
 	 */
 	@Test
 	public void testPipeStringITool() {
-		pipingTool = new PipingTool(new String[]{});
+		pipingTool = new PipingTool(new String[]{}, new Shell());
 		
 		String input;
 		String result;
