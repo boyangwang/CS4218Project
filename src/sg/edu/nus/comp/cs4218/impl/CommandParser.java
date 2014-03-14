@@ -74,8 +74,10 @@ public class CommandParser {
 
             case "uniq":
                 return new UniqTool(argList);
+
             case "comm":
             	return new CommTool(argList);
+
             default:
                 Logging.logger(System.out).writeLog(Logging.ERROR, "Cannot parse " + trimmedCmd);
                 return null;
