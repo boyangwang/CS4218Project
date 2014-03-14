@@ -4,6 +4,7 @@ package sg.edu.nus.comp.cs4218.impl;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.CommTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
@@ -70,7 +71,8 @@ public class CommandParser {
 
             case "uniq":
                 return new UniqTool(argList);
-
+            case "comm":
+            	return new CommTool(argList);
             default:
                 Logging.logger(System.out).writeLog(Logging.ERROR, "Cannot parse " + trimmedCmd);
                 return null;
@@ -129,9 +131,11 @@ public class CommandParser {
 			if (!inQuotes && (c == DQUOTE_CHAR || c==QUOTE_CHAR || c==BQUOTE_CHAR)) {
 				inQuotes = true;
 				currentQuote = c;
+				continue;
 			} else if (inQuotes && (currentQuote == c)) {
 				inQuotes = false;
 				currentQuote = 0;
+				continue;
 			}
 			
 			curCmd.append(c);
@@ -164,11 +168,13 @@ public class CommandParser {
     					//exiting from quote
     					currentQuote = 0; 
     					isInQuote = false;
+    					continue;
     				}
     			}else{
     				if (c==QUOTE_CHAR || c==DQUOTE_CHAR || c==BQUOTE_CHAR){
     					currentQuote = c;
     					isInQuote = true;
+    					continue;
     				}
     			}
     			if (c==DELIMITER_CHAR && !isInQuote){
