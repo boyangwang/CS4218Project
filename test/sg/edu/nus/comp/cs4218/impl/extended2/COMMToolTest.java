@@ -36,11 +36,7 @@ public class COMMToolTest {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * @CORRECTED the help msg is copied from projecet specs
-=======
-	 * @CORRECTED
->>>>>>> 6f09c1f0bb7d5ade57b62883f3206f8070c0b01c
 	 */
 	@Test
 	public void testGetHelp() {
