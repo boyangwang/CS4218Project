@@ -4,6 +4,7 @@ package sg.edu.nus.comp.cs4218.impl;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.PasteTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
@@ -59,6 +60,8 @@ public class CommandParser {
             case "move":
                 return new MoveTool(argList);
 
+            case "paste":
+                return new PasteTool(argList);
             case "pwd":
                 return new PwdTool(argList);
 

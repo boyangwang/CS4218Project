@@ -21,7 +21,7 @@ public class PASTEToolTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		pastetool = new PasteTool();
+		pastetool = new PasteTool(new String[0]);
 		testDir = new File("testPasteFolder");
         testDir.mkdir();
         
