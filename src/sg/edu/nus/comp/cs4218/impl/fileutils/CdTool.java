@@ -2,7 +2,6 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
-import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -14,7 +13,7 @@ import java.lang.reflect.Field;
  * Extra parameters are ignored.
  */
 public class CdTool extends ATool implements ICdTool {
-    private File workingDir;
+    File workingDir;
 
     /**
      * Constructor
@@ -105,7 +104,20 @@ public class CdTool extends ATool implements ICdTool {
             return "";
         }
 
-        Shell.getInstance().changeWorkingDirectory(candidateDir);
+        try {
+            // Usually bad practice to use reflection in this manner. However,
+            // the other viable alternative would be to pass a reference to
+            // the shell to the tool in order to be able to set the shell's
+            // working directory, which is arguably an even worse practice,
+            // as it breaks encapsulation, and would be more incompatible as it
+            // requires the addition and usage of our own private api.
+            Field field = workingDir.getClass().getDeclaredField("path");
+            field.setAccessible(true);
+            field.set(workingDir, candidateDir.getPath());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            statusError();
+            return "";
+        }
 
         statusSuccess();
         return "";

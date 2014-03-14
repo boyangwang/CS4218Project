@@ -17,15 +17,6 @@ import java.util.Scanner;
  * instance can be implemented in Java
  */
 public class Shell implements IShell {
-    private static Shell ref = null;
-
-    public static Shell getInstance() {
-        if (ref == null) {
-            ref = new Shell(null);
-        }
-        return ref;
-    }
-
 	/**
 	 * TaskExecution Thread
 	 */
@@ -57,6 +48,7 @@ public class Shell implements IShell {
             } catch (IOException e) {
                 // TODO:
             }
+
         }
 		/**
 		 * print output stream to console
@@ -82,17 +74,8 @@ public class Shell implements IShell {
      */
     private File cwd = null;    
     public Shell() {
-    	init();
-        Shell.ref = this;
-    }
-
-    private Shell(String magic) {
-        init();
-    }
-
-    private void init() {
-        String userDir = System.getProperty("user.dir");
-        cwd = new File(userDir);
+    	String userDir = System.getProperty("user.dir");
+    	cwd = new File(userDir);
     }
 
     /**
@@ -222,7 +205,7 @@ public class Shell implements IShell {
      */
 	public static void main(String[] args){
         Logging.logger(System.out).setLevel(Logging.ALL);
-		Shell sh = Shell.getInstance();
+		Shell sh = new Shell();
         sh.run();
 	}
 
