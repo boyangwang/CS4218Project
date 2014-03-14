@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
 
 public class CdToolTest {
     private ICdTool cdTool;
@@ -19,7 +20,8 @@ public class CdToolTest {
      */
     @Before
     public void before() {
-        cdTool = new CdTool(new String[0]);
+        Shell shell = new Shell();
+        cdTool = new CdTool(new String[0], shell);
     }
 
     @After
