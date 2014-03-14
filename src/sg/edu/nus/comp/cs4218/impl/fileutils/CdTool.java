@@ -15,14 +15,16 @@ import java.lang.reflect.Field;
  */
 public class CdTool extends ATool implements ICdTool {
     private File workingDir;
+    private Shell shell;
 
     /**
      * Constructor
      *
      * @param arguments Arguments the tool is going to be executed with.
      */
-    public CdTool(String[] arguments) {
+    public CdTool(String[] arguments, Shell shell) {
         super(arguments);
+        this.shell = shell;
         workingDir = new File(System.getProperty("user.dir"));
     }
 
@@ -105,7 +107,7 @@ public class CdTool extends ATool implements ICdTool {
             return "";
         }
 
-        Shell.getInstance().changeWorkingDirectory(candidateDir);
+        shell.changeWorkingDirectory(candidateDir);
 
         statusSuccess();
         return "";

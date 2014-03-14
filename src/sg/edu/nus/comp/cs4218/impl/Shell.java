@@ -20,15 +20,6 @@ import java.util.Scanner;
  */
 public class Shell implements IShell {
 	String LINE_SEPARATOR = System.lineSeparator();
-    private static Shell ref = null;
-
-    public static Shell getInstance() {
-        if (ref == null) {
-            ref = new Shell(null);
-        }
-        return ref;
-    }
-
 	/**
 	 * TaskExecution Thread
 	 */
@@ -60,6 +51,7 @@ public class Shell implements IShell {
             } catch (IOException e) {
                 // TODO:
             }
+
         }
 		/**
 		 * print output stream to console
@@ -85,17 +77,8 @@ public class Shell implements IShell {
      */
     private File cwd = null;    
     public Shell() {
-    	init();
-        Shell.ref = this;
-    }
-
-    private Shell(String magic) {
-        init();
-    }
-
-    private void init() {
-        String userDir = System.getProperty("user.dir");
-        cwd = new File(userDir);
+    	String userDir = System.getProperty("user.dir");
+    	cwd = new File(userDir);
     }
 
     /**
@@ -170,7 +153,7 @@ public class Shell implements IShell {
 
 	@Override
 	public ITool parse(String commandline) {
-		return CommandParser.parse(commandline);
+		return CommandParser.parse(commandline, this);
 	}
 
 	@Override
@@ -225,7 +208,7 @@ public class Shell implements IShell {
      */
 	public static void main(String[] args){
         Logging.logger(System.out).setLevel(Logging.ALL);
-		Shell sh = Shell.getInstance();
+		Shell sh = new Shell();
         sh.run();
 	}
 
