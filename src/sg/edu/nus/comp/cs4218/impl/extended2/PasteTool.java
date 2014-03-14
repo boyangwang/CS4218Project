@@ -11,6 +11,8 @@ import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class PasteTool extends ATool implements IPasteTool {
+	String LINE_SEPARATOR = System.lineSeparator();
+	//String LINE_SEPARATOR = "\n";
 
 	public PasteTool(String[] arguments) {
         super(arguments);
@@ -37,16 +39,19 @@ public class PasteTool extends ATool implements IPasteTool {
 						}
 						i++;
 					}else{
-						return "Error: please specify delimiter\n";
+						return "Error: please specify delimiter" + LINE_SEPARATOR;
 					};
+				}else if (args[i].compareTo("-help")==0){
+					return getHelp();
+					
 				}else{
-					return "Error: unknown option "+args[i]+"\n";
+					return "Error: unknown option " + args[i] + LINE_SEPARATOR;
 				}
 			}else{
 				if (args[i].compareTo("-")==0){
 					if (isFirstStdin){
 						isFirstStdin=false;
-						filesContent.add(stdin.split("\\n"));
+						filesContent.add(stdin.split(LINE_SEPARATOR));
 					}
 				}else{
 
@@ -54,7 +59,7 @@ public class PasteTool extends ATool implements IPasteTool {
 					try {
 						filesContent.add(readContentsOfFile(target));
 					} catch (IOException e) {
-						return "Error: cannot read file " + args[i] + "\n";
+						return "Error: cannot read file " + args[i] + LINE_SEPARATOR;
 					}
 				}
 			}
@@ -81,7 +86,7 @@ public class PasteTool extends ATool implements IPasteTool {
 						currDelimiter++;
 					}
 				}
-				out+="\n";
+				out+=LINE_SEPARATOR;
 				currDelimiter=0;
 				lineNumber++;
 				if(numFilesLeft==0){
@@ -101,7 +106,7 @@ public class PasteTool extends ATool implements IPasteTool {
 						currDelimiter++;
 					}
 				}
-				out += "\n";
+				out += LINE_SEPARATOR;
 			}
 		}
 
@@ -129,9 +134,11 @@ public class PasteTool extends ATool implements IPasteTool {
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
-		return "NAME\n\nPaste - merge lines of files\n-d Delimiter\tUser custom delimiter instead of the default tab\n" +
-               "-s\tpaste one file at a time instead of in parallel"   +
-               "-help\tBrief information about supported options.\n";
+		return "NAME" + LINE_SEPARATOR + LINE_SEPARATOR +
+				"Paste - merge lines of files" + LINE_SEPARATOR +
+				"-d DELIM:\tUser custom delimiter instead of the default tab" + LINE_SEPARATOR +
+				"-s\t\tpaste one file at a time instead of in parallel"   + LINE_SEPARATOR +
+				"-help\t\tBrief information about supported options." + LINE_SEPARATOR ;
 	}
     private String[] readContentsOfFile(File file) throws IOException {
     	ArrayList<String> outTmp = new ArrayList<String>();
