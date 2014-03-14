@@ -20,7 +20,10 @@ public class COMMToolTest {
 	private ICommTool commtool;
 
 	@Before
-	@CORRECTED
+	/**
+	 * @CORRECTED
+	 * @throws Exception
+	 */
 	public void setUp() throws Exception {
         shell = new Shell();
 		commtool = new CommTool(null);
@@ -31,7 +34,9 @@ public class COMMToolTest {
 		commtool = null;
 	}
 
-	@CORRECTED
+	/**
+	 * @CORRECTED
+	 */
 	@Test
 	public void testGetHelp() {
 		String result = commtool.getHelp();
@@ -162,7 +167,10 @@ public class COMMToolTest {
 		assertEquals(expected.compareTo(result), 0);
 	}
 
-	@CORRECTED
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
 	@Test
 	public void executeNoOptionTest() throws IOException {
 		// Test expected behavior
@@ -213,7 +221,10 @@ public class COMMToolTest {
 		Files.delete(tempFolder.toPath());
 	}
 
-	@CORRECTED
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
 	@Test
 	public void executeTwoOptionTest() throws IOException {
 		// Test expected behavior
@@ -294,7 +305,10 @@ public class COMMToolTest {
 		Files.delete(tempFolder.toPath());
 	}
 
-	@CORRECTED
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
 	@Test
 	public void executeEmptyFileTest() throws IOException {
 		// Test expected behavior
