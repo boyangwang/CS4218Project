@@ -47,13 +47,13 @@ public class WcTool extends ATool implements IWcTool {
                             break;
                         default:
                             statusError();
-                            return "wc: illegal option -- " + flag + System.lineSeparator();
+                            return String.format("wc: illegal option -- %s%n", flag);
                     }
                 }
             }
         }
 
-        if (i >= args.length) {
+        if (i == args.length) {
             statusError();
             return getHelp();
         }
@@ -133,7 +133,7 @@ public class WcTool extends ATool implements IWcTool {
             return String.format("%s%s%n", wc(UTF_8.decode(ByteBuffer.wrap(encoded)).toString()), path.getFileName());
         } catch (NoSuchFileException e) {
         	statusError();
-            return String.format("Error: SOURCE file not found%n", pathname);
+            return String.format("Error: SOURCE file not found%n");
         } catch (IOException e) {
         	statusError();
             return String.format("wc: %s: %s%n", pathname, e);

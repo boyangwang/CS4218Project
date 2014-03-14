@@ -6,6 +6,7 @@ import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
 import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.PasteTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.CommTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.SortTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.*;
@@ -77,6 +78,9 @@ public class CommandParser {
 
             case "comm":
             	return new CommTool(argList);
+            	
+            case "sort":
+            	return new SortTool(argList);
 
             default:
                 Logging.logger(System.out).writeLog(Logging.ERROR, "Cannot parse " + trimmedCmd);
