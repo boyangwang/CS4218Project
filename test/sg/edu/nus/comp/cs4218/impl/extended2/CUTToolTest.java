@@ -27,7 +27,7 @@ public class CUTToolTest {
     
     @Before
     public void setUp() throws Exception {
-        cuttool = new CutTool();
+        cuttool = new CutTool(new String[0]);
         
         testDir = new File("testCutFolder");
         testDir.mkdir();
