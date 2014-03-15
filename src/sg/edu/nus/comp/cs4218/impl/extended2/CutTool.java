@@ -31,6 +31,7 @@ public class CutTool extends ATool implements ICutTool {
 	String ERROR_INVALID_CUT_LIST = "Error: invalid cut list\n";
 	String ERROR_INVALID_FIELD_LIST = "Error: invalid field list\n";
 	String ERROR_DELIM_MORE_THAN_ONE_CHAR = "Error: delimter must be one char\n";
+	String ERROR_INVALID_DELIM = "Error: delimter is invalid\n";
 	String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s " + LINE_SEPARATOR;
 	String ERROR_NO_MODE_SPECIFIED = "Error: no mode specified\n";
 	String ERROR_NO_FILE = "Error: please specify at least one file\n";
@@ -134,7 +135,7 @@ public class CutTool extends ATool implements ICutTool {
 			return ERROR_NO_MODE_SPECIFIED;
 		}
 
-		return out;
+		return out + LINE_SEPARATOR;
 	}
 
 	/*
@@ -215,8 +216,15 @@ public class CutTool extends ATool implements ICutTool {
 			return ERROR_INVALID_CUT_LIST;
 		}
 		String out = "";
-		
+		boolean isFirstLine = true;
 		for (int i = 0; i < inputTokens.length; i++) {
+
+			if (isFirstLine){
+				isFirstLine=false;
+			}else{
+				out+= LINE_SEPARATOR;
+			}
+
 			String line = inputTokens[i];
 			StringBuilder outLine = new StringBuilder();
 			for (int j = 0; j < line.length(); j++) {
@@ -227,8 +235,7 @@ public class CutTool extends ATool implements ICutTool {
 					}
 				}
 			}
-			out+= outLine.toString() + LINE_SEPARATOR;
-			
+			out+= outLine.toString();
 		}
 		return out;
 	}
@@ -237,18 +244,33 @@ public class CutTool extends ATool implements ICutTool {
 	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
 			String input) {
 
+		if (delim==null || delim.length()!=1){
+			delim = "\t";
+		}
+		if (list==null){
+			return "";
+		}
+		if (input==null){
+			return "";
+		}
 		String[] inputTokens = input.split(LINE_SEPARATOR);
 		Range[] ranges = convertListToRange(list);
 		if(ranges==null){
 			return ERROR_INVALID_FIELD_LIST;
 		}
 		String out = "";
-		
+		boolean isFirstLine = true;
 		for (int i = 0; i < inputTokens.length; i++) {
+
+			if(isFirstLine){
+				isFirstLine = false;
+			}else{
+				out+= LINE_SEPARATOR;
+			}
 			String line = inputTokens[i];
 			if (line.indexOf(delim)==-1){
 				//don't touch this line
-				out += inputTokens[i] + LINE_SEPARATOR;
+				out += inputTokens[i];
 			}else{
 				String[] lineTokens = line.split(delim);
 				StringBuilder outLine = new StringBuilder();
@@ -268,7 +290,7 @@ public class CutTool extends ATool implements ICutTool {
 						}
 					}
 				}
-				out+= outLine.toString() + LINE_SEPARATOR;
+				out+= outLine.toString();
 			}
 			
 		}
