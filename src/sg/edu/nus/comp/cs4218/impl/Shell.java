@@ -99,7 +99,7 @@ public class Shell implements IShell {
      * 4. Execute the command and its arguments on the newly created thread. Exit with the status code of the executed command
      * 5. In the instance, wait for the thread to complete execution
      * 6. Report the exit status of the command to the user
-     */    
+     */
 	public void run() {
         Scanner sc = new Scanner(System.in);
 		Thread runningThread = null;
