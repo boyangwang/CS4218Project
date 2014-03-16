@@ -65,10 +65,13 @@ public class CommandParser {
 
             case "paste":
                 return new PasteTool(argList);
+                
             case "pwd":
                 return new PwdTool(argList);
+                
             case "cut":
                 return new CutTool(argList);
+                
             case "grep":
                 return new GrepTool(argList);
                 
