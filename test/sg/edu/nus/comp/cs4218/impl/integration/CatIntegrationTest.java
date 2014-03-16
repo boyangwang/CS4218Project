@@ -10,43 +10,24 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 
-public class UniqIntegrationTest {
+public class CatIntegrationTest {
     // Used to abstract Shell testing. You'll need these in a new suite.
     private ByteArrayInputStream simIn;
     private ByteArrayOutputStream simOut;
     private Shell shell;
 
     // Used only in this test suite.
-    private final String TEST_INPUT_FILE = "uniq-test-in.txt";
-    private final String TEST_OUTPUT_FILE = "uniq-test-output.txt";
+    private final String TEST_INPUT_FILE = "cat-test-in.txt";
+    private final String TEST_OUTPUT_FILE = "cat-test-output.txt";
     private File fin;
     private File fout;
 
     // You need this method.
     private String getStringFromOutput() {
         String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);
-        String[] lines = out.split("\n");
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-
-            // Ignore empty lines.
-            if (line == "") {
-                continue;
-            }
-
-            // Greedily strip prompts from beginning of line.
-            int promptIndex;
-            if ((promptIndex = line.lastIndexOf("> ")) >= 0) {
-                line = line.substring(promptIndex + 2);
-            }
-
-            // Pack line back into string.
-            sb.append(line).append("\n");
-        }
-
-        // Should not contain trailing newline.
-        return sb.toString().trim();
+        out = out.substring(out.indexOf("> ") + 2).trim();
+        out = out.substring(0, out.lastIndexOf("\n"));
+        return out;
     }
 
     // You need this method.
@@ -86,28 +67,10 @@ public class UniqIntegrationTest {
     }
 
     /**
-     * uniq | cut
+     * cat | grep
      */
     @Test
-    public void uniqCut() throws IOException {
-        String input = "hello\nhello\nworld\ncat\ndog";
-        FileWriter fw = new FileWriter(fin);
-        fw.write(input);
-        fw.close();
-
-        setupShellWithInput(String.format("uniq %s | cut -c1-3", TEST_INPUT_FILE));
-        shell.run();
-        String result = getStringFromOutput();
-
-        String expected = "hel\nwor\ncat\ndog";
-        assertEquals(expected, result);
-    }
-
-    /**
-     * uniq | uniq
-     */
-    @Test
-    public void uniqUniq() throws IOException {
+    public void catGrep() throws IOException {
         // Setup the test case.
         String input = "hello\nhello\nworld\ncat\ndog";
         FileWriter fw = new FileWriter(fin);
@@ -115,51 +78,96 @@ public class UniqIntegrationTest {
         fw.close();
 
         // Call and run the shell like this.
-        setupShellWithInput(String.format("uniq %s | uniq", TEST_INPUT_FILE));
+        setupShellWithInput(String.format("cat %s | grep hello", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
         // Do your asserts.
-        String expected = "hello\nworld\ncat\ndog";
+        String expected = "hello\nhello";
         assertEquals(expected, result);
     }
-
+    
     /**
-     * uniq | paste
-     * @throws IOException
+     * grep | cat
      */
     @Test
-    public void uniqPaste() throws IOException {
+    public void grepCat() throws IOException {
+        // Setup the test case.
         String input = "hello\nhello\nworld\ncat\ndog";
         FileWriter fw = new FileWriter(fin);
         fw.write(input);
         fw.close();
 
-        // TODO: paste a file.
-        setupShellWithInput(String.format("uniq %s | paste %s", TEST_INPUT_FILE, TEST_INPUT_FILE));
+        // Call and run the shell like this.
+        setupShellWithInput(String.format("grep hello %s | cat", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "hello\nhello\nworld\ncat\ndog";
+        // Do your asserts.
+        String expected = "hello\nhello";
         assertEquals(expected, result);
     }
-
+    
     /**
-     * uniq | wc
-     * @throws IOException
+     * grep | cat | grep | grep | cat | cat
      */
     @Test
-    public void uniqWc() throws IOException {
+    public void grepCatGrepGrepCatCat() throws IOException {
+        // Setup the test case.
         String input = "hello\nhello\nworld\ncat\ndog";
         FileWriter fw = new FileWriter(fin);
         fw.write(input);
         fw.close();
 
-        setupShellWithInput(String.format("uniq %s | wc", TEST_INPUT_FILE));
+        // Call and run the shell like this.
+        setupShellWithInput(String.format("grep hello %s | cat | grep h | grep e | cat | cat", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "4\t4\t20";
+        // Do your asserts.
+        String expected = "hello\nhello";
+        assertEquals(expected, result);
+    }
+    
+    /**
+     * cat | grep | cat | sort
+     */
+    @Test
+    public void catGrepCatSort() throws IOException {
+        // Setup the test case.
+        String input = "hello\nhello\nworld\ncat\ndog\nHello";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        // Call and run the shell like this.
+        setupShellWithInput(String.format("cat %s | grep l | cat | sort", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        // Do your asserts.
+        String expected = "Hello\nhello\nhello\nworld";
+        assertEquals(expected, result);
+    }
+    
+    /**
+     * cat | grep | cat | sort | wc
+     */
+    @Test
+    public void catGrepCatSortWc() throws IOException {
+        // Setup the test case.
+        String input = "hello\nhello\nworld\ncat\ndog\nHello";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        // Call and run the shell like this.
+        setupShellWithInput(String.format("cat %s | grep l | cat | sort | wc", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        // Do your asserts.
+        String expected = "4\t4\t24\t";
         assertEquals(expected, result);
     }
 }
