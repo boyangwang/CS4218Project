@@ -17,8 +17,8 @@ public class PasteIntegrationTest {
     private Shell shell;
 
     // Used only in this test suite.
-    private final String TEST_INPUT_FILE = "sort-test-in.txt";
-    private final String TEST_OUTPUT_FILE = "sort-test-output.txt";
+    private final String TEST_INPUT_FILE = "paste-test-in.txt";
+    private final String TEST_OUTPUT_FILE = "paste-test-output.txt";
     private File fin;
     private File fout;
 
