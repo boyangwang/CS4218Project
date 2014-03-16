@@ -15,12 +15,18 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
+ * 
+ * IMPORTANT METHOD COVERAGE NOTE: since many methods in this shell cannot be automated, 
+ * we do not guarantee 100% method coverage for our shell.
+ * 
  * The Shell is used to interpret and execute user's
  * commands. Following sequence explains how a basic
  * instance can be implemented in Java
+ * 
  */
 public class Shell implements IShell {
 	String LINE_SEPARATOR = System.lineSeparator();
+	CommandParser cmdParser = new CommandParser();
     InputStream is;
     OutputStream os;
     PrintStream ps;
