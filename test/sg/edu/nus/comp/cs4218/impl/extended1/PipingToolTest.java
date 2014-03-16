@@ -39,7 +39,7 @@ public class PipingToolTest {
 	 */
 	@Test
 	public void testExecute() {
-		Shell shell = new Shell();
+		Shell shell = new Shell(System.in, System.out);
 		String[] args;
 		String output;
 
@@ -80,7 +80,7 @@ public class PipingToolTest {
 	 */
 	@Test
 	public void testPipeIToolITool() {
-		pipingTool = new PipingTool(new String[]{}, new Shell());
+		pipingTool = new PipingTool(new String[]{}, new Shell(System.in, System.out));
 		
 		EchoTool from = new EchoTool(new String[]{"foo"});
 		CatTool to = new CatTool(new String[]{"-"});
@@ -95,7 +95,7 @@ public class PipingToolTest {
 	 */
 	@Test
 	public void testPipeStringITool() {
-		pipingTool = new PipingTool(new String[]{}, new Shell());
+		pipingTool = new PipingTool(new String[]{}, new Shell(System.in, System.out));
 		
 		String input;
 		String result;

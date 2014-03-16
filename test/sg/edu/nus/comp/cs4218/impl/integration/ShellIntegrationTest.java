@@ -1,7 +1,7 @@
 /**
  * 
  */
-package sg.edu.nus.comp.cs4218.impl;
+package sg.edu.nus.comp.cs4218.impl.integration;
 
 import static org.junit.Assert.*;
 

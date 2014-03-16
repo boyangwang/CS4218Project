@@ -10,10 +10,7 @@ import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -30,6 +27,10 @@ import java.util.Scanner;
 public class Shell implements IShell {
 	String LINE_SEPARATOR = System.lineSeparator();
 	CommandParser cmdParser = new CommandParser();
+    InputStream is;
+    OutputStream os;
+    PrintStream ps;
+
 	/**
 	 * TaskExecution Thread
 	 */
@@ -57,7 +58,7 @@ public class Shell implements IShell {
 		public void run() {
 			handleOutput(tool.execute(shell.getWorkingDirectory(), stdin));
             try {
-                Shell.printPrompt(shell.getWorkingDirectory().getCanonicalPath());
+                Shell.printPrompt(shell.getWorkingDirectory().getCanonicalPath(), (new PrintStream(stdout)));
             } catch (IOException e) {
                 // TODO:
             }
@@ -86,7 +87,12 @@ public class Shell implements IShell {
      * Code for instance stuff.
      */
     private File cwd = null;    
-    public Shell() {
+    public Shell(InputStream in, OutputStream out) {
+        this.is = in;
+        this.os = out;
+
+        ps = new PrintStream(this.os);
+
     	String userDir = System.getProperty("user.dir");
     	cwd = new File(userDir);
     }
@@ -99,7 +105,7 @@ public class Shell implements IShell {
      * 4. Execute the command and its arguments on the newly created thread. Exit with the status code of the executed command
      * 5. In the instance, wait for the thread to complete execution
      * 6. Report the exit status of the command to the user
-     */    
+     */
 	public void run() {
         Scanner sc = new Scanner(System.in);
 		Thread runningThread = null;
@@ -120,6 +126,7 @@ public class Shell implements IShell {
                     try {
 						runningThread.join();
 					} catch (InterruptedException e) {
+                        // Nothing here.
 					}
                 }
             } else {
@@ -127,7 +134,7 @@ public class Shell implements IShell {
 
                 // Report an invalid command immediately.
                 if (tool == null) {
-                    System.out.println("Invalid command.");
+                    ps.println("Invalid command.");
                     printPrompt();
                     continue;
                 }
@@ -147,7 +154,7 @@ public class Shell implements IShell {
 	 */
     private void printPrompt() {
         try {
-            Shell.printPrompt(cwd.getCanonicalPath());
+            Shell.printPrompt(cwd.getCanonicalPath(), this.ps);
         } catch (IOException e) {
             // TODO:
         }
@@ -157,8 +164,9 @@ public class Shell implements IShell {
 	 * print the command prompt to users
 	 * @param cwd current working directory string
 	 */
-    private static void printPrompt(String cwd) {
-        System.out.print(cwd + "> ");
+    private static void printPrompt(String cwd, PrintStream ps) {
+        assert ps != null;
+        ps.print(cwd + "> ");
     }
 
 	@Override
@@ -189,7 +197,7 @@ public class Shell implements IShell {
 		}
 
 		Thread t;
-        t = new Thread(new TaskExecution(this, tool, stdin, System.out));
+        t = new Thread(new TaskExecution(this, tool, stdin, this.os));
 		t.start();
 		return t;
 	}
@@ -222,7 +230,7 @@ public class Shell implements IShell {
      */
 	public static void main(String[] args){
         Logging.logger(System.out).setLevel(Logging.ALL);
-		Shell sh = new Shell();
+		Shell sh = new Shell(System.in, System.out);
         sh.run();
 	}
 
@@ -233,7 +241,7 @@ public class Shell implements IShell {
      */
 	private String readFromUserInput() {
     	@SuppressWarnings("resource")
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(this.is);
     	StringBuilder sb = new StringBuilder();
     	String str= sc.nextLine();
     	while (true){

@@ -30,7 +30,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandLeadingSpaces() {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "  echo you shall not pass  ";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
@@ -41,7 +41,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandWrongCase() {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "eCho you shall not pass";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
@@ -52,7 +52,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandWrongQuote() {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "echo 'you shall not pass ";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
@@ -63,7 +63,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandWrongDQuote() {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "echo \"you shall not pass ";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
@@ -74,7 +74,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandWrongBQuote() {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "echo `you shall not pass ";
 		ITool result = sh.parse(cmd);
 		assertEquals(null,result);
@@ -85,7 +85,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandPipe(){
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = " echo pipe | cat";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IPipingTool);
@@ -96,7 +96,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseCommandWithQuote(){
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "echo `don't seperate | echo us`";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
@@ -107,7 +107,7 @@ public class ShellTest {
      */
 	@Test
 	public void parseNormalCommand() {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String cmd = "echo you shall not pass";
 		ITool result = sh.parse(cmd);
 		assertTrue(result instanceof IEchoTool);
@@ -119,7 +119,7 @@ public class ShellTest {
 
 	@Test 
 	public void executeNormalCommand(){
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		ITool tool = sh.parse("echo you shall not pass");
 		Runnable executor = sh.execute(tool);
 		assertNotEquals(null,executor);
@@ -130,7 +130,7 @@ public class ShellTest {
      */
 	@Test 
 	public void executeNull(){
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		Runnable executor = sh.execute(null);
 		assertEquals(null,executor);
 	}
@@ -141,7 +141,7 @@ public class ShellTest {
      */
 	@Test 
 	public void executeNullPipe(){
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		ITool tool = sh.parse("|");
 		Runnable executor = sh.execute(tool);
 		assertNotEquals(null,executor);
