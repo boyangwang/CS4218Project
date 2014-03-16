@@ -17,7 +17,8 @@ import java.util.Scanner;
 /**
  * 
  * IMPORTANT METHOD COVERAGE NOTE: since many methods in this shell cannot be automated, 
- * we do not guarantee 100% method coverage for our shell.
+ * we do not guarantee 100% method coverage for our shell. 
+ * Those methods are main() and those which are supposed to be called by main.
  * 
  * The Shell is used to interpret and execute user's
  * commands. Following sequence explains how a basic
@@ -107,7 +108,7 @@ public class Shell implements IShell {
      * 6. Report the exit status of the command to the user
      */
 	public void run() {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(is);
 		Thread runningThread = null;
 
         printPrompt();
@@ -129,6 +130,9 @@ public class Shell implements IShell {
                         // Nothing here.
 					}
                 }
+            } else if(cmd.equals("ctrl-c")) {
+                while (runningThread != null && runningThread.isAlive());
+                break;
             } else {
                 ITool tool = parse(cmd);
 
