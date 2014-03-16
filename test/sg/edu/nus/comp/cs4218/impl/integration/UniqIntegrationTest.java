@@ -21,7 +21,10 @@ public class UniqIntegrationTest {
     private File fout;
 
     private String getStringFromOutput() {
-        return new String(simOut.toByteArray(), StandardCharsets.UTF_8);
+        String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);
+        out = out.substring(out.indexOf("> ") + 2).trim();
+        out = out.substring(0, out.lastIndexOf("\n"));
+        return out;
     }
 
     private void setupShellWithInput(String input) {
@@ -71,7 +74,7 @@ public class UniqIntegrationTest {
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = input;
+        String expected = "hello\nworld\ncat\ndog";
         assertEquals(expected, result);
     }
 }
