@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 public class MoveTool extends ATool implements IMoveTool {
-    private File cwd;
 
     /**
      * Constructor
@@ -58,8 +57,6 @@ public class MoveTool extends ATool implements IMoveTool {
      */
     @Override
     public String execute(File workingDir, String stdin) {
-        this.cwd = workingDir;
-
         if (this.args.length != 2) {
             statusError();
             return "";
