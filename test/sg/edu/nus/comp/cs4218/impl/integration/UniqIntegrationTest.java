@@ -124,6 +124,10 @@ public class UniqIntegrationTest {
         assertEquals(expected, result);
     }
 
+    /**
+     * uniq | paste
+     * @throws IOException
+     */
     @Test
     public void uniqPaste() throws IOException {
         String input = "hello\nhello\nworld\ncat\ndog";
@@ -131,11 +135,31 @@ public class UniqIntegrationTest {
         fw.write(input);
         fw.close();
 
-        setupShellWithInput(String.format("cd ../../Desktop\r\ncat a"/*, TEST_INPUT_FILE, TEST_INPUT_FILE*/));
+        // TODO: paste a file.
+        setupShellWithInput(String.format("uniq %s | paste %s", TEST_INPUT_FILE, TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "hello";
+        String expected = "hello\nhello\nworld\ncat\ndog";
+        assertEquals(expected, result);
+    }
+
+    /**
+     * uniq | wc
+     * @throws IOException
+     */
+    @Test
+    public void uniqWc() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("uniq %s | wc", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "4\t4\t20";
         assertEquals(expected, result);
     }
 }
