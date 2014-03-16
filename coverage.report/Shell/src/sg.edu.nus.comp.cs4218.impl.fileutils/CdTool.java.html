@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CdTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">CdTool.java</span></div><h1>CdTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+import java.io.File;
+
+/**
+ * Changes CWD.
+ *
+ * Usage: cd directory
+ * Extra parameters are ignored.
+ */
+public class CdTool extends ATool implements ICdTool {
+    private File workingDir;
+    private Shell shell;
+
+    /**
+     * Constructor
+     *
+     * @param arguments Arguments the tool is going to be executed with.
+     */
+    public CdTool(String[] arguments, Shell shell) {
+<span class="fc" id="L25">        super(arguments);</span>
+<span class="fc" id="L26">        this.shell = shell;</span>
+<span class="fc" id="L27">        workingDir = new File(System.getProperty(&quot;user.dir&quot;));</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Checks that the new directory is accessible and switchable.
+     *
+     * Pre-condition: directory != null
+     *
+     * @param candidate Candidate directory to switch to.
+     * @return `true' iff the candidate directory can be switched to.
+     */
+    private boolean canChangeDirectoryTo(File candidate) {
+        /**
+         * Checks for the following conditions:
+         * - File does not exist.
+         * - Not a directory.
+         * - Directory not readable.
+         * - File Exception (returns `false').
+         */
+
+        try {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            if (!candidate.exists()) {</span>
+<span class="fc" id="L49">                return false;</span>
+            }
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (!candidate.isDirectory()) {</span>
+<span class="fc" id="L53">                return false;</span>
+            }
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (!candidate.canRead()) {</span>
+<span class="nc" id="L57">                return false;</span>
+            }
+<span class="nc" id="L59">        } catch (Exception ex) {</span>
+<span class="nc" id="L60">            return false;</span>
+        }
+
+<span class="fc" id="L63">        return true;</span>
+    }
+
+    /**
+     * Changes current working directory.
+     *
+     * @param newDirectory Directory to change to.
+     * @return The new directory, or `null' if unsuccessful.
+     */
+    @Override
+    public File changeDirectory(String newDirectory) {
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (newDirectory != null) {</span>
+<span class="fc" id="L75">            File dir = workingDir.toPath().resolve(newDirectory).toFile();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">            if (canChangeDirectoryTo(dir)) {</span>
+<span class="fc" id="L77">                statusSuccess();</span>
+<span class="fc" id="L78">                return dir;</span>
+            }
+        }
+
+<span class="fc" id="L82">        statusError();</span>
+<span class="fc" id="L83">        return null;</span>
+    }
+
+    /**
+     * Executes the tool with args provided in the constructor
+     *
+     * @param workingDir
+     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+     * @return Output on stdout
+     */
+    @Override
+    public String execute(File workingDir, String stdin) {
+<span class="fc" id="L95">        this.workingDir = workingDir;</span>
+
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (this.args.length &lt; 1) {</span>
+<span class="nc" id="L98">            statusError();</span>
+<span class="nc" id="L99">            return &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L102">        File candidateDir = changeDirectory(this.args[0]);</span>
+
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        if (candidateDir == null) {</span>
+<span class="nc" id="L105">            statusError();</span>
+<span class="nc" id="L106">            return &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L109">        shell.changeWorkingDirectory(candidateDir);</span>
+
+<span class="fc" id="L111">        statusSuccess();</span>
+<span class="fc" id="L112">        return &quot;&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

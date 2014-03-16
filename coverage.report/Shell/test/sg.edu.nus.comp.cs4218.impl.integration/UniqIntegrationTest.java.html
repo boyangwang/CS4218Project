@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UniqIntegrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">UniqIntegrationTest.java</span></div><h1>UniqIntegrationTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.Assert.assertEquals;
+
+<span class="fc" id="L13">public class UniqIntegrationTest {</span>
+    // Used to abstract Shell testing. You'll need these in a new suite.
+    private ByteArrayInputStream simIn;
+    private ByteArrayOutputStream simOut;
+    private Shell shell;
+
+    // Used only in this test suite.
+<span class="fc" id="L20">    private final String TEST_INPUT_FILE = &quot;uniq-test-in.txt&quot;;</span>
+<span class="fc" id="L21">    private final String TEST_OUTPUT_FILE = &quot;uniq-test-output.txt&quot;;</span>
+    private File fin;
+    private File fout;
+
+    // You need this method.
+    private String getStringFromOutput() {
+<span class="fc" id="L27">        String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L28">        String[] lines = out.split(&quot;\n&quot;);</span>
+<span class="fc" id="L29">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        for (int i = 0; i &lt; lines.length; i++) {</span>
+<span class="fc" id="L31">            String line = lines[i];</span>
+
+            // Ignore empty lines.
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">            if (line == &quot;&quot;) {</span>
+<span class="nc" id="L35">                continue;</span>
+            }
+
+            // Greedily strip prompts from beginning of line.
+            int promptIndex;
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            if ((promptIndex = line.lastIndexOf(&quot;&gt; &quot;)) &gt;= 0) {</span>
+<span class="fc" id="L41">                line = line.substring(promptIndex + 2);</span>
+            }
+
+            // Pack line back into string.
+<span class="fc" id="L45">            sb.append(line).append(&quot;\n&quot;);</span>
+        }
+
+        // Should not contain trailing newline.
+<span class="fc" id="L49">        return sb.toString().trim();</span>
+    }
+
+    // You need this method.
+    private void setupShellWithInput(String input) {
+        // Terminate at the end of this command.
+<span class="fc" id="L55">        input += &quot;\r\nctrl-c\r\n&quot;;</span>
+
+<span class="fc" id="L57">        simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L58">        shell = new Shell(simIn, simOut);</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        // You need this line.
+<span class="fc" id="L67">        simOut = new ByteArrayOutputStream();</span>
+
+        // Only for this test suite/
+<span class="fc" id="L70">        fin = new File(TEST_INPUT_FILE);</span>
+<span class="fc" id="L71">        fout = new File(TEST_OUTPUT_FILE);</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        // Only for this test suite.
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (fin.exists()) {</span>
+<span class="fc" id="L81">            fin.delete();</span>
+        }
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (fout.exists()) {</span>
+<span class="nc" id="L84">            fout.delete();</span>
+        }
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * uniq | cut
+     */
+    @Test
+    public void uniqCut() throws IOException {
+<span class="fc" id="L93">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L94">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L95">        fw.write(input);</span>
+<span class="fc" id="L96">        fw.close();</span>
+
+<span class="fc" id="L98">        setupShellWithInput(String.format(&quot;uniq %s | cut -c1-3&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L99">        shell.run();</span>
+<span class="fc" id="L100">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L102">        String expected = &quot;hel\nwor\ncat\ndog&quot;;</span>
+<span class="fc" id="L103">        assertEquals(expected, result);</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * uniq | uniq
+     */
+    @Test
+    public void uniqUniq() throws IOException {
+        // Setup the test case.
+<span class="fc" id="L112">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L113">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L114">        fw.write(input);</span>
+<span class="fc" id="L115">        fw.close();</span>
+
+        // Call and run the shell like this.
+<span class="fc" id="L118">        setupShellWithInput(String.format(&quot;uniq %s | uniq&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L119">        shell.run();</span>
+<span class="fc" id="L120">        String result = getStringFromOutput();</span>
+
+        // Do your asserts.
+<span class="fc" id="L123">        String expected = &quot;hello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L124">        assertEquals(expected, result);</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * uniq | paste
+     * @throws IOException
+     */
+    @Test
+    public void uniqPaste() throws IOException {
+<span class="fc" id="L133">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L134">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L135">        fw.write(input);</span>
+<span class="fc" id="L136">        fw.close();</span>
+
+        // TODO: paste a file.
+<span class="fc" id="L139">        setupShellWithInput(String.format(&quot;uniq %s | paste %s&quot;, TEST_INPUT_FILE, TEST_INPUT_FILE));</span>
+<span class="fc" id="L140">        shell.run();</span>
+<span class="fc" id="L141">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L143">        String expected = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L144">        assertEquals(expected, result);</span>
+<span class="fc" id="L145">    }</span>
+
+    /**
+     * uniq | wc
+     * @throws IOException
+     */
+    @Test
+    public void uniqWc() throws IOException {
+<span class="fc" id="L153">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L154">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L155">        fw.write(input);</span>
+<span class="fc" id="L156">        fw.close();</span>
+
+<span class="fc" id="L158">        setupShellWithInput(String.format(&quot;uniq %s | wc&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L159">        shell.run();</span>
+<span class="fc" id="L160">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L162">        String expected = &quot;4\t4\t20&quot;;</span>
+<span class="fc" id="L163">        assertEquals(expected, result);</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * uniq | paste | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqPasteGrep() throws IOException {
+<span class="fc" id="L172">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L173">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L174">        fw.write(input);</span>
+<span class="fc" id="L175">        fw.close();</span>
+
+<span class="fc" id="L177">        setupShellWithInput(String.format(&quot;uniq %s | paste %s | grep cat&quot;, TEST_INPUT_FILE, TEST_INPUT_FILE));</span>
+<span class="fc" id="L178">        shell.run();</span>
+<span class="fc" id="L179">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L181">        String expected = &quot;cat&quot;;</span>
+<span class="fc" id="L182">        assertEquals(expected, result);</span>
+<span class="fc" id="L183">    }</span>
+
+    /**
+     * uniq | wc | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqWcGrep() throws IOException {
+<span class="fc" id="L191">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L192">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L193">        fw.write(input);</span>
+<span class="fc" id="L194">        fw.close();</span>
+
+<span class="fc" id="L196">        setupShellWithInput(String.format(&quot;uniq %s | wc | grep 4&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L197">        shell.run();</span>
+<span class="fc" id="L198">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L200">        String expected = &quot;4\t4\t20&quot;;</span>
+<span class="fc" id="L201">        assertEquals(expected, result);</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * uniq | cut | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqCutGrep() throws IOException {
+<span class="fc" id="L210">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L211">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L212">        fw.write(input);</span>
+<span class="fc" id="L213">        fw.close();</span>
+
+<span class="fc" id="L215">        setupShellWithInput(String.format(&quot;uniq %s | cut -c1-3 | grep wor&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L216">        shell.run();</span>
+<span class="fc" id="L217">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L219">        String expected = &quot;wor&quot;;</span>
+<span class="fc" id="L220">        assertEquals(expected, result);</span>
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * uniq | uniq | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqUniqGrep() throws IOException {
+<span class="fc" id="L229">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L230">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L231">        fw.write(input);</span>
+<span class="fc" id="L232">        fw.close();</span>
+
+<span class="fc" id="L234">        setupShellWithInput(String.format(&quot;uniq %s | uniq | grep dog&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L235">        shell.run();</span>
+<span class="fc" id="L236">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L238">        String expected = &quot;dog&quot;;</span>
+<span class="fc" id="L239">        assertEquals(expected, result);</span>
+<span class="fc" id="L240">    }</span>
+
+    /**
+     * cd
+     * uniq
+     * @throws IOException
+     */
+    @Test
+    public void stateChangeTest() throws IOException {
+<span class="fc" id="L249">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L250">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L251">        fw.write(input);</span>
+<span class="fc" id="L252">        fw.close();</span>
+
+<span class="fc" id="L254">        String TEST_DIR = &quot;uniq-test-dir&quot;;</span>
+<span class="fc" id="L255">        File dir = new File(TEST_DIR);</span>
+<span class="fc" id="L256">        dir.mkdir();</span>
+
+<span class="fc" id="L258">        setupShellWithInput(String.format(&quot;cd %s\r\nuniq %s&quot;, TEST_DIR, TEST_INPUT_FILE));</span>
+<span class="fc" id="L259">        shell.run();</span>
+<span class="fc" id="L260">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L262">        String expected = &quot;&quot;;</span>
+<span class="fc" id="L263">        assertEquals(expected, result);</span>
+
+<span class="fc" id="L265">        dir.delete();</span>
+<span class="fc" id="L266">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

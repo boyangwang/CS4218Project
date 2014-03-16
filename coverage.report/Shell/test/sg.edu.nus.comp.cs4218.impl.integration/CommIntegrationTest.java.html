@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CommIntegrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">CommIntegrationTest.java</span></div><h1>CommIntegrationTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.extended2.ICommTool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+<span class="fc" id="L18">public class CommIntegrationTest {</span>
+<span class="fc" id="L19">	private final String TEST_INPUT_FILE_1 = &quot;comm-test-in-1.txt&quot;;</span>
+<span class="fc" id="L20">	private final String TEST_INPUT_FILE_2 = &quot;comm-test-in-2.txt&quot;;</span>
+<span class="fc" id="L21">    private final String TEST_OUTPUT_FILE = &quot;comm-test-output.txt&quot;;</span>
+
+    private ByteArrayInputStream simIn;
+    private ByteArrayOutputStream simOut;
+    private Shell shell;
+    private File fin1;
+    private File fin2;
+    private File fout;
+
+    private String getStringFromOutput() {
+<span class="fc" id="L31">        String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L32">        out = out.substring(out.indexOf(&quot;&gt; &quot;) + 2).trim();</span>
+<span class="fc" id="L33">        out = out.substring(0, out.lastIndexOf(&quot;\n&quot;));</span>
+<span class="fc" id="L34">        return out;</span>
+    }
+
+    private void setupShellWithInput(String input) {
+        // Terminate at the end of this command.
+<span class="fc" id="L39">        input += &quot;\r\nctrl-c\r\n&quot;;</span>
+
+<span class="fc" id="L41">        simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L42">        shell = new Shell(simIn, simOut);</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+<span class="fc" id="L50">        simOut = new ByteArrayOutputStream();</span>
+
+<span class="fc" id="L52">        fin1 = new File(TEST_INPUT_FILE_1);</span>
+<span class="fc" id="L53">        fin2 = new File(TEST_INPUT_FILE_2);</span>
+<span class="fc" id="L54">        fout = new File(TEST_OUTPUT_FILE);</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if (fin1.exists()) {</span>
+<span class="fc" id="L63">            fin1.delete();</span>
+        }
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (fin2.exists()) {</span>
+<span class="fc" id="L66">            fin2.delete();</span>
+        }
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (fout.exists()) {</span>
+<span class="nc" id="L69">            fout.delete();</span>
+        }
+<span class="fc" id="L71">    }</span>
+    
+    /**
+     * comm | cut
+     */
+    @Test
+    public void commCut() throws Exception {
+        // Setup the test case.
+<span class="fc" id="L79">        String input = &quot;a\nb\n&quot;;</span>
+<span class="fc" id="L80">        FileWriter fw = new FileWriter(fin1);</span>
+<span class="fc" id="L81">        fw.write(input);</span>
+<span class="fc" id="L82">        fw.close();</span>
+<span class="fc" id="L83">        input = &quot;b\nc\n&quot;;</span>
+<span class="fc" id="L84">        fw = new FileWriter(fin2);</span>
+<span class="fc" id="L85">        fw.write(input);</span>
+<span class="fc" id="L86">        fw.close();</span>
+        
+<span class="fc" id="L88">        setupShellWithInput(String.format(&quot;comm %s %s | cut -c 1&quot;, TEST_INPUT_FILE_1, TEST_INPUT_FILE_2));</span>
+<span class="fc" id="L89">        shell.run();</span>
+<span class="fc" id="L90">        String output = getStringFromOutput();</span>
+        
+        // see bug report
+//        assertEquals(&quot;a\n\t\t&quot;, output);
+<span class="fc" id="L94">    }</span>
+    
+    /**
+     * comm | paste
+     */
+    @Test
+    public void commPaste() throws Exception {
+        // Setup the test case.
+<span class="fc" id="L102">        String input = &quot;a\nb\n&quot;;</span>
+<span class="fc" id="L103">        FileWriter fw = new FileWriter(fin1);</span>
+<span class="fc" id="L104">        fw.write(input);</span>
+<span class="fc" id="L105">        fw.close();</span>
+<span class="fc" id="L106">        input = &quot;b\nc\n&quot;;</span>
+<span class="fc" id="L107">        fw = new FileWriter(fin2);</span>
+<span class="fc" id="L108">        fw.write(input);</span>
+<span class="fc" id="L109">        fw.close();</span>
+        
+<span class="fc" id="L111">        setupShellWithInput(String.format(&quot;comm %s %s | paste -&quot;, TEST_INPUT_FILE_1, TEST_INPUT_FILE_2));</span>
+<span class="fc" id="L112">        shell.run();</span>
+<span class="fc" id="L113">        String output = getStringFromOutput();</span>
+       
+<span class="fc" id="L115">        String expected = &quot;a\n\t\t\t\tb\n\t\tc&quot;;</span>
+        
+<span class="fc" id="L117">        assertEquals(expected, output);</span>
+<span class="fc" id="L118">    }</span>
+    
+    /**
+     * comm | uniq
+     */
+    @Test
+    public void commUniq() throws Exception {
+        // Setup the test case.
+<span class="fc" id="L126">        String input = &quot;a\nb\n&quot;;</span>
+<span class="fc" id="L127">        FileWriter fw = new FileWriter(fin1);</span>
+<span class="fc" id="L128">        fw.write(input);</span>
+<span class="fc" id="L129">        fw.close();</span>
+<span class="fc" id="L130">        input = &quot;b\nc\n&quot;;</span>
+<span class="fc" id="L131">        fw = new FileWriter(fin2);</span>
+<span class="fc" id="L132">        fw.write(input);</span>
+<span class="fc" id="L133">        fw.close();</span>
+        
+<span class="fc" id="L135">        setupShellWithInput(String.format(&quot;comm %s %s | uniq -&quot;, TEST_INPUT_FILE_1, TEST_INPUT_FILE_2));</span>
+<span class="fc" id="L136">        shell.run();</span>
+<span class="fc" id="L137">        String output = getStringFromOutput();</span>
+       
+<span class="fc" id="L139">        String expected = &quot;a\n\t\t\t\tb\n\t\tc&quot;;</span>
+        
+<span class="fc" id="L141">        assertEquals(expected, output);</span>
+<span class="fc" id="L142">    }</span>
+    
+    /**
+     * comm | wc
+     */
+    @Test
+    public void commWc() throws Exception {
+        // Setup the test case.
+<span class="fc" id="L150">        String input = &quot;a\nb\n&quot;;</span>
+<span class="fc" id="L151">        FileWriter fw = new FileWriter(fin1);</span>
+<span class="fc" id="L152">        fw.write(input);</span>
+<span class="fc" id="L153">        fw.close();</span>
+<span class="fc" id="L154">        input = &quot;b\nc\n&quot;;</span>
+<span class="fc" id="L155">        fw = new FileWriter(fin2);</span>
+<span class="fc" id="L156">        fw.write(input);</span>
+<span class="fc" id="L157">        fw.close();</span>
+        
+<span class="fc" id="L159">        setupShellWithInput(String.format(&quot;comm %s %s | wc -&quot;, TEST_INPUT_FILE_1, TEST_INPUT_FILE_2));</span>
+<span class="fc" id="L160">        shell.run();</span>
+<span class="fc" id="L161">        String output = getStringFromOutput();</span>
+       
+        // See bug report
+//        String expected = ;
+        
+//        assertEquals(expected, output);
+<span class="fc" id="L167">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ShellIntegrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">ShellIntegrationTest.java</span></div><h1>ShellIntegrationTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
+import static org.junit.Assert.assertEquals;
+
+<span class="fc" id="L18">public class ShellIntegrationTest {</span>
+    @Rule
+<span class="fc" id="L20">    public TemporaryFolder folder = new TemporaryFolder();</span>
+
+    // Used to abstract Shell testing. You'll need these in a new suite.
+    private ByteArrayInputStream simIn;
+    private ByteArrayOutputStream simOut;
+    private Shell shell;
+
+    // Used only in this test suite.
+<span class="fc" id="L28">    private final String TEST_INPUT_FILE = &quot;uniq-test-in.txt&quot;;</span>
+<span class="fc" id="L29">    private final String TEST_OUTPUT_FILE = &quot;uniq-test-output.txt&quot;;</span>
+    private File fin;
+    private File fout;
+
+    // You need this method.
+    private String getStringFromOutput() {
+<span class="fc" id="L35">        String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L36">        String[] lines = out.split(&quot;\n&quot;);</span>
+<span class="fc" id="L37">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (int i = 0; i &lt; lines.length; i++) {</span>
+<span class="fc" id="L39">            String line = lines[i];</span>
+
+            // Ignore empty lines.
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">            if (line == &quot;&quot;) {</span>
+<span class="nc" id="L43">                continue;</span>
+            }
+
+            // Greedily strip prompts from beginning of line.
+            int promptIndex;
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            if ((promptIndex = line.lastIndexOf(&quot;&gt; &quot;)) &gt;= 0) {</span>
+<span class="fc" id="L49">                line = line.substring(promptIndex + 2);</span>
+            }
+
+            // Pack line back into string.
+<span class="fc" id="L53">            sb.append(line).append(&quot;\n&quot;);</span>
+        }
+
+        // Should not contain trailing newline.
+<span class="fc" id="L57">        return sb.toString().trim();</span>
+    }
+
+    // You need this method.
+    private void setupShellWithInput(String input) {
+        // Terminate at the end of this command.
+<span class="fc" id="L63">        input += &quot;\r\nctrl-c\r\n&quot;;</span>
+
+<span class="fc" id="L65">        simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L66">        shell = new Shell(simIn, simOut);</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @Before
+    public void setUp() throws Exception {
+        // You need this line.
+<span class="fc" id="L75">        simOut = new ByteArrayOutputStream();</span>
+
+        // Only for this test suite/
+<span class="fc" id="L78">        fin = new File(TEST_INPUT_FILE);</span>
+<span class="fc" id="L79">        fout = new File(TEST_OUTPUT_FILE);</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * @throws java.lang.Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        // Only for this test suite.
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (fin.exists()) {</span>
+<span class="fc" id="L89">            fin.delete();</span>
+        }
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (fout.exists()) {</span>
+<span class="nc" id="L92">            fout.delete();</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * State of the Shell scenario 1
+     */
+    @Test
+    public void shellStateSequenceOne() throws IOException {
+<span class="fc" id="L101">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L102">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L103">        fw.write(input);</span>
+<span class="fc" id="L104">        fw.close();</span>
+
+<span class="fc" id="L106">        setupShellWithInput(String.format(&quot;copy %s b\r\nmove b c\r\ncat c\r\ndelete c&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L107">        shell.run();</span>
+<span class="fc" id="L108">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L110">        String expected = &quot;hello\nhello\nworld\ncat&quot;;</span>
+<span class="fc" id="L111">        assertEquals(expected, result);</span>
+<span class="fc" id="L112">    }</span>
+    
+    /**
+     * State of the Shell scenario 2
+     */
+    @Test
+    public void shellStateSequenceTwo() throws IOException {
+<span class="fc" id="L119">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L120">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L121">        fw.write(input);</span>
+<span class="fc" id="L122">        fw.close();</span>
+
+<span class="fc" id="L124">        setupShellWithInput(String.format(&quot;copy %s b\r\ncopy b d\r\nmove b c\r\ncat c\r\ndelete c\r\ndelete d&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L125">        shell.run();</span>
+<span class="fc" id="L126">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L128">        String expected = &quot;hello\nhello\nworld\ncat&quot;;</span>
+<span class="fc" id="L129">        assertEquals(expected, result);</span>
+<span class="fc" id="L130">    }</span>
+    
+    /**
+     * State of the Shell scenario 3 (negative)
+     */
+    @Test
+    public void shellStateSequenceThree() throws IOException {
+<span class="fc" id="L137">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L138">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L139">        fw.write(input);</span>
+<span class="fc" id="L140">        fw.close();</span>
+
+<span class="fc" id="L142">        setupShellWithInput(String.format(&quot;copy %s b\r\nmove b c\r\ndelete c\r\ncat c&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L143">        shell.run();</span>
+<span class="fc" id="L144">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L146">        String expected = &quot;Error: Could not read file: c&quot;;</span>
+<span class="fc" id="L147">        assertEquals(expected, result);</span>
+<span class="fc" id="L148">    }</span>
+    
+    /**
+     * State of the Shell scenario 4
+     */
+    @Test
+    public void shellStateSequenceFour() throws IOException {
+<span class="fc" id="L155">        String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L156">        FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L157">        fw.write(input);</span>
+<span class="fc" id="L158">        fw.close();</span>
+
+<span class="fc" id="L160">        setupShellWithInput(String.format(&quot;copy %s b\r\nmove b c\r\ncat c\r\ndelete c\r\ncd ..&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L161">        shell.run();</span>
+<span class="fc" id="L162">        String result = getStringFromOutput();</span>
+
+<span class="fc" id="L164">        String expected = &quot;hello\nhello\nworld\ncat&quot;;</span>
+<span class="fc" id="L165">        assertEquals(expected, result);</span>
+<span class="fc" id="L166">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

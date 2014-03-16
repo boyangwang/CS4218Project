@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ShellTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl</a> &gt; <span class="el_source">ShellTest.java</span></div><h1>ShellTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl;
+
+import static org.junit.Assert.*;
+
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.ITool;
+import sg.edu.nus.comp.cs4218.extended1.IPipingTool;
+import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+<span class="fc" id="L16">public class ShellTest {</span>
+	IShell sh;
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L20">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L24">		sh = null;</span>
+<span class="fc" id="L25">	}</span>
+
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool for command with leading spaces
+     */
+	@Test
+	public void parseCommandLeadingSpaces() {
+<span class="fc" id="L33">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L34">		String cmd = &quot;  echo you shall not pass  &quot;;</span>
+<span class="fc" id="L35">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L36">		assertTrue(result instanceof IEchoTool);</span>
+<span class="fc" id="L37">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool for command with wrong casing
+     */
+	@Test
+	public void parseCommandWrongCase() {
+<span class="fc" id="L44">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L45">		String cmd = &quot;eCho you shall not pass&quot;;</span>
+<span class="fc" id="L46">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L47">		assertTrue(result instanceof IEchoTool);</span>
+<span class="fc" id="L48">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool for command with improperly closing quotes
+     */
+	@Test
+	public void parseCommandWrongQuote() {
+<span class="fc" id="L55">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L56">		String cmd = &quot;echo 'you shall not pass &quot;;</span>
+<span class="fc" id="L57">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L58">		assertEquals(null,result);</span>
+<span class="fc" id="L59">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool for command with improperly closing dquotes
+     */
+	@Test
+	public void parseCommandWrongDQuote() {
+<span class="fc" id="L66">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L67">		String cmd = &quot;echo \&quot;you shall not pass &quot;;</span>
+<span class="fc" id="L68">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L69">		assertEquals(null,result);</span>
+<span class="fc" id="L70">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool for command with improperly closing quotes
+     */
+	@Test
+	public void parseCommandWrongBQuote() {
+<span class="fc" id="L77">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L78">		String cmd = &quot;echo `you shall not pass &quot;;</span>
+<span class="fc" id="L79">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L80">		assertEquals(null,result);</span>
+<span class="fc" id="L81">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return pipe tool for normal command 
+     */
+	@Test
+	public void parseCommandPipe(){
+<span class="fc" id="L88">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L89">		String cmd = &quot; echo pipe | cat&quot;;</span>
+<span class="fc" id="L90">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L91">		assertTrue(result instanceof IPipingTool);</span>
+<span class="fc" id="L92">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool for commnad with pipe char in a quote
+     */
+	@Test
+	public void parseCommandWithQuote(){
+<span class="fc" id="L99">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L100">		String cmd = &quot;echo `don't seperate | echo us`&quot;;</span>
+<span class="fc" id="L101">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L102">		assertTrue(result instanceof IEchoTool);</span>
+<span class="fc" id="L103">	}</span>
+    /**
+     * MUT: parse(cmd)
+     * Should return echo tool in normal command parsing 
+     */
+	@Test
+	public void parseNormalCommand() {
+<span class="fc" id="L110">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L111">		String cmd = &quot;echo you shall not pass&quot;;</span>
+<span class="fc" id="L112">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L113">		assertTrue(result instanceof IEchoTool);</span>
+<span class="fc" id="L114">	}</span>
+    /**
+     * MUT: execute(tool)
+     * should return a non null executor
+     */
+
+	@Test 
+	public void executeNormalCommand(){
+<span class="fc" id="L122">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L123">		ITool tool = sh.parse(&quot;echo you shall not pass&quot;);</span>
+<span class="fc" id="L124">		Runnable executor = sh.execute(tool);</span>
+<span class="fc" id="L125">		assertNotEquals(null,executor);</span>
+<span class="fc" id="L126">	}</span>
+    /**
+     * MUT: execute(tool)
+     * should return a null executor when executing null
+     */
+	@Test 
+	public void executeNull(){
+<span class="fc" id="L133">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L134">		Runnable executor = sh.execute(null);</span>
+<span class="fc" id="L135">		assertEquals(null,executor);</span>
+<span class="fc" id="L136">	}</span>
+
+    /**
+     * MUT: execute(tool)
+     * should return a null executor when executing null pipe
+     */
+	@Test 
+	public void executeNullPipe(){
+<span class="fc" id="L144">		sh = new Shell(System.in, System.out);</span>
+<span class="fc" id="L145">		ITool tool = sh.parse(&quot;|&quot;);</span>
+<span class="fc" id="L146">		Runnable executor = sh.execute(tool);</span>
+<span class="fc" id="L147">		assertNotEquals(null,executor);</span>
+<span class="fc" id="L148">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

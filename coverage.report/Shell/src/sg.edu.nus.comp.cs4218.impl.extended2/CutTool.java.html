@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CutTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">CutTool.java</span></div><h1>CutTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import sg.edu.nus.comp.cs4218.extended2.ICutTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+
+public class CutTool extends ATool implements ICutTool {
+	private class Range{
+		//inclusive range
+<span class="fc" id="L17">		public Range(int _start, int _end){</span>
+<span class="fc" id="L18">			start = _start;</span>
+<span class="fc" id="L19">			end = _end;</span>
+<span class="fc" id="L20">		}</span>
+		int start;
+		int end;
+	}
+<span class="fc" id="L24">	String LINE_SEPARATOR = System.lineSeparator();</span>
+
+<span class="fc" id="L26">	String ERROR_CUT_AND_DELIM_MODE = &quot;Error: only one type of list may be specified\n&quot;;</span>
+<span class="fc" id="L27">	String ERROR_MORE_THAN_ONE_CUT_LIST = &quot;Error: only one type of list may be specified\n&quot;;</span>
+<span class="fc" id="L28">	String ERROR_MORE_THAN_ONE_FIELD_LIST = &quot;Error: only one type of list may be specified\n&quot;;</span>
+<span class="fc" id="L29">	String ERROR_NO_CUT_LIST = &quot;Error: no cut list specified\n&quot;;</span>
+<span class="fc" id="L30">	String ERROR_NO_FIELD_LIST = &quot;Error: no field list specified\n&quot;;</span>
+<span class="fc" id="L31">	String ERROR_INVALID_CUT_LIST = &quot;Error: invalid list argument for -c&quot;;</span>
+<span class="fc" id="L32">	String ERROR_INVALID_FIELD_LIST = &quot;Error: invalid list argument for -f&quot;;</span>
+<span class="fc" id="L33">	String ERROR_DELIM_MORE_THAN_ONE_CHAR = &quot;Error: delimter must be one char\n&quot;;</span>
+<span class="fc" id="L34">	String ERROR_INVALID_DELIM = &quot;Error: delimter is invalid\n&quot;;</span>
+<span class="fc" id="L35">	String ERROR_FILE_INACCESSIBLE = &quot;Error: cannot read from file %s&quot; + LINE_SEPARATOR;</span>
+<span class="fc" id="L36">	String ERROR_NO_MODE_SPECIFIED = &quot;Error: you must specify a list of bytes, characters, or fields\n&quot;;</span>
+<span class="fc" id="L37">	String ERROR_DELIM_WITHOUT_FIELD = &quot;Error: an input delimiter may be specified only when operating on fields\n&quot;;</span>
+<span class="fc" id="L38">	String ERROR_NO_FILE = &quot;Error: you must specify a file name\n&quot;;</span>
+<span class="fc" id="L39">	String ERROR_DECREASING_RANGE = &quot;Error: you must specify a file name\n&quot;;</span>
+
+
+	public CutTool(String[] args) {
+<span class="fc" id="L43">		super(args);</span>
+<span class="fc" id="L44">	}</span>
+
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc" id="L48">		boolean isDelimMode	= false;</span>
+<span class="fc" id="L49">		boolean isCutMode	= false;</span>
+<span class="fc" id="L50">		boolean isFirstStdin = true;</span>
+<span class="fc" id="L51">		String delimChar = &quot;\t&quot;;</span>
+<span class="fc" id="L52">		String cutList = null;</span>
+<span class="fc" id="L53">		String fieldList = null;</span>
+<span class="fc" id="L54">		ArrayList&lt;String&gt; filesContent = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L55">		String out = &quot;&quot;;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">		for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc" id="L57">			String arg = args[i];</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">			if(arg.startsWith(&quot;-&quot;)){</span>
+<span class="pc bpc" id="L59" title="2 of 4 branches missed.">				if (isFirstStdin &amp;&amp; arg.compareTo(&quot;-&quot;)==0){</span>
+<span class="nc" id="L60">					isFirstStdin = false;</span>
+<span class="nc" id="L61">					filesContent.add(stdin);</span>
+<span class="pc bfc" id="L62" title="All 2 branches covered.">				} else if (arg.compareTo(&quot;-help&quot;)==0){</span>
+<span class="fc" id="L63">					return getHelp();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">				}else if(arg.startsWith(&quot;-c&quot;)){</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">					if (isDelimMode){</span>
+<span class="fc" id="L66">						statusError();</span>
+<span class="fc" id="L67">						return ERROR_CUT_AND_DELIM_MODE;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">					}else if(cutList!=null){</span>
+<span class="nc" id="L69">						statusError();</span>
+<span class="nc" id="L70">						return ERROR_MORE_THAN_ONE_CUT_LIST;</span>
+					}else{
+<span class="fc" id="L72">						isCutMode=true;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">						if(arg.length()&gt;2){</span>
+<span class="fc" id="L74">							cutList = arg.substring(2);</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">						}else if (args.length&gt;i+1){</span>
+<span class="fc" id="L76">							cutList = args[++i];</span>
+<span class="fc" id="L77">						}else{</span>
+<span class="nc" id="L78">							statusError();</span>
+<span class="nc" id="L79">							return ERROR_NO_CUT_LIST;</span>
+						}
+					}
+<span class="fc bfc" id="L82" title="All 2 branches covered.">				}else if (arg.startsWith(&quot;-f&quot;)){</span>
+					
+<span class="fc bfc" id="L84" title="All 2 branches covered.">					if (isCutMode){</span>
+<span class="fc" id="L85">						statusError();</span>
+<span class="fc" id="L86">						return ERROR_CUT_AND_DELIM_MODE;</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">					}else if(fieldList!=null){</span>
+<span class="nc" id="L88">						statusError();</span>
+<span class="nc" id="L89">						return ERROR_MORE_THAN_ONE_FIELD_LIST;</span>
+					}else{
+<span class="fc" id="L91">						isDelimMode = true;</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">						if(arg.length()&gt;2){</span>
+<span class="nc" id="L93">							fieldList = arg.substring(2);</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">						}else if (args.length&gt;i+1){</span>
+<span class="fc" id="L95">							fieldList = args[++i];</span>
+<span class="fc" id="L96">						}else{</span>
+<span class="nc" id="L97">							statusError();</span>
+<span class="nc" id="L98">							return ERROR_NO_FIELD_LIST;</span>
+						}
+					}
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">				}else if (arg.startsWith(&quot;-d&quot;)){</span>
+<span class="fc" id="L102">					isDelimMode = true;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">					if (isCutMode){</span>
+<span class="fc" id="L104">						statusError();</span>
+<span class="fc" id="L105">						return ERROR_DELIM_WITHOUT_FIELD;</span>
+					}else{
+<span class="fc" id="L107">						isDelimMode = true;</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">						if(arg.length()==3){</span>
+<span class="nc" id="L109">							delimChar = arg.substring(2);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">						}else if(arg.length()&gt;=3){</span>
+<span class="nc" id="L111">							statusError();</span>
+<span class="nc" id="L112">							return ERROR_DELIM_MORE_THAN_ONE_CHAR;</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">						} else if (args.length&gt;i+1){</span>
+							//arg.length == 2, expect delimiter char
+<span class="fc" id="L115">							delimChar = args[++i];</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">							if(delimChar.length()&gt;1){</span>
+<span class="nc" id="L117">								statusError();</span>
+<span class="nc" id="L118">								return ERROR_DELIM_MORE_THAN_ONE_CHAR;</span>
+							}
+						}else{
+<span class="nc" id="L121">							statusError();</span>
+<span class="nc" id="L122">							return ERROR_NO_FIELD_LIST;</span>
+						}
+					}
+				}
+			}else{
+<span class="fc" id="L127">				File target = workingDir.toPath().resolve(arg).toFile();</span>
+				try {
+<span class="fc" id="L129">					filesContent.add(readContentsOfFile(target));</span>
+<span class="fc" id="L130">				} catch (IOException e) {</span>
+<span class="fc" id="L131">					return String.format(ERROR_FILE_INACCESSIBLE, arg);</span>
+				}
+			}
+		}
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		if (filesContent.size() == 0){</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">			if (stdin!=null){</span>
+<span class="fc" id="L137">				filesContent.add(stdin);</span>
+			}
+		}
+<span class="pc bpc" id="L140" title="1 of 6 branches missed.">		if (isDelimMode &amp;&amp; (fieldList==null || fieldList==&quot;&quot;)){</span>
+<span class="fc" id="L141">			return ERROR_NO_MODE_SPECIFIED;</span>
+		}
+<span class="fc bfc" id="L143" title="All 2 branches covered.">		if (filesContent.size() == 0){</span>
+<span class="fc" id="L144">			statusError();</span>
+<span class="fc" id="L145">			return ERROR_NO_FILE;</span>
+		}
+<span class="fc" id="L147">		boolean isFirstFile = true;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">		if (isCutMode){</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">			for (int j = 0; j &lt; filesContent.size(); j++) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">				if(isFirstFile){</span>
+<span class="fc" id="L151">					isFirstFile=false;</span>
+<span class="fc" id="L152">				}else{</span>
+<span class="fc" id="L153">					out += LINE_SEPARATOR;</span>
+				}
+<span class="fc" id="L155">				out += cutSpecfiedCharacters(cutList, filesContent.get(j));</span>
+			}
+<span class="fc bfc" id="L157" title="All 2 branches covered.">		}else if (isDelimMode){</span>
+<span class="pc bpc" id="L158" title="2 of 4 branches missed.">			if (fieldList==null || fieldList==&quot;&quot;){</span>
+<span class="nc" id="L159">				return ERROR_NO_MODE_SPECIFIED;</span>
+			}
+<span class="fc bfc" id="L161" title="All 2 branches covered.">			for (int j = 0; j &lt; filesContent.size(); j++) {</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">				if(isFirstFile){</span>
+<span class="fc" id="L163">					isFirstFile=false;</span>
+<span class="fc" id="L164">				}else{</span>
+<span class="fc" id="L165">					out += LINE_SEPARATOR;</span>
+				}
+<span class="fc" id="L167">				out += cutSpecifiedCharactersUseDelimiter(fieldList, delimChar, filesContent.get(j));</span>
+			}
+<span class="fc" id="L169">		}else {</span>
+<span class="fc" id="L170">			statusError();</span>
+<span class="fc" id="L171">			return ERROR_NO_MODE_SPECIFIED;</span>
+		}
+
+<span class="fc" id="L174">		return out + LINE_SEPARATOR;</span>
+	}
+
+	/*
+	 * to parse a string list to a boolean mask array
+	 * @param list		string list to be converted
+	 * @return 			array of inclusive range, null if there is error in the string list
+	 */
+	private Range[] convertListToRange(String list) {
+<span class="fc" id="L183">		String[] ranges = list.split(&quot;,&quot;,-1);</span>
+<span class="fc" id="L184">		ArrayList&lt;Range&gt; out = new ArrayList&lt;Range&gt;();</span>
+
+<span class="fc bfc" id="L186" title="All 2 branches covered.">		for (int i = 0; i &lt; ranges.length; i++) {</span>
+<span class="fc" id="L187">			String strRange = ranges[i];</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">			if(strRange.indexOf(&quot;-&quot;)&gt;=0){</span>
+<span class="fc" id="L189">				String[] tokens = strRange.split(&quot;-&quot;,-1);</span>
+
+<span class="fc bfc" id="L191" title="All 2 branches covered.">				if(tokens.length==2){</span>
+					try {
+						int num1;
+<span class="fc bfc" id="L194" title="All 2 branches covered.">						if (tokens[0].length()==0){</span>
+<span class="fc" id="L195">							num1 = 1;</span>
+<span class="fc" id="L196">						}else{</span>
+<span class="fc" id="L197">							num1 = Integer.parseInt(tokens[0]);</span>
+						}
+
+						int num2;
+<span class="fc bfc" id="L201" title="All 2 branches covered.">						if (tokens[1].length()==0){</span>
+<span class="fc" id="L202">							num2 = Integer.MAX_VALUE;</span>
+<span class="fc" id="L203">						}else{</span>
+<span class="fc" id="L204">							num2 = Integer.parseInt(tokens[1]);</span>
+						}
+
+<span class="pc bpc" id="L207" title="2 of 6 branches missed.">						if (num1&gt;0 &amp;&amp; num2&gt;0 &amp;&amp; num2&gt;=num1){</span>
+<span class="fc" id="L208">							out.add(new Range(num1-1,num2-1));</span>
+<span class="fc" id="L209">						}else{</span>
+<span class="fc" id="L210">							return null;</span>
+						}
+
+<span class="nc" id="L213">					} catch (Exception e) {</span>
+<span class="nc" id="L214">						return null;</span>
+					}
+				}else{
+<span class="fc" id="L217">					return null;</span>
+				}
+			}else{
+				try {
+<span class="fc" id="L221">					int num = Integer.parseInt(strRange);</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">					if (num&gt;0){</span>
+<span class="fc" id="L223">						out.add(new Range(num-1,num-1));</span>
+<span class="fc" id="L224">					}else{</span>
+<span class="nc" id="L225">						return null;</span>
+					}
+<span class="fc" id="L227">				}catch(Exception e){</span>
+<span class="fc" id="L228">					return null;</span>
+				}
+			}
+		}
+<span class="fc" id="L232">		Range[] result = new Range[out.size()];</span>
+<span class="fc" id="L233">		result = out.toArray(result);</span>
+<span class="fc" id="L234">		return result;</span>
+	}
+
+	@Override
+	public String cutSpecfiedCharacters(String list, String input) {
+<span class="fc" id="L239">		String[] inputTokens = input.split(LINE_SEPARATOR,-1);</span>
+<span class="fc" id="L240">		Range[] ranges = convertListToRange(list);</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">		if(ranges==null){</span>
+<span class="fc" id="L242">			statusError();</span>
+<span class="fc" id="L243">			return ERROR_INVALID_CUT_LIST;</span>
+		}
+<span class="fc" id="L245">		String out = &quot;&quot;;</span>
+<span class="fc" id="L246">		boolean isFirstLine = true;</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">		for (int i = 0; i &lt; inputTokens.length; i++) {</span>
+
+<span class="fc bfc" id="L249" title="All 2 branches covered.">			if (isFirstLine){</span>
+<span class="fc" id="L250">				isFirstLine=false;</span>
+<span class="fc" id="L251">			}else{</span>
+<span class="fc" id="L252">				out+= LINE_SEPARATOR;</span>
+			}
+
+<span class="fc" id="L255">			String line = inputTokens[i];</span>
+<span class="fc" id="L256">			StringBuilder outLine = new StringBuilder();</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">			for (int j = 0; j &lt; line.length(); j++) {</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">				for (int k = 0; k &lt; ranges.length; k++) {</span>
+<span class="fc bfc" id="L259" title="All 4 branches covered.">					if (ranges[k].start&lt;=j &amp;&amp; j&lt;=ranges[k].end){</span>
+<span class="fc" id="L260">						outLine.append(line.charAt(j));</span>
+<span class="fc" id="L261">						break;</span>
+					}
+				}
+			}
+<span class="fc" id="L265">			out+= outLine.toString();</span>
+		}
+<span class="fc" id="L267">		return out;</span>
+	}
+
+	@Override
+	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
+			String input) {
+
+<span class="fc bfc" id="L274" title="All 4 branches covered.">		if (delim==null || delim.length()!=1){</span>
+<span class="fc" id="L275">			delim = &quot;\t&quot;;</span>
+		}
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">		if (list==null){</span>
+<span class="nc" id="L278">			return &quot;&quot;;</span>
+		}
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">		if (input==null){</span>
+<span class="nc" id="L281">			return &quot;&quot;;</span>
+		}
+<span class="fc" id="L283">		String[] inputTokens = input.split(LINE_SEPARATOR,-1);</span>
+<span class="fc" id="L284">		Range[] ranges = convertListToRange(list);</span>
+<span class="fc bfc" id="L285" title="All 2 branches covered.">		if(ranges==null){</span>
+<span class="fc" id="L286">			statusError();</span>
+<span class="fc" id="L287">			return ERROR_INVALID_FIELD_LIST;</span>
+		}
+<span class="fc" id="L289">		String out = &quot;&quot;;</span>
+<span class="fc" id="L290">		boolean isFirstLine = true;</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">		for (int i = 0; i &lt; inputTokens.length; i++) {</span>
+
+<span class="fc bfc" id="L293" title="All 2 branches covered.">			if(isFirstLine){</span>
+<span class="fc" id="L294">				isFirstLine = false;</span>
+<span class="fc" id="L295">			}else{</span>
+<span class="fc" id="L296">				out+= LINE_SEPARATOR;</span>
+			}
+<span class="fc" id="L298">			String line = inputTokens[i];</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">			if (line.indexOf(delim)==-1){</span>
+				//don't touch this line
+<span class="fc" id="L301">				out += inputTokens[i];</span>
+<span class="fc" id="L302">			}else{</span>
+<span class="fc" id="L303">				String[] lineTokens = line.split(delim,-1);</span>
+<span class="fc" id="L304">				StringBuilder outLine = new StringBuilder();</span>
+<span class="fc" id="L305">				boolean isFirstTokenInLine=true;</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">				for (int j = 0; j &lt; lineTokens.length; j++) {</span>
+
+<span class="fc bfc" id="L308" title="All 2 branches covered.">					for (int k = 0; k &lt; ranges.length; k++) {</span>
+<span class="fc bfc" id="L309" title="All 4 branches covered.">						if (ranges[k].start&lt;=j &amp;&amp; j&lt;=ranges[k].end){</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">							if(isFirstTokenInLine){</span>
+<span class="fc" id="L311">								isFirstTokenInLine=false;</span>
+<span class="fc" id="L312">							}else{</span>
+<span class="fc" id="L313">								outLine.append(delim);</span>
+							}
+<span class="fc" id="L315">							outLine.append(lineTokens[j]);</span>
+
+<span class="fc" id="L317">							break;</span>
+						}
+					}
+				}
+<span class="fc" id="L321">				out+= outLine.toString();</span>
+			}
+			
+		}
+<span class="fc" id="L325">		return out;</span>
+	}
+
+	@Override
+	public String getHelp() {
+<span class="fc" id="L330">		return &quot;help cut tool&quot;;</span>
+	}
+    private String readContentsOfFile(File file) throws IOException {
+<span class="fc" id="L333">    	String out = &quot;&quot;;</span>
+<span class="fc" id="L334">    	boolean isFirstLine = true;</span>
+    	String strLine;
+        FileInputStream is;
+<span class="fc" id="L337">        is = new FileInputStream(file);</span>
+<span class="fc" id="L338">        BufferedReader br = new BufferedReader(new InputStreamReader(is));</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">        while((strLine = br.readLine())!= null){</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        	if (isFirstLine){</span>
+<span class="fc" id="L341">        		isFirstLine = false;</span>
+<span class="fc" id="L342">        		out += strLine;</span>
+<span class="fc" id="L343">        	}else{</span>
+<span class="fc" id="L344">        		out += LINE_SEPARATOR + strLine;</span>
+        	}
+        }
+<span class="fc" id="L347">        is.close();</span>
+
+<span class="fc" id="L349">        return out;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

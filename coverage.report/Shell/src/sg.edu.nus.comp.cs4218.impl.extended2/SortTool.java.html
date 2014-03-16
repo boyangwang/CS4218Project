@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SortTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">SortTool.java</span></div><h1>SortTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
+import sg.edu.nus.comp.cs4218.extended2.ISortTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+
+public class SortTool extends ATool implements ISortTool {
+<span class="fc" id="L20">	static final Charset UTF_8 = StandardCharsets.UTF_8;</span>
+
+	private boolean checkIfSorted;
+	
+	public SortTool(String[] arguments) {
+<span class="fc" id="L25">		super(arguments);</span>
+<span class="fc" id="L26">	}</span>
+
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc" id="L30">        int i = 0;</span>
+
+<span class="fc bfc" id="L32" title="All 4 branches covered.">        while (i &lt; args.length &amp;&amp; args[i].startsWith(&quot;-&quot;)) {</span>
+<span class="fc" id="L33">            String arg = args[i++];</span>
+            
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">            if (arg.equals(&quot;-help&quot;)) {</span>
+<span class="nc" id="L36">            	return getHelp();</span>
+            } else {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                for (int j = 1; j &lt; arg.length(); j++) {</span>
+<span class="fc" id="L39">                    char flag = arg.charAt(j);</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">                    switch (flag) {</span>
+                        case 'c':
+<span class="fc" id="L42">                        	checkIfSorted = true;</span>
+<span class="fc" id="L43">                            break;</span>
+                        default:
+<span class="fc" id="L45">                            statusError();</span>
+<span class="fc" id="L46">                            return String.format(&quot;Error: sort: unrecognized option '-%s'%nTry 'sort -help' for more information.%n&quot;, flag);</span>
+                    }
+                }
+            }
+        }
+        
+<span class="fc" id="L52">        StringBuilder lines = new StringBuilder();</span>
+        
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (i == args.length) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        	if (stdin == null) {</span>
+<span class="fc" id="L56">                statusError();</span>
+<span class="fc" id="L57">                return String.format(&quot;Error: Missing parameter for OPTION FILE%n&quot;);</span>
+        	} else {
+<span class="fc" id="L59">        		addLines(lines, stdin);</span>
+        	}
+        }
+        
+<span class="pc bpc" id="L63" title="1 of 4 branches missed.">        if (checkIfSorted &amp;&amp; i + 1 &lt; args.length) {</span>
+<span class="nc" id="L64">        	statusError();</span>
+<span class="nc" id="L65">        	return String.format(&quot;sort: extra operand `%s' not allowed with -c%n&quot;, args[i + 1]);</span>
+        }
+        
+<span class="fc" id="L68">        String arg = &quot;&quot;;</span>
+<span class="fc" id="L69">        boolean isFirstStdin = true;</span>
+
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        while (i &lt; args.length) {</span>
+<span class="fc" id="L72">            arg = args[i++];</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if(arg.equals(&quot;-&quot;)){</span>
+                // Process only first stdin argument
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (isFirstStdin) {</span>
+<span class="nc" id="L76">                    isFirstStdin = false;</span>
+<span class="nc" id="L77">                    addLines(lines, stdin);</span>
+                }
+<span class="nc" id="L79">            } else {</span>
+<span class="fc" id="L80">            	String error = addLines(lines, arg, workingDir);</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            	if (error != null) {</span>
+<span class="fc" id="L82">            		statusError();</span>
+<span class="fc" id="L83">            		return error;</span>
+            	}
+            }
+        }
+
+<span class="fc" id="L88">        String input = lines.toString();</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (checkIfSorted) {</span>
+<span class="fc" id="L90">        	String output = checkIfSorted(input);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        	return output.isEmpty() ? output : String.format(&quot;sort: %s %s&quot;, arg, output);</span>
+        }
+<span class="fc" id="L93">        return sortFile(input);</span>
+	}
+
+	@Override
+	public String sortFile(String input) {
+<span class="fc" id="L98">		List&lt;String&gt; list = new LinkedList&lt;String&gt;();</span>
+<span class="fc" id="L99">        Scanner scanner = new Scanner(input);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        while (scanner.hasNextLine()) {</span>
+<span class="fc" id="L101">            list.add(String.format(&quot;%s%n&quot;, scanner.nextLine()));</span>
+        }
+<span class="fc" id="L103">        scanner.close();</span>
+<span class="fc" id="L104">        Collections.sort(list);</span>
+<span class="fc" id="L105">        StringBuilder stringBuilder = new StringBuilder();</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        for (String string : list) {</span>
+<span class="fc" id="L107">        	stringBuilder.append(string);</span>
+        }
+<span class="fc" id="L109">        return stringBuilder.toString();</span>
+	}
+
+	@Override
+	public String checkIfSorted(String input) {
+<span class="fc" id="L114">		String prevLine = &quot;&quot;;</span>
+<span class="fc" id="L115">		String nextLine = &quot;&quot;;</span>
+<span class="fc" id="L116">		String output = &quot;&quot;;</span>
+<span class="fc" id="L117">		int lineCount = 0;</span>
+<span class="fc" id="L118">        Scanner scanner = new Scanner(input);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        while (scanner.hasNextLine()) {</span>
+<span class="fc" id="L120">        	nextLine = scanner.nextLine();</span>
+<span class="fc" id="L121">        	lineCount++;</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        	if (prevLine.compareTo(nextLine) &gt; 0) {</span>
+<span class="fc" id="L123">        		output = String.format(&quot;%d: disorder:%s%n&quot;, lineCount, nextLine);</span>
+<span class="fc" id="L124">        		break;</span>
+        	}
+<span class="fc" id="L126">        	prevLine = nextLine;</span>
+        }
+<span class="fc" id="L128">        scanner.close();</span>
+<span class="fc" id="L129">        return output;</span>
+	}
+
+	@Override
+	public String getHelp() {
+<span class="fc" id="L134">		return String.format(&quot;NAME%n%nsort - sort lines of text files%n%n&quot; +</span>
+				&quot;DESCRIPTION%n%nWrite sorted concatenation of all FILE(s)%n&quot; +
+				&quot;-c\tCheck whether the given file is already sorted, if it%n&quot; +
+				&quot;-help\tBrief information about supported options%n&quot;);
+	}
+	
+	private void addLines(StringBuilder stringBuilder, String input) {
+<span class="fc" id="L141">        Scanner scanner = new Scanner(input);</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        while (scanner.hasNextLine()) {</span>
+<span class="fc" id="L143">        	stringBuilder.append(String.format(&quot;%s%n&quot;, scanner.nextLine()));</span>
+        }
+<span class="fc" id="L145">        scanner.close();</span>
+<span class="fc" id="L146">	}</span>
+	
+	private String addLines(StringBuilder stringBuilder, String pathname, File workingDir) {
+        try {
+<span class="fc" id="L150">        	Path path = workingDir.toPath().resolve(pathname);</span>
+<span class="fc" id="L151">            byte[] encoded = Files.readAllBytes(path);</span>
+<span class="fc" id="L152">            addLines(stringBuilder, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());</span>
+<span class="fc" id="L153">            return null;</span>
+<span class="fc" id="L154">        } catch (NoSuchFileException e) {</span>
+<span class="fc" id="L155">            return String.format(&quot;Error: FILE is not found%n&quot;);</span>
+<span class="fc" id="L156">        } catch (IOException e) {</span>
+<span class="fc" id="L157">            return String.format(&quot;Error: FILE 01 is not a file%n&quot;);</span>
+        }
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

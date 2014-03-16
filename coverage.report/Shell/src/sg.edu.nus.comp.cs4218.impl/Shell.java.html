@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Shell.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl</a> &gt; <span class="el_source">Shell.java</span></div><h1>Shell.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl;
+
+import sg.edu.nus.comp.cs4218.ITool;
+import sg.edu.nus.comp.cs4218.IShell;
+import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+import sg.edu.nus.comp.cs4218.extended2.ICutTool;
+import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
+import sg.edu.nus.comp.cs4218.extended2.ISortTool;
+import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
+
+import java.io.*;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
+/**
+ * 
+ * IMPORTANT METHOD COVERAGE NOTE: since many methods in this shell cannot be automated, 
+ * we do not guarantee 100% method coverage for our shell. 
+ * Those methods are main() and those which are supposed to be called by main.
+ * 
+ * The Shell is used to interpret and execute user's
+ * commands. Following sequence explains how a basic
+ * instance can be implemented in Java
+ * 
+ */
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">public class Shell implements IShell {</span>
+<span class="fc" id="L29">	String LINE_SEPARATOR = System.lineSeparator();</span>
+<span class="fc" id="L30">	CommandParser cmdParser = new CommandParser();</span>
+    InputStream is;
+    OutputStream os;
+    PrintStream ps;
+
+	/**
+	 * TaskExecution Thread
+	 */
+	private static class TaskExecution implements Runnable{
+		ITool tool;
+		Shell shell;
+        String stdin;
+		OutputStream stdout;
+
+		/**
+		 * 
+		 * @param shell
+		 * @param tool the tool run by this executor
+		 * @param stdin 
+		 * @param stdout
+		 */
+<span class="fc" id="L51">		public TaskExecution(Shell shell, ITool tool, String stdin, OutputStream stdout){</span>
+<span class="fc" id="L52">			this.shell = shell;</span>
+<span class="fc" id="L53">			this.tool = tool;</span>
+<span class="fc" id="L54">			this.stdin = stdin;</span>
+<span class="fc" id="L55">			this.stdout = stdout;</span>
+<span class="fc" id="L56">		}</span>
+
+		@Override
+		public void run() {
+<span class="fc" id="L60">			handleOutput(tool.execute(shell.getWorkingDirectory(), stdin));</span>
+            try {
+<span class="fc" id="L62">                Shell.printPrompt(shell.getWorkingDirectory().getCanonicalPath(), (new PrintStream(stdout)));</span>
+<span class="pc" id="L63">            } catch (IOException e) {</span>
+                // TODO:
+            }
+
+<span class="fc" id="L67">        }</span>
+		/**
+		 * print output stream to console
+		 * @param output the text to print out to users
+		 */
+		public void handleOutput(String output) {
+<span class="fc bfc" id="L73" title="All 2 branches covered.">			if (stdout instanceof PrintStream) {</span>
+<span class="fc" id="L74">				((PrintStream) stdout).print(output);</span>
+<span class="fc" id="L75">			}</span>
+			else {
+				try {
+<span class="fc" id="L78">					stdout.write(output.getBytes());</span>
+<span class="fc" id="L79">				}</span>
+<span class="nc" id="L80">				catch(IOException e) {</span>
+<span class="nc" id="L81">					e.printStackTrace();</span>
+				}
+			}
+<span class="fc" id="L84">		}</span>
+	}
+	
+    /**
+     * Code for instance stuff.
+     */
+<span class="fc" id="L90">    private File cwd = null;    </span>
+<span class="fc" id="L91">    public Shell(InputStream in, OutputStream out) {</span>
+<span class="fc" id="L92">        this.is = in;</span>
+<span class="fc" id="L93">        this.os = out;</span>
+
+<span class="fc" id="L95">        ps = new PrintStream(this.os);</span>
+
+<span class="fc" id="L97">    	String userDir = System.getProperty(&quot;user.dir&quot;);</span>
+<span class="fc" id="L98">    	cwd = new File(userDir);</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Do Forever
+     * 1. Wait for a user input
+     * 2. Parse the user input. Separate the command and its arguments
+     * 3. Create a new thread to execute the command
+     * 4. Execute the command and its arguments on the newly created thread. Exit with the status code of the executed command
+     * 5. In the instance, wait for the thread to complete execution
+     * 6. Report the exit status of the command to the user
+     */
+	public void run() {
+<span class="fc" id="L111">        Scanner sc = new Scanner(is);</span>
+<span class="fc" id="L112">		Thread runningThread = null;</span>
+
+<span class="fc" id="L114">        printPrompt();</span>
+<span class="fc" id="L115">        while (true) {</span>
+            String cmd;
+            try {
+<span class="fc" id="L118">                cmd = sc.nextLine().trim();</span>
+<span class="pc" id="L119">            } catch (NoSuchElementException ex) {</span>
+                // Terminate gracefully.
+<span class="nc" id="L121">                break;</span>
+            }
+
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            if (cmd.equalsIgnoreCase(&quot;ctrl-z&quot;)) {</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">                if (runningThread != null &amp;&amp; runningThread.isAlive()) {</span>
+<span class="nc" id="L126">                    stop(runningThread);</span>
+                    try {
+<span class="nc" id="L128">						runningThread.join();</span>
+<span class="nc" id="L129">					} catch (InterruptedException e) {</span>
+                        // Nothing here.
+					}
+                }
+<span class="pc bfc" id="L133" title="All 2 branches covered.">            } else if(cmd.equals(&quot;ctrl-c&quot;)) {</span>
+<span class="pc bpc" id="L134" title="1 of 4 branches missed.">                while (runningThread != null &amp;&amp; runningThread.isAlive());</span>
+<span class="fc" id="L135">                break;</span>
+            } else {
+<span class="fc" id="L137">                ITool tool = parse(cmd);</span>
+
+                // Report an invalid command immediately.
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">                if (tool == null) {</span>
+<span class="nc" id="L141">                    ps.println(&quot;Invalid command.&quot;);</span>
+<span class="nc" id="L142">                    printPrompt();</span>
+<span class="nc" id="L143">                    continue;</span>
+                }
+
+                // Block until previous command has finished execution.
+<span class="fc bfc" id="L147" title="All 4 branches covered.">                while (runningThread != null &amp;&amp; runningThread.isAlive());</span>
+<span class="fc" id="L148">                runningThread = (Thread)execute(tool);</span>
+
+            }
+        }
+<span class="fc" id="L152">        sc.close();</span>
+<span class="fc" id="L153">    }</span>
+
+	/**
+	 * print the command prompt containing current working dir
+	 */
+    private void printPrompt() {
+        try {
+<span class="fc" id="L160">            Shell.printPrompt(cwd.getCanonicalPath(), this.ps);</span>
+<span class="pc" id="L161">        } catch (IOException e) {</span>
+            // TODO:
+        }
+<span class="fc" id="L164">    }</span>
+
+	/**
+	 * print the command prompt to users
+	 * @param cwd current working directory string
+	 */
+    private static void printPrompt(String cwd, PrintStream ps) {
+<span class="pc bpc" id="L171" title="3 of 4 branches missed.">        assert ps != null;</span>
+<span class="fc" id="L172">        ps.print(cwd + &quot;&gt; &quot;);</span>
+<span class="fc" id="L173">    }</span>
+
+	@Override
+	public ITool parse(String commandline) {
+<span class="fc" id="L177">		return CommandParser.parse(commandline, this);</span>
+	}
+
+	@Override
+	public Runnable execute(ITool tool) {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">		if (!(tool instanceof ATool)){</span>
+<span class="fc" id="L183">			return null;</span>
+		}
+<span class="fc" id="L185">		String stdin = &quot;&quot;;</span>
+<span class="pc bpc" id="L186" title="1 of 4 branches missed.">		if(tool instanceof IGrepTool || tool instanceof ICatTool </span>
+<span class="pc bpc" id="L187" title="2 of 4 branches missed.">				|| tool instanceof IPasteTool || tool instanceof ICutTool </span>
+<span class="pc bpc" id="L188" title="1 of 4 branches missed.">				|| tool instanceof ISortTool || tool instanceof UniqTool </span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">				|| tool instanceof WcTool){</span>
+
+<span class="fc" id="L191">			ATool aTool = (ATool) tool;</span>
+<span class="fc" id="L192">			int argLength = aTool.args.length;</span>
+<span class="fc" id="L193">			boolean alreadyReadFromStdin = false;;</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">			for(int i=0;i&lt;argLength;i++){</span>
+<span class="pc bpc" id="L195" title="3 of 4 branches missed.">				if (aTool.args[i].equals(&quot;-&quot;) &amp;&amp; !alreadyReadFromStdin){</span>
+<span class="nc" id="L196">					stdin = readFromUserInput();</span>
+<span class="nc" id="L197">					alreadyReadFromStdin = true;</span>
+				}
+			}
+		}
+
+		Thread t;
+<span class="fc" id="L203">        t = new Thread(new TaskExecution(this, tool, stdin, this.os));</span>
+<span class="fc" id="L204">		t.start();</span>
+<span class="fc" id="L205">		return t;</span>
+	}
+
+	@Override
+	public void stop(Runnable toolExecution) {
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">		if (toolExecution instanceof Thread){</span>
+<span class="fc" id="L211">			Thread t = (Thread) toolExecution;</span>
+<span class="fc" id="L212">			t.interrupt();</span>
+		}
+<span class="fc" id="L214">	}</span>
+
+    /**
+     * Direct access to working directory for cd tool.
+     *
+     * Pre-condition: newDirectory has been validated.
+     *
+     * @param newDirectory The new working directory.
+     */
+    public void changeWorkingDirectory(File newDirectory) {
+<span class="fc" id="L224">        this.cwd = newDirectory;</span>
+<span class="fc" id="L225">    }</span>
+    
+    public File getWorkingDirectory() {
+<span class="fc" id="L228">    	return this.cwd;</span>
+    }
+
+    /**
+     * Code for static stuff.
+     */
+	public static void main(String[] args){
+<span class="nc" id="L235">        Logging.logger(System.out).setLevel(Logging.ALL);</span>
+<span class="nc" id="L236">		Shell sh = new Shell(System.in, System.out);</span>
+<span class="nc" id="L237">        sh.run();</span>
+<span class="nc" id="L238">	}</span>
+
+    /**
+     * To read from user input system.in
+     * until ctrl-d&lt;newlinechar&gt; is encountered
+	 * @return string containing the text user inputs, excluding ctrl-d
+     */
+	private String readFromUserInput() {
+    	@SuppressWarnings(&quot;resource&quot;)
+<span class="nc" id="L247">		Scanner sc = new Scanner(this.is);</span>
+<span class="nc" id="L248">    	StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L249">    	String str= sc.nextLine();</span>
+<span class="nc" id="L250">    	while (true){</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">    		if (str.toLowerCase().endsWith(&quot;ctrl-d&quot;)){</span>
+<span class="nc" id="L252">    			String realArg = str.substring(0,str.length()-&quot;ctrl-d&quot;.length());</span>
+<span class="nc" id="L253">    			sb.append(realArg);</span>
+<span class="nc" id="L254">    			break;</span>
+    		}else{
+<span class="nc" id="L256">    			sb.append(str + LINE_SEPARATOR );</span>
+    		}
+<span class="nc" id="L258">    		str= sc.nextLine();</span>
+    	}
+<span class="nc" id="L260">    	return sb.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

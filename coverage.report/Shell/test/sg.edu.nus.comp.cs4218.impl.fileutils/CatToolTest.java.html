@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CatToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">CatToolTest.java</span></div><h1>CatToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+
+<span class="fc" id="L15">public class CatToolTest {</span>
+    private ICatTool catTool;
+
+    @Before
+    public void before() {
+<span class="fc" id="L20">        catTool = new CatTool(new String[0]);</span>
+<span class="fc" id="L21">    }</span>
+
+    @After
+    public void after() {
+<span class="fc" id="L25">        catTool = null;</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * MUT: getStringForFile()
+     * Program should not crash when trying to read a directory.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForDirectoryTest() throws IOException {
+<span class="fc" id="L35">        File f = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L36">        f.mkdir();</span>
+<span class="fc" id="L37">        String result = catTool.getStringForFile(f);</span>
+<span class="fc" id="L38">        assertNull(result);</span>
+<span class="fc" id="L39">        assertNotEquals(catTool.getStatusCode(), 0);</span>
+<span class="fc" id="L40">        f.delete();</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * MUT: getStringForFile()
+     * Program should not crash when a null argument is supplied.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForNullTest() throws IOException {
+<span class="fc" id="L50">        String result = catTool.getStringForFile(null);</span>
+<span class="fc" id="L51">        assertNull(result);</span>
+<span class="fc" id="L52">        assertNotEquals(catTool.getStatusCode(), 0);</span>
+<span class="fc" id="L53">    }</span>
+
+    /**
+     * MUT: getStringForFile()
+     * Program should not crash when a non-existent file is specified.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForNonexistentTest() throws IOException {
+<span class="fc" id="L62">        String result = catTool.getStringForFile(new File(&quot;nonexistent&quot;));</span>
+<span class="fc" id="L63">        assertNull(result);</span>
+<span class="fc" id="L64">        assertNotEquals(catTool.getStatusCode(), 0);</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * MUT: getStringForFile()
+     * Program should not crash when a non-readable file is specified.
+     * @throws IOException
+     */
+    @Test
+    public void getStringForNonReadable() throws IOException {
+<span class="fc" id="L74">        File f = new File(&quot;test.txt&quot;);</span>
+<span class="fc" id="L75">        f.setReadable(false);</span>
+<span class="fc" id="L76">        String result = catTool.getStringForFile(f);</span>
+<span class="fc" id="L77">        assertNull(result);</span>
+<span class="fc" id="L78">        assertNotEquals(catTool.getStatusCode(), 0);</span>
+<span class="fc" id="L79">        f.delete();</span>
+<span class="fc" id="L80">    }</span>
+    
+    @Test
+    public void getCorrectString() throws IOException {
+<span class="fc" id="L84">    	String expected = &quot;hello world!&quot;;</span>
+<span class="fc" id="L85">    	FileWriter fw = new FileWriter(&quot;catTest.txt&quot;, false);</span>
+<span class="fc" id="L86">    	fw.write(expected);</span>
+<span class="fc" id="L87">    	fw.close();</span>
+    	
+<span class="fc" id="L89">    	File f = new File(&quot;catTest.txt&quot;);</span>
+<span class="fc" id="L90">    	String result = catTool.getStringForFile(f);</span>
+<span class="fc" id="L91">    	assertEquals(expected, result);</span>
+<span class="fc" id="L92">    	assertEquals(0, catTool.getStatusCode());</span>
+    	
+<span class="fc" id="L94">    	f.delete();</span>
+<span class="fc" id="L95">    }</span>
+    
+    @Test
+    public void executeCatStdin() {
+<span class="fc" id="L99">    	String expected = &quot;This is stdin!&quot;;</span>
+    	
+<span class="fc" id="L101">    	String result = catTool.execute(new File(System.getProperty(&quot;user.dir&quot;)), expected);</span>
+    	
+<span class="fc" id="L103">    	assertEquals(expected, result);</span>
+<span class="fc" id="L104">    	assertEquals(0, catTool.getStatusCode());</span>
+<span class="fc" id="L105">    }</span>
+    
+    @Test
+    public void executeCorrectString() throws IOException {
+<span class="fc" id="L109">    	String expected = &quot;hello world!&quot;;</span>
+<span class="fc" id="L110">    	FileWriter fw = new FileWriter(&quot;catTest.txt&quot;, false);</span>
+<span class="fc" id="L111">    	fw.write(expected);</span>
+<span class="fc" id="L112">    	fw.close();</span>
+    	
+<span class="fc" id="L114">    	catTool = new CatTool(new String[]{&quot;catTest.txt&quot;});</span>
+<span class="fc" id="L115">    	File f = new File(&quot;catTest.txt&quot;);</span>
+<span class="fc" id="L116">    	String result = catTool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+    	
+<span class="fc" id="L118">    	assertEquals(expected, result);</span>
+<span class="fc" id="L119">    	assertEquals(0, catTool.getStatusCode());</span>
+    	
+<span class="fc" id="L121">    	f.delete();</span>
+<span class="fc" id="L122">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

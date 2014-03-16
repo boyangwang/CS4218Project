@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WcTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">WcTool.java</span></div><h1>WcTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import sg.edu.nus.comp.cs4218.extended2.IWcTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+
+public class WcTool extends ATool implements IWcTool {
+<span class="fc" id="L18">	static final Charset UTF_8 = StandardCharsets.UTF_8;</span>
+
+	private boolean printCharacterCount, printWordCount, printNewLineCount;
+
+	public WcTool(String[] arguments) {
+<span class="fc" id="L23">		super(arguments);</span>
+<span class="fc" id="L24">	}</span>
+
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc" id="L28">        int i = 0;</span>
+
+<span class="fc bfc" id="L30" title="All 4 branches covered.">        while (i &lt; args.length &amp;&amp; args[i].startsWith(&quot;-&quot;)) {</span>
+<span class="fc" id="L31">            String arg = args[i++];</span>
+            
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            if (arg.equals(&quot;-help&quot;)) {</span>
+<span class="fc" id="L34">            	return getHelp();</span>
+            } else {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">                for (int j = 1; j &lt; arg.length(); j++) {</span>
+<span class="fc" id="L37">                    char flag = arg.charAt(j);</span>
+<span class="fc bfc" id="L38" title="All 4 branches covered.">                    switch (flag) {</span>
+                        case 'm':
+<span class="fc" id="L40">                        	printCharacterCount = true;</span>
+<span class="fc" id="L41">                            break;</span>
+                        case 'w':
+<span class="fc" id="L43">                        	printWordCount = true;</span>
+<span class="fc" id="L44">                            break;</span>
+                        case 'l':
+<span class="fc" id="L46">                        	printNewLineCount = true;</span>
+<span class="fc" id="L47">                            break;</span>
+                        default:
+<span class="fc" id="L49">                            statusError();</span>
+<span class="fc" id="L50">                            return String.format(&quot;wc: illegal option -- %s%n&quot;, flag);</span>
+                    }
+                }
+            }
+        }
+        
+<span class="fc" id="L56">        StringBuilder output = new StringBuilder();</span>
+
+<span class="fc bfc" id="L58" title="All 6 branches covered.">        if (!printCharacterCount &amp;&amp; !printWordCount &amp;&amp; !printNewLineCount) {</span>
+<span class="fc" id="L59">        	printCharacterCount = printWordCount = printNewLineCount = true;</span>
+        }
+        
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (i == args.length) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        	if (stdin == null) {</span>
+<span class="nc" id="L64">	            statusError();</span>
+<span class="nc" id="L65">	            return getHelp();</span>
+        	} else {
+<span class="fc" id="L67">        		output.append(wc(stdin));</span>
+<span class="fc" id="L68">        		output.append(String.format(&quot;%n&quot;));</span>
+        	}
+        }
+
+<span class="fc" id="L72">        boolean isFirstStdin = true;</span>
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        while (i &lt; args.length) {</span>
+<span class="fc" id="L75">            String arg = args[i++];</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">            if(arg.equals(&quot;-&quot;)){</span>
+                // Process only first stdin argument
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                if (isFirstStdin) {</span>
+<span class="nc" id="L79">                    isFirstStdin = false;</span>
+<span class="nc" id="L80">                    output.append(wc(stdin));</span>
+<span class="nc" id="L81">            		output.append(String.format(&quot;%n&quot;));</span>
+                }
+<span class="nc" id="L83">            } else {</span>
+<span class="fc" id="L84">                output.append(wc(arg, workingDir));</span>
+            }
+        }
+
+<span class="fc" id="L88">        return output.toString();</span>
+	}
+
+	@Override
+	public String getCharacterCount(String input) {
+<span class="fc" id="L93">		return String.valueOf(input.length());</span>
+	}
+
+	@Override
+	public String getWordCount(String input) {
+<span class="fc" id="L98">		Matcher matcher = Pattern.compile(&quot;\\S+&quot;).matcher(input);</span>
+<span class="fc" id="L99">		int count = 0;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		while (matcher.find()) {</span>
+<span class="fc" id="L101">			count++;</span>
+		}
+<span class="fc" id="L103">		return String.valueOf(count);</span>
+	}
+
+	@Override
+	public String getNewLineCount(String input) {
+<span class="fc" id="L108">		Matcher matcher = Pattern.compile(System.lineSeparator()).matcher(input);</span>
+<span class="fc" id="L109">		int count = 0;</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">		while (matcher.find()) {</span>
+<span class="fc" id="L111">			count++;</span>
+		}
+<span class="fc" id="L113">		return String.valueOf(count);</span>
+	}
+
+	@Override
+	public String getHelp() {
+<span class="fc" id="L118">		statusSuccess();</span>
+<span class="fc" id="L119">		return &quot;usage: wc [-lmw] [file ...]&quot; + System.lineSeparator();</span>
+	}
+
+	private String wc(String input) {
+<span class="fc" id="L123">		StringBuilder output = new StringBuilder();</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		if (printNewLineCount) {</span>
+<span class="fc" id="L125">			output.append(getNewLineCount(input) + &quot;\t&quot;);</span>
+		}
+<span class="fc bfc" id="L127" title="All 2 branches covered.">		if (printWordCount) {</span>
+<span class="fc" id="L128">			output.append(getWordCount(input) + &quot;\t&quot;);</span>
+		}
+<span class="fc bfc" id="L130" title="All 2 branches covered.">		if (printCharacterCount) {</span>
+<span class="fc" id="L131">			output.append(getCharacterCount(input) + &quot;\t&quot;);</span>
+		}
+<span class="fc" id="L133">		return output.toString();</span>
+	}
+	
+	private String wc(String pathname, File workingDir) {
+        try {
+<span class="fc" id="L138">        	Path path = workingDir.toPath().resolve(pathname);</span>
+<span class="fc" id="L139">            byte[] encoded = Files.readAllBytes(path);</span>
+<span class="fc" id="L140">            return String.format(&quot;%s%s%n&quot;, wc(UTF_8.decode(ByteBuffer.wrap(encoded)).toString()), path.getFileName());</span>
+<span class="fc" id="L141">        } catch (NoSuchFileException e) {</span>
+<span class="fc" id="L142">        	statusError();</span>
+<span class="fc" id="L143">            return String.format(&quot;Error: SOURCE file not found%n&quot;);</span>
+<span class="nc" id="L144">        } catch (IOException e) {</span>
+<span class="nc" id="L145">        	statusError();</span>
+<span class="nc" id="L146">            return String.format(&quot;wc: %s: %s%n&quot;, pathname, e);</span>
+        }
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

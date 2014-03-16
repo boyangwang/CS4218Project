@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PipingToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended1</a> &gt; <span class="el_source">PipingToolTest.java</span></div><h1>PipingToolTest.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package sg.edu.nus.comp.cs4218.impl.extended1;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.Shell;
+import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
+
+/**
+ *
+ */
+<span class="fc" id="L19">public class PipingToolTest {</span>
+	private PipingTool pipingTool;
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L27">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L34">		pipingTool = null;</span>
+<span class="fc" id="L35">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.PipingTool#execute(java.io.File, java.lang.String)}.
+	 */
+	@Test
+	public void testExecute() {
+<span class="fc" id="L42">		Shell shell = new Shell(System.in, System.out);</span>
+		String[] args;
+		String output;
+
+<span class="fc" id="L46">		args = new String[]{&quot;echo foo&quot;, &quot;cat -&quot;};</span>
+<span class="fc" id="L47">		pipingTool = new PipingTool(args, shell);</span>
+<span class="fc" id="L48">		output = pipingTool.execute(shell.getWorkingDirectory(), &quot;&quot;);</span>
+<span class="fc" id="L49">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L50">		assertEquals(&quot;foo&quot; + System.lineSeparator(), output);</span>
+		
+<span class="fc" id="L52">		args = new String[]{&quot;echo foo&quot;, &quot;echo bar&quot;, &quot;cat -&quot;};</span>
+<span class="fc" id="L53">		pipingTool = new PipingTool(args, shell);</span>
+<span class="fc" id="L54">		output = pipingTool.execute(shell.getWorkingDirectory(), &quot;&quot;);</span>
+<span class="fc" id="L55">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L56">		assertEquals(&quot;bar&quot; + System.lineSeparator(), output);</span>
+		
+		// cases where one or more of the commands are null
+<span class="fc" id="L59">		args = new String[]{&quot;echo foo&quot;, &quot;&quot;};</span>
+<span class="fc" id="L60">		pipingTool = new PipingTool(args, shell);</span>
+<span class="fc" id="L61">		output = pipingTool.execute(shell.getWorkingDirectory(), &quot;&quot;);</span>
+<span class="fc" id="L62">		assertEquals(1, pipingTool.getStatusCode());</span>
+<span class="fc" id="L63">		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);</span>
+		
+<span class="fc" id="L65">		args = new String[]{&quot;&quot;, &quot;echo foo&quot;};</span>
+<span class="fc" id="L66">		pipingTool = new PipingTool(args, shell);</span>
+<span class="fc" id="L67">		output = pipingTool.execute(shell.getWorkingDirectory(), &quot;&quot;);</span>
+<span class="fc" id="L68">		assertEquals(1, pipingTool.getStatusCode());</span>
+<span class="fc" id="L69">		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);</span>
+		
+<span class="fc" id="L71">		args = new String[]{&quot;echo foo&quot;, &quot;&quot;, &quot;&quot;};</span>
+<span class="fc" id="L72">		pipingTool = new PipingTool(args, shell);</span>
+<span class="fc" id="L73">		output = pipingTool.execute(shell.getWorkingDirectory(), &quot;&quot;);</span>
+<span class="fc" id="L74">		assertEquals(1, pipingTool.getStatusCode());</span>
+<span class="fc" id="L75">		assertEquals(PipingTool.ERROR_MSG_NULL_CMD + System.lineSeparator(), output);</span>
+<span class="fc" id="L76">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.PipingTool#pipe(sg.edu.nus.comp.cs4218.ITool, sg.edu.nus.comp.cs4218.ITool)}.
+	 */
+	@Test
+	public void testPipeIToolITool() {
+<span class="fc" id="L83">		pipingTool = new PipingTool(new String[]{}, new Shell(System.in, System.out));</span>
+		
+<span class="fc" id="L85">		EchoTool from = new EchoTool(new String[]{&quot;foo&quot;});</span>
+<span class="fc" id="L86">		CatTool to = new CatTool(new String[]{&quot;-&quot;});</span>
+		
+<span class="fc" id="L88">		String output = pipingTool.pipe(from, to);</span>
+<span class="fc" id="L89">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L90">		assertEquals(&quot;foo&quot; + System.lineSeparator(), output);</span>
+<span class="fc" id="L91">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.PipingTool#pipe(java.lang.String, sg.edu.nus.comp.cs4218.ITool)}.
+	 */
+	@Test
+	public void testPipeStringITool() {
+<span class="fc" id="L98">		pipingTool = new PipingTool(new String[]{}, new Shell(System.in, System.out));</span>
+		
+		String input;
+		String result;
+<span class="fc" id="L102">		CatTool catTool = new CatTool(new String[]{&quot;-&quot;});</span>
+		
+		// normal case where the output should be the input string.
+		// Assuming EchoTool functional
+<span class="fc" id="L106">		input = &quot;foo&quot;;</span>
+<span class="fc" id="L107">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L108">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L109">		assertEquals(input, result);</span>
+		
+<span class="fc" id="L111">		input = &quot;'\&quot;\&quot;'&quot;;</span>
+<span class="fc" id="L112">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L113">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L114">		assertEquals(result, input);</span>
+		
+<span class="fc" id="L116">		input = &quot;    \n\t&quot;;</span>
+<span class="fc" id="L117">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L118">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L119">		assertEquals(result, input);</span>
+		
+<span class="fc" id="L121">		input = &quot;'\&quot;&quot;;</span>
+<span class="fc" id="L122">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L123">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L124">		assertEquals(result, input);</span>
+		
+		// pipe operator wraped inside quotes should be supported
+<span class="fc" id="L127">		input = &quot;\&quot;|\&quot;&quot;;</span>
+<span class="fc" id="L128">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L129">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L130">		assertEquals(result, input);</span>
+		
+<span class="fc" id="L132">		input = &quot;'|'&quot;;</span>
+<span class="fc" id="L133">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L134">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L135">		assertEquals(result, input);</span>
+		
+		// some UNICODE testing
+<span class="fc" id="L138">		input = &quot;&quot; + Character.toChars(2202).toString();</span>
+<span class="fc" id="L139">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L140">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L141">		assertEquals(result, input);</span>
+		
+<span class="fc" id="L143">		input = &quot;&quot; + Character.toChars(0x2E97).toString();</span>
+<span class="fc" id="L144">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L145">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L146">		assertEquals(result, input);</span>
+		
+<span class="fc" id="L148">		input = &quot;&quot; + Character.toChars(0x3042).toString();</span>
+<span class="fc" id="L149">		result = pipingTool.pipe(input, catTool);</span>
+<span class="fc" id="L150">		assertEquals(0, pipingTool.getStatusCode());</span>
+<span class="fc" id="L151">		assertEquals(result, input);</span>
+<span class="fc" id="L152">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

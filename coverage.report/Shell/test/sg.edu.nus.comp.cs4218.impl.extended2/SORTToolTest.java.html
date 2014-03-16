@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SORTToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">SORTToolTest.java</span></div><h1>SORTToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.extended2.ISortTool;
+
+<span class="fc" id="L16">public class SORTToolTest {</span>
+	
+	private ISortTool sorttool;
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L21">		sorttool = new SortTool(null);</span>
+<span class="fc" id="L22">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L26">		sorttool = null;</span>
+<span class="fc" id="L27">	}</span>
+	
+	@Test
+	public void testGetHelpTest() {
+<span class="fc" id="L31">		String result = sorttool.getHelp();</span>
+<span class="fc" id="L32">		assertTrue(result.startsWith(&quot;NAME\n\nsort - sort lines of text files\n\n&quot;));</span>
+<span class="fc" id="L33">		assertTrue(result.endsWith(&quot;-help\tBrief information about supported options\n&quot;));</span>
+<span class="fc" id="L34">		assertTrue(result.contains(&quot;DESCRIPTION\n\nWrite sorted concatenation of all FILE(s)&quot;));</span>
+<span class="fc" id="L35">		assertTrue(result.contains(&quot;-c\tCheck whether the given file is already sorted, if it&quot;));</span>
+<span class="fc" id="L36">	}</span>
+
+	@Test
+	public void sortFileTestArrangementTest() {
+<span class="fc" id="L40">		String input = &quot;test\nTest\nTEst\nTESt\nTEST\ntEST\nteST\ntesT\n&quot;;</span>
+<span class="fc" id="L41">		String result = sorttool.sortFile(input);</span>
+<span class="fc" id="L42">		assertEquals(&quot;TEST\nTESt\nTEst\nTest\ntEST\nteST\ntesT\ntest\n&quot;, result);</span>
+<span class="fc" id="L43">	}</span>
+	
+	@Test
+	public void sortFileTestDuplicateTest(){
+<span class="fc" id="L47">		String input = &quot;test\nTEST\ntest\napple\nApple\n&quot;;</span>
+<span class="fc" id="L48">		String result = sorttool.sortFile(input);</span>
+<span class="fc" id="L49">		assertEquals(&quot;Apple\nTEST\napple\ntest\ntest\n&quot;, result);</span>
+<span class="fc" id="L50">	}</span>
+	
+	@Test
+	public void sortFileTestSpecialCharacterTest(){
+<span class="fc" id="L54">		String input = &quot;test\nTEST\n!!!\n@.@\n���\n&quot;;</span>
+<span class="fc" id="L55">		String result = sorttool.sortFile(input);</span>
+<span class="fc" id="L56">		assertEquals(&quot;!!!\n@.@\nTEST\ntest\n���\n&quot;, result);</span>
+<span class="fc" id="L57">	}</span>
+	
+	@Test
+	public void sortFileTestBlankLinesTest(){
+<span class="fc" id="L61">		String input = &quot;test\n\n\nTEST\n&quot;;</span>
+<span class="fc" id="L62">		String result = sorttool.sortFile(input);</span>
+<span class="fc" id="L63">		assertEquals(&quot;\n\nTEST\ntest\n&quot;, result);</span>
+<span class="fc" id="L64">	}</span>
+
+	@Test
+	public void sortFileTestSortedAlreadyTest(){
+<span class="fc" id="L68">		String input = &quot;test\nTEST&quot;;</span>
+<span class="fc" id="L69">		String result = sorttool.sortFile(input);</span>
+<span class="fc" id="L70">		assertEquals(&quot;TEST\ntest\n&quot;, result);</span>
+<span class="fc" id="L71">	}</span>
+	
+	@Test
+	public void checkIfSortedTestSortedAlreadyTest() {
+<span class="fc" id="L75">		String input = &quot;TEST\ntest&quot;;</span>
+<span class="fc" id="L76">		String result = sorttool.checkIfSorted(input);</span>
+<span class="fc" id="L77">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L78">	}</span>
+	
+	@Test
+	public void checkIfSortedTestUnsortedTest() {
+<span class="fc" id="L82">		String input = &quot;TEST\ntest\nTEST&quot;;</span>
+<span class="fc" id="L83">		String result = sorttool.checkIfSorted(input);</span>
+<span class="fc" id="L84">		assertEquals(&quot;3: disorder:TEST\n&quot;, result);</span>
+<span class="fc" id="L85">	}</span>
+
+	@Test
+	public void executeTestOneFileTest() throws IOException {
+<span class="fc" id="L89">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L90">		String input = &quot;hello world\nHello world\napple\n&quot;;</span>
+<span class="fc" id="L91">		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L92">		sorttool = new SortTool(new String[]{file.getName()});</span>
+<span class="fc" id="L93">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L94">		assertEquals(&quot;Hello world\napple\nhello world\n&quot;, result);</span>
+<span class="fc" id="L95">		Files.delete(file.toPath());</span>
+<span class="fc" id="L96">	}</span>
+	
+	@Test
+	public void executeTestEmptyFileTest() throws IOException {
+<span class="fc" id="L100">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L101">		sorttool = new SortTool(new String[]{file.getName()});</span>
+<span class="fc" id="L102">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L103">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L104">		Files.delete(file.toPath());</span>
+<span class="fc" id="L105">	}</span>
+
+	@Test
+	public void executeTestMultipleSameFileTest() throws IOException {
+<span class="fc" id="L109">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L110">		String input = &quot;hello world\nHello world\napple\n&quot;;</span>
+<span class="fc" id="L111">		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L112">		sorttool = new SortTool(new String[]{file.getName(), file.getName(), file.getName()});</span>
+<span class="fc" id="L113">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L114">		assertEquals(&quot;Hello world\nHello world\nHello world\napple\napple\napple\nhello world\nhello world\nhello world\n&quot;, result);</span>
+<span class="fc" id="L115">		Files.delete(file.toPath());</span>
+<span class="fc" id="L116">	}</span>
+	
+	@Test
+	public void executeTestMultipleDiffFileTest() throws IOException {
+<span class="fc" id="L120">		File file1 = File.createTempFile(&quot;tempFile 1&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L121">		File directory = new File(System.getProperty(&quot;user.home&quot;));</span>
+<span class="fc" id="L122">		File file2 = Files.createFile(new File(directory, &quot;tempFile 2.tmp&quot;).toPath()).toFile();</span>
+<span class="fc" id="L123">		directory = Files.createTempDirectory(&quot;temp Folder&quot;).toFile();</span>
+<span class="fc" id="L124">		File file3 = Files.createFile(new File(directory, &quot;tempFile 3.tmp&quot;).toPath()).toFile();</span>
+		
+<span class="fc" id="L126">		String input = &quot;hello world\nHello world\napple\n&quot;;</span>
+<span class="fc" id="L127">		Files.write(file1.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L128">		input = &quot;orange\nOrange\nApple&quot;;</span>
+<span class="fc" id="L129">		Files.write(file2.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L130">		input = &quot;banana\nBanana\nApple&quot;;</span>
+<span class="fc" id="L131">		Files.write(file3.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+		
+<span class="fc" id="L133">		sorttool = new SortTool(new String[]{directory.getName() + System.getProperty(&quot;file.separator&quot;) + file3.getName(), file2.getAbsolutePath(), file1.getName()});</span>
+<span class="fc" id="L134">		String result = sorttool.execute(file1.getParentFile(), null);		</span>
+<span class="fc" id="L135">		assertEquals(&quot;Apple\nApple\nBanana\nHello world\nOrange\napple\nbanana\nhello world\norange\n&quot;, result);</span>
+<span class="fc" id="L136">		Files.delete(file1.toPath());</span>
+<span class="fc" id="L137">		Files.delete(file2.toPath());</span>
+<span class="fc" id="L138">		Files.delete(file3.toPath());</span>
+<span class="fc" id="L139">		Files.delete(directory.toPath());</span>
+<span class="fc" id="L140">	}</span>
+	
+	@Test
+	public void executeTestMultipleFileWithOneInvalidFileTest() throws IOException {
+<span class="fc" id="L144">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L145">		String input = &quot;hello world\nHello world\napple\n&quot;;</span>
+<span class="fc" id="L146">		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L147">		sorttool = new SortTool(new String[]{file.getName(), &quot;invalidfile.tmp&quot;});</span>
+<span class="fc" id="L148">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L149">		assertEquals(String.format(&quot;Error: FILE is not found%n&quot;), result);</span>
+<span class="fc" id="L150">		assertEquals(1, sorttool.getStatusCode());</span>
+<span class="fc" id="L151">		Files.delete(file.toPath());</span>
+<span class="fc" id="L152">	}</span>
+	
+	@Test
+	public void executeTestOneFileCheckIfSortedTest() throws IOException {
+<span class="fc" id="L156">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L157">		String input = &quot;apple\nhello world\nHello world\n&quot;;</span>
+<span class="fc" id="L158">		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L159">		sorttool = new SortTool(new String[]{&quot;-c&quot;, file.getName()});</span>
+<span class="fc" id="L160">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L161">		assertEquals(String.format(&quot;sort: &quot; + file.getName() + &quot; 3: disorder:Hello world%n&quot;), result);</span>
+<span class="fc" id="L162">		Files.delete(file.toPath());</span>
+<span class="fc" id="L163">	}</span>
+	
+	@Test
+	public void executeTestMultipleFileCheckIfSortedTest() throws IOException {
+<span class="fc" id="L167">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L168">		String input = &quot;apple\nHello world\nhello world\napple\n&quot;;</span>
+<span class="fc" id="L169">		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L170">		sorttool = new SortTool(new String[]{&quot;-c&quot;, file.getName()});</span>
+<span class="fc" id="L171">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L172">		String expected = &quot;sort: &quot; + file.getName() + &quot; 2: disorder:Hello world\n&quot;;</span>
+<span class="fc" id="L173">		assertEquals(expected, result);</span>
+<span class="fc" id="L174">		Files.delete(file.toPath());</span>
+<span class="fc" id="L175">	}</span>
+	
+	@Test
+	public void executeTestEmptyFileCheckIfSortedTest() throws IOException {
+<span class="fc" id="L179">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L180">		sorttool = new SortTool(new String[]{&quot;-c&quot;, file.getName()});</span>
+<span class="fc" id="L181">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L182">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L183">		Files.delete(file.toPath());</span>
+<span class="fc" id="L184">	}</span>
+	
+	@Test
+	public void executeTestInvalidFileCheckIfSortedTest() {
+<span class="fc" id="L188">		sorttool = new SortTool(new String[]{&quot;-c&quot;, &quot;invalidfile.tmp&quot;});</span>
+<span class="fc" id="L189">		String result = sorttool.execute(new File(System.getProperty(&quot;user.home&quot;)), null);</span>
+<span class="fc" id="L190">		assertEquals(String.format(&quot;Error: FILE is not found%n&quot;), result);</span>
+<span class="fc" id="L191">		assertEquals(1, sorttool.getStatusCode());</span>
+<span class="fc" id="L192">	}</span>
+	
+	@Test
+	public void executeTestInvalidOptionTest() throws IOException {
+<span class="fc" id="L196">		File file = File.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;);</span>
+<span class="fc" id="L197">		sorttool = new SortTool(new String[]{&quot;-c&quot;, &quot;-d&quot;, file.getName()});</span>
+<span class="fc" id="L198">		String result = sorttool.execute(file.getParentFile(), null);</span>
+<span class="fc" id="L199">		String expected = String.format(&quot;Error: sort: unrecognized option '-d'%nTry 'sort -help' for more information.%n&quot;);</span>
+<span class="fc" id="L200">		assertEquals(expected, result);</span>
+<span class="fc" id="L201">		assertEquals(1, sorttool.getStatusCode());</span>
+<span class="fc" id="L202">		Files.delete(file.toPath());</span>
+<span class="fc" id="L203">	}</span>
+	
+	@Test
+	public void executeTestEmptyArgumentTest() {
+<span class="fc" id="L207">		sorttool = new SortTool(null);</span>
+<span class="fc" id="L208">		String result = sorttool.execute(new File(System.getProperty(&quot;user.home&quot;)), null);</span>
+<span class="fc" id="L209">		assertEquals(String.format(&quot;Error: Missing parameter for OPTION FILE%n&quot;), result);</span>
+<span class="fc" id="L210">		assertEquals(1, sorttool.getStatusCode());</span>
+<span class="fc" id="L211">	}</span>
+	
+	@Test
+	public void executeFolderTest() throws IOException{
+<span class="fc" id="L215">		File dir = Files.createTempDirectory(&quot;temp dir&quot;).toFile();</span>
+<span class="fc" id="L216">		sorttool = new SortTool(new String[]{dir.getName()});</span>
+<span class="fc" id="L217">		String result = sorttool.execute(dir.getParentFile(), null);</span>
+<span class="fc" id="L218">		assertEquals(String.format(&quot;Error: FILE 01 is not a file%n&quot;), result);</span>
+<span class="fc" id="L219">		assertEquals(1, sorttool.getStatusCode());</span>
+<span class="fc" id="L220">		Files.delete(dir.toPath());</span>
+<span class="fc" id="L221">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

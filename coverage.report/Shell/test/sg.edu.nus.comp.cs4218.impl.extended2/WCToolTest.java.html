@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WCToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">WCToolTest.java</span></div><h1>WCToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+<span class="fc" id="L14">public class WCToolTest {</span>
+
+	private WcTool wctool;
+<span class="fc" id="L17">	private String testString = &quot;The quick brown fox jumps over the lazy dog.\n&quot;;</span>
+
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L21">		wctool = new WcTool(null);</span>
+<span class="fc" id="L22">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L26">		wctool = null;</span>
+<span class="fc" id="L27">	}</span>
+	
+	@Test 
+	public void getCharacterCountTest(){
+<span class="fc" id="L31">		String count = wctool.getCharacterCount(testString);</span>
+<span class="fc" id="L32">		assertEquals(count,&quot;45&quot;);</span>
+<span class="fc" id="L33">	}</span>
+	
+	@Test 
+	public void getWordCountTest(){
+<span class="fc" id="L37">		String count = wctool.getWordCount(testString);</span>
+<span class="fc" id="L38">		assertEquals(count,&quot;9&quot;);</span>
+<span class="fc" id="L39">	}</span>
+	
+	@Test 
+	public void getNewLineCountTest(){
+<span class="fc" id="L43">		String count = wctool.getNewLineCount(testString);</span>
+<span class="fc" id="L44">		assertEquals(count,&quot;1&quot;);</span>
+<span class="fc" id="L45">	}</span>
+	
+	@Test 
+	public void executeCharacterOptionTest() throws IOException{
+<span class="fc" id="L49">		File tempFile = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L50">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L51">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L52">		wctool = new WcTool(new String[]{&quot;-m&quot;, tempFile.getAbsolutePath()});</span>
+<span class="fc" id="L53">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L54">		assertEquals(&quot;45\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L55">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L56">	}</span>
+	
+	@Test 
+	public void executeWordOptionTest() throws IOException{
+<span class="fc" id="L60">		File tempFile = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L61">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L62">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L63">		wctool = new WcTool(new String[]{&quot;-w&quot;, tempFile.getAbsolutePath()});</span>
+<span class="fc" id="L64">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L65">		assertEquals(&quot;9\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L66">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L67">	}</span>
+	
+	@Test 
+	public void executeNewLineOptionTest() throws IOException{
+<span class="fc" id="L71">		File tempFile = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L72">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L73">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L74">		wctool = new WcTool(new String[]{&quot;-l&quot;, tempFile.getAbsolutePath()});</span>
+<span class="fc" id="L75">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L76">		assertEquals(&quot;1\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L77">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L78">	}</span>
+	
+	@Test 
+	public void executeTwoOptionsTest() throws IOException{
+<span class="fc" id="L82">		File tempFile = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L83">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L84">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L85">		wctool = new WcTool(new String[]{&quot;-l&quot;, &quot;-w&quot;, tempFile.getAbsolutePath()});</span>
+<span class="fc" id="L86">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L87">		assertEquals(&quot;1\t9\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L88">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L89">	}</span>
+	
+	@Test 
+	public void executeNoOptionsTest() throws IOException{
+<span class="fc" id="L93">		File tempFile = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L94">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L95">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L96">		wctool = new WcTool(new String[]{tempFile.getAbsolutePath()});</span>
+<span class="fc" id="L97">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L98">		assertEquals(&quot;1\t9\t45\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L99">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L100">	}</span>
+	
+	@Test 
+	public void executeFileNameTest() throws IOException{
+<span class="fc" id="L104">		File tempFile = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L105">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L106">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L107">		wctool = new WcTool(new String[]{tempFile.getName()});</span>
+<span class="fc" id="L108">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L109">		assertEquals(&quot;1\t9\t45\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L110">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L111">	}</span>
+	
+	@Test 
+	public void executeTwoFilesTest() throws IOException{
+<span class="fc" id="L115">		File tempFile = Files.createTempFile(&quot;tempFile1T&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L116">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L117">		File tempFile2 = Files.createTempFile(&quot;tempFile2T&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L118">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L119">		Files.write(tempFile2.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L120">		wctool = new WcTool(new String[]{tempFile.getName(), tempFile2.getName()});</span>
+<span class="fc" id="L121">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L122">		assertEquals(&quot;1\t9\t45\t&quot;+tempFile.getName()+&quot;\n1\t9\t45\t&quot;+tempFile2.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L123">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L124">		Files.delete(tempFile2.toPath());</span>
+<span class="fc" id="L125">	}</span>
+	
+	@Test 
+	public void executeTwoFilesWithOptionsTest() throws IOException{
+<span class="fc" id="L129">		File tempFile = Files.createTempFile(&quot;tempFile1T&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L130">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L131">		File tempFile2 = Files.createTempFile(&quot;tempFile2T&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L132">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L133">		Files.write(tempFile2.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L134">		wctool = new WcTool(new String[]{&quot;-l&quot;, &quot;-w&quot;, tempFile.getName(), tempFile2.getName()});</span>
+<span class="fc" id="L135">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L136">		assertEquals(&quot;1\t9\t&quot;+tempFile.getName()+&quot;\n1\t9\t&quot;+tempFile2.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L137">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L138">		Files.delete(tempFile2.toPath());</span>
+<span class="fc" id="L139">	}</span>
+	
+	@Test 
+	public void executeContainsSpaceTest() throws IOException{
+<span class="fc" id="L143">		File tempFile = Files.createTempFile(&quot;temp File&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L144">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L145">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L146">		wctool = new WcTool(new String[]{tempFile.getName()});</span>
+<span class="fc" id="L147">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L148">		assertEquals(&quot;1\t9\t45\t&quot;+tempFile.getName()+System.lineSeparator(), msg);</span>
+<span class="fc" id="L149">		Files.delete(tempFile.toPath());</span>
+<span class="fc" id="L150">	}</span>
+	
+	@Test
+    public void getHelpTest() {
+<span class="fc" id="L154">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L155">        String helpText = wctool.getHelp();</span>
+<span class="fc" id="L156">        assertEquals(helpText, new WcTool(new String[]{&quot;-help&quot;}).execute(tempWorkingDir, null));</span>
+<span class="fc" id="L157">        assertEquals(helpText, new WcTool(new String[]{&quot;-help&quot;, &quot;abcde&quot;}).execute(tempWorkingDir, null));</span>
+<span class="fc" id="L158">        assertEquals(String.format(&quot;wc: illegal option -- d%n&quot;), new WcTool(new String[]{&quot;-d&quot;, &quot;.,&quot;, &quot;-s&quot;, &quot;-help&quot;, &quot;abcde&quot;}).execute(tempWorkingDir, null));</span>
+<span class="fc" id="L159">    }</span>
+	
+	@Test
+	public void executeInvalidSourceNameTest() throws IOException {
+<span class="fc" id="L163">		File tempFile = Files.createTempFile(&quot;temp File&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L164">		Files.write(tempFile.toPath(), testString.getBytes(),  StandardOpenOption.CREATE);</span>
+<span class="fc" id="L165">		File tempWorkingDir = new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+<span class="fc" id="L166">		String tempName = &quot;tempFile.tmp &quot; + &quot;test&quot;;</span>
+<span class="fc" id="L167">		wctool = new WcTool(new String[]{tempName});</span>
+<span class="fc" id="L168">		String msg = wctool.execute(tempWorkingDir, null);</span>
+<span class="fc" id="L169">		assertEquals(String.format(&quot;Error: SOURCE file not found%n&quot;), msg);</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">		assertTrue(wctool.getStatusCode() != 0);</span>
+<span class="fc" id="L171">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>

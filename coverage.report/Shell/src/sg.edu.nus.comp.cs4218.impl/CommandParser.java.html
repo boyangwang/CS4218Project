@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CommandParser.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Shell (1) (Mar 17, 2014 12:17:28 AM)</a> &gt; <a href="../../index.html" class="el_group">Shell</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl</a> &gt; <span class="el_source">CommandParser.java</span></div><h1>CommandParser.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl;
+
+
+import sg.edu.nus.comp.cs4218.ITool;
+import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.CutTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.PasteTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.CommTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.SortTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+<span class="fc" id="L18">public class CommandParser {</span>
+	private final static char DELIMITER_CHAR = ' ';
+	private final static char QUOTE_CHAR = '\'';
+	private final static char DQUOTE_CHAR = '&quot;';
+	private final static char BQUOTE_CHAR = '`';
+	private final static char PIPE_CHAR = '|';
+	/**
+	 * parse user input and return an instance of ITool for execution
+	 * @param rawInput user command
+	 * @return ITool if user command is valid, null otherwise
+	 */
+    public static ITool parse(String rawInput, Shell shell) {
+<span class="fc" id="L30">    	String trimmedCmd = rawInput.trim();</span>
+        // at the beginning of Shell.parse, if pipe operator is present, pass to PipingTool
+<span class="fc bfc" id="L32" title="All 2 branches covered.">    	if (!verifyCommand(trimmedCmd)) {</span>
+<span class="fc" id="L33">    		return null;</span>
+    	}
+<span class="fc" id="L35">    	String[] argList = tokenizePipeCommands(trimmedCmd);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (argList != null) {</span>
+<span class="fc" id="L37">            return new PipingTool(argList, shell);</span>
+        }
+
+<span class="fc" id="L40">        String[] tokens = tokenizeString(trimmedCmd);</span>
+<span class="fc" id="L41">        argList = getArgumentList(tokens);</span>
+<span class="fc" id="L42">        String cmd = getCommand(tokens);</span>
+
+<span class="pc bpc" id="L44" title="17 of 46 branches missed.">        switch (cmd.toLowerCase()) {</span>
+            case &quot;cat&quot;:
+<span class="fc" id="L46">                return new CatTool(argList);</span>
+
+            case &quot;cd&quot;:
+<span class="fc" id="L49">                return new CdTool(argList, shell);</span>
+
+            case &quot;copy&quot;:
+<span class="fc" id="L52">                return new CopyTool(argList);</span>
+
+            case &quot;delete&quot;:
+<span class="fc" id="L55">                return new DeleteTool(argList);</span>
+
+            case &quot;echo&quot;:
+<span class="fc" id="L58">                return new EchoTool(argList);</span>
+
+            case &quot;ls&quot;:
+<span class="fc" id="L61">                return new LsTool(argList);</span>
+
+            case &quot;move&quot;:
+<span class="fc" id="L64">                return new MoveTool(argList);</span>
+
+            case &quot;paste&quot;:
+<span class="fc" id="L67">                return new PasteTool(argList);</span>
+                
+            case &quot;pwd&quot;:
+<span class="nc" id="L70">                return new PwdTool(argList);</span>
+                
+            case &quot;cut&quot;:
+<span class="fc" id="L73">                return new CutTool(argList);</span>
+                
+            case &quot;grep&quot;:
+<span class="fc" id="L76">                return new GrepTool(argList);</span>
+                
+            case &quot;wc&quot;:
+<span class="fc" id="L79">            	return new WcTool(argList);</span>
+
+            case &quot;uniq&quot;:
+<span class="fc" id="L82">                return new UniqTool(argList);</span>
+
+            case &quot;comm&quot;:
+<span class="fc" id="L85">            	return new CommTool(argList);</span>
+            	
+            case &quot;sort&quot;:
+<span class="fc" id="L88">            	return new SortTool(argList);</span>
+
+            default:
+<span class="fc" id="L91">                Logging.logger(System.out).writeLog(Logging.ERROR, &quot;Cannot parse &quot; + trimmedCmd);</span>
+<span class="fc" id="L92">                return null;</span>
+        }
+    }
+
+    /**
+     * verify user command, 
+     * @param cmd user command
+     * @return true if quotes are closed properly, false otherwise
+     */
+    private static boolean verifyCommand(String cmd) {
+<span class="fc" id="L102">    	boolean isInQuote = false;</span>
+<span class="fc" id="L103">    	char currentQuote = 0;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">    	for(int i=0;i&lt;cmd.length();i++){</span>
+<span class="fc" id="L105">    		char c = cmd.charAt(i);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    		if (isInQuote){</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">    			if(currentQuote == c){</span>
+<span class="fc" id="L108">    				currentQuote = 0;</span>
+<span class="fc" id="L109">    				isInQuote = false;</span>
+    			}
+<span class="fc" id="L111">    		}else{</span>
+<span class="fc bfc" id="L112" title="All 6 branches covered.">    			if (c==BQUOTE_CHAR || c== QUOTE_CHAR || c== DQUOTE_CHAR){</span>
+<span class="fc" id="L113">    				currentQuote = c;</span>
+<span class="fc" id="L114">    				isInQuote = true;</span>
+    			}
+    		}
+    	}
+<span class="fc bfc" id="L118" title="All 2 branches covered.">		return !isInQuote;</span>
+	}
+
+	/**
+     * Parse inputString and returns an array of commands string if the control should be
+     * passed to PipingTool
+     *
+     * Null otherwise
+     *
+     * @param str the user input string
+     * @return `null` if the control shouldn't be passed to PipingTool
+     */
+	private static String[] tokenizePipeCommands(String str) {
+<span class="fc" id="L131">		ArrayList&lt;String&gt; cmds = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L132">		StringBuilder curCmd = new StringBuilder();</span>
+<span class="fc" id="L133">		boolean inQuotes = false;</span>
+<span class="fc" id="L134">		char currentQuote = 0;</span>
+		
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		for (int i = 0; i &lt; str.length(); i++) {</span>
+<span class="fc" id="L137">			char c = str.charAt(i);</span>
+			
+<span class="fc bfc" id="L139" title="All 4 branches covered.">			if (c == PIPE_CHAR &amp;&amp; !inQuotes) {</span>
+<span class="fc" id="L140">				cmds.add(curCmd.toString().trim());</span>
+<span class="fc" id="L141">				curCmd = new StringBuilder();</span>
+<span class="fc" id="L142">				continue;</span>
+			}
+			
+<span class="fc bfc" id="L145" title="All 8 branches covered.">			if (!inQuotes &amp;&amp; (c == DQUOTE_CHAR || c==QUOTE_CHAR || c==BQUOTE_CHAR)) {</span>
+<span class="fc" id="L146">				inQuotes = true;</span>
+<span class="fc" id="L147">				currentQuote = c;</span>
+<span class="fc" id="L148">				continue;</span>
+<span class="fc bfc" id="L149" title="All 4 branches covered.">			} else if (inQuotes &amp;&amp; (currentQuote == c)) {</span>
+<span class="fc" id="L150">				inQuotes = false;</span>
+<span class="fc" id="L151">				currentQuote = 0;</span>
+<span class="fc" id="L152">				continue;</span>
+			}
+			
+<span class="fc" id="L155">			curCmd.append(c);</span>
+		}
+		
+<span class="fc bfc" id="L158" title="All 2 branches covered.">		if (cmds.size() &gt;= 1) {</span>
+<span class="fc" id="L159">			cmds.add(curCmd.toString().trim());</span>
+<span class="fc" id="L160">			return cmds.toArray(new String[cmds.size()]);</span>
+		}
+		else {
+<span class="fc" id="L163">			return null;</span>
+		}
+	}
+
+	/**
+     * Parse inputString and array of token strings
+     * @param str the user input string
+     * @return array of parsed token strings (can be empty)
+     */
+    private static String[] tokenizeString(String str) {
+<span class="fc" id="L173">    	ArrayList&lt;String&gt; out = new ArrayList&lt;String&gt;();</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">    	if (str!=null){</span>
+<span class="fc" id="L175">    		char currentQuote = 0;</span>
+<span class="fc" id="L176">    		boolean isInQuote = false;</span>
+<span class="fc" id="L177">    		StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">    		for (int i = 0; i &lt; str.length(); i++){</span>
+<span class="fc" id="L179">    			char c = str.charAt(i);</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">    			if (isInQuote){</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">    				if (currentQuote == c){</span>
+    					//exiting from quote
+<span class="fc" id="L183">    					currentQuote = 0; </span>
+<span class="fc" id="L184">    					isInQuote = false;</span>
+<span class="fc" id="L185">    					continue;</span>
+    				}
+    			}else{
+<span class="pc bpc" id="L188" title="1 of 6 branches missed.">    				if (c==QUOTE_CHAR || c==DQUOTE_CHAR || c==BQUOTE_CHAR){</span>
+<span class="fc" id="L189">    					currentQuote = c;</span>
+<span class="fc" id="L190">    					isInQuote = true;</span>
+<span class="fc" id="L191">    					continue;</span>
+    				}
+    			}
+<span class="fc bfc" id="L194" title="All 4 branches covered.">    			if (c==DELIMITER_CHAR &amp;&amp; !isInQuote){</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">    				if(sb.length()&gt;0){</span>
+<span class="fc" id="L196">    					out.add(sb.toString());</span>
+    				}
+<span class="fc" id="L198">    				sb = new StringBuilder();</span>
+<span class="fc" id="L199">    			}else{</span>
+<span class="fc" id="L200">    				sb.append(c);</span>
+    			}
+    		}
+
+<span class="fc bfc" id="L204" title="All 2 branches covered.">    		if(sb.length()&gt;0){</span>
+<span class="fc" id="L205">    			out.add(sb.toString().trim());</span>
+    		}
+    	}
+
+<span class="fc" id="L209">    	return out.toArray(new String[out.size()]);</span>
+    }
+
+  
+
+	private static String[] getArgumentList(String[] tokens) {
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (tokens.length &lt; 2) {</span>
+<span class="fc" id="L216">            return new String[0];</span>
+        } else {
+<span class="fc" id="L218">            return Arrays.copyOfRange(tokens, 1, tokens.length);</span>
+        }
+    }
+	/**
+	 * return text determine which tool to execute
+	 * @param tokens array of tokens parsed from user input
+	 * @return string determine the tool to execute
+	 */
+    private static String getCommand(String[] tokens) {
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (tokens.length &gt; 0) {</span>
+<span class="fc" id="L228">            return tokens[0];</span>
+        } else {
+<span class="fc" id="L230">            return &quot;&quot;;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>Shell (1) (Mar 17, 2014 12:17:28 AM)</div></body></html>
