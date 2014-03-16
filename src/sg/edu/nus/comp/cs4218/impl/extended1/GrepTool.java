@@ -299,7 +299,11 @@ public class GrepTool extends ATool implements IGrepTool {
      * @param <E>
      */
     public class CircularQueue<E> extends LinkedList<E> {
-        private int limit;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 8443436540607701637L;
+		private int limit;
 
         public CircularQueue(int limit) {
             this.limit = limit;

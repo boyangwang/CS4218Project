@@ -88,7 +88,7 @@ public class DeleteTool extends ATool implements IDeleteTool {
     public String execute(File workingDir, String stdin) {
         if (this.args.length < 1) {
             statusError();
-            return "";
+            return "Invalid arguments.";
         }
 
         for (int i = 0; i < this.args.length; i++) {

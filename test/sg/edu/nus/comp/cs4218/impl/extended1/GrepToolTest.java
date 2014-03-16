@@ -2,14 +2,16 @@ package sg.edu.nus.comp.cs4218.impl.extended1;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.rules.TemporaryFolder;
+
 import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
 
 public class GrepToolTest {
@@ -17,26 +19,10 @@ public class GrepToolTest {
     public TemporaryFolder folder = new TemporaryFolder();
 
     private IGrepTool grepTool;
-//    private File emptyFile;
-//    private File oneNewLineFile;
-//    private File oneLineFile;
 
     @Before
     public void before() throws IOException {
         grepTool = new GrepTool(new String[0]);
-
-//        emptyFile = folder.newFile();
-//        emptyFile.createNewFile();
-//
-//        oneNewLineFile = folder.newFile();
-//        BufferedWriter oneNewLineBuf = new BufferedWriter(new FileWriter(oneNewLineFile));
-//        oneNewLineBuf.write(System.lineSeparator());
-//        oneNewLineBuf.close();
-//
-//        oneLineFile = folder.newFile();
-//        BufferedWriter oneLineBuf = new BufferedWriter(new FileWriter(oneLineFile));
-//        oneLineBuf.write(String.format("abc%n"));
-//        oneLineBuf.close();
     }
 
     @After
@@ -205,5 +191,16 @@ public class GrepToolTest {
     public void getHelpTest() {
         assertEquals(grepTool.getHelp(), String.format("grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]%n"));
         assertEquals(grepTool.getStatusCode(), 0);
+    }
+    
+    /**
+     * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+     */
+    @Test
+    public void combinedBeforeAfterExecuteTest() throws IOException {
+        File file = folder.newFile();
+        Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+        grepTool = new GrepTool(new String[]{"-A", "2", "-B", "1", "2", file.getName()});
+        assertEquals("1\n2\n3\n4\n", grepTool.execute(folder.getRoot(), null));
     }
 }

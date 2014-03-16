@@ -14,7 +14,6 @@ import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
 import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
 
 /**
- * @author moyang
  *
  */
 public class PipingToolTest {

@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,5 +141,39 @@ public class LsToolTest {
     	dir.delete();
     }
     
+    @Test
+    public void listDirectoryNull() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	Method listDir = lsTool.getClass().getDeclaredMethod("listDirectory", new Class[]{File.class});
+        listDir.setAccessible(true);
+        
+        String result = (String) listDir.invoke(lsTool, (Object) null);
+        
+        assertNull(result);
+    }
     
+    @Test
+    public void executeNoArgumentsCwd() throws IOException {
+    	String[] files = new String[]{"a", "b", "c", "d"};
+    	StringBuilder expected = new StringBuilder();
+    	
+    	File dir = new File("testDir");
+    	dir.mkdir();
+    	for (String name : files) {
+    		File f = new File(String.format("%s%s%s", "testDir", File.separator, name));
+    		f.createNewFile();
+    		expected.append(String.format("%s\n", name));
+    	}
+    	
+    	LsTool tool = new LsTool(new String[0]);
+    	String result = tool.execute(dir, "");
+    	
+    	assertEquals(expected.toString(),result);
+    	assertEquals(0, tool.getStatusCode());
+    	
+    	for (String name : files) {
+    		File f = new File(String.format("%s%s%s", "testDir", File.separator, name));
+    		f.delete();
+    	}
+    	dir.delete();
+    }
 }

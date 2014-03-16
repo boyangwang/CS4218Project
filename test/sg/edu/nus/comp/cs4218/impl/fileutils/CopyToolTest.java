@@ -205,6 +205,15 @@ public class CopyToolTest {
     	File dest = new File("nonExistent");
     	dest.delete();
     }
+    
+    @Test
+    public void toolExecuteInvalidArgs() {
+    	CopyTool tool = new CopyTool(new String[]{"testFile"});
+    	String result = tool.execute(new File(System.getProperty("user.dir")), "");
+    	
+    	assertEquals("Invalid arguments.", result);
+    	assertNotEquals(0, tool.getStatusCode());
+    }
 
     /**
      * MUT: copy()

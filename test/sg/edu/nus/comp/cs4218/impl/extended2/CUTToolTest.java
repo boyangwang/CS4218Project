@@ -280,7 +280,7 @@ public class CUTToolTest {
         sb.append("one:two:three:four:five:six\n");
         sb.append("alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n");
         sb.append("the quick brown fox jumps over the lazy dog");
-        String expectedOutput = sb.toString();
+        //String expectedOutput = sb.toString();
     	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-d","\":\"","test.txt"});
         //assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" test.txt"));
     	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-d",":","test.txt"});

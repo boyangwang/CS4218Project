@@ -22,10 +22,6 @@ import org.junit.rules.TemporaryFolder;
 import sg.edu.nus.comp.cs4218.extended2.ICommTool;
 import sg.edu.nus.comp.cs4218.impl.CommandParser;
 
-/**
- * @author moyang
- *
- */
 public class CommToolAddedTest {
 	ICommTool ct;
 	
