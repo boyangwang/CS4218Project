@@ -17,7 +17,8 @@ import java.util.Scanner;
 /**
  * 
  * IMPORTANT METHOD COVERAGE NOTE: since many methods in this shell cannot be automated, 
- * we do not guarantee 100% method coverage for our shell.
+ * we do not guarantee 100% method coverage for our shell. 
+ * Those methods are main() and those which are supposed to be called by main.
  * 
  * The Shell is used to interpret and execute user's
  * commands. Following sequence explains how a basic
