@@ -238,6 +238,11 @@ public class GrepTool extends ATool implements IGrepTool {
                     }
             }
         }
+        
+        if (i + 1 == args.length && stdin != null) {
+        	String pattern = args[i++];
+        	return grep(pattern, stdin);
+        }
 
         if (i + 2 > args.length) {
             statusError();
