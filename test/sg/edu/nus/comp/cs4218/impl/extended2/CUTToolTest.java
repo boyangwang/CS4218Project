@@ -163,14 +163,20 @@ public class CUTToolTest {
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void cutSpecfiedCharDelimEndWithDelimTest() throws IOException {
         assertEquals("", cuttool.cutSpecifiedCharactersUseDelimiter("3", ":", "foo:bar:"));
-        assertEquals("", cuttool.cutSpecifiedCharactersUseDelimiter("3", ":", "\n"));
+        assertEquals("\n", cuttool.cutSpecifiedCharactersUseDelimiter("3", ":", "\n"));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void cutSpecfiedCharDelimNewLineTest() throws IOException {
-        assertEquals("", cuttool.cutSpecifiedCharactersUseDelimiter("3", ":", "\n"));
+        assertEquals("\n", cuttool.cutSpecifiedCharactersUseDelimiter("3", ":", "\n"));
     }
     
     @Test
