@@ -132,6 +132,11 @@ public class CutTool extends ATool implements ICutTool {
 				}
 			}
 		}
+		if (filesContent.size() == 0){
+			if (stdin!=null){
+				filesContent.add(stdin);
+			}
+		}
 		if (isDelimMode && (fieldList==null || fieldList=="")){
 			return ERROR_NO_MODE_SPECIFIED;
 		}

@@ -72,6 +72,12 @@ public class PasteTool extends ATool implements IPasteTool {
 				}
 			}
 		}
+
+		if (tmpFilesContent.size() == 0){
+			if (stdin!=null){
+				tmpFilesContent.add(stdin);
+			}
+		}
 		if (tmpFilesContent.size()==0){
 			statusError();
 			return ERROR_NO_FILE;

@@ -379,8 +379,12 @@ public class CUTToolTest {
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeNoFileOptionTest() throws IOException {
-        assertEquals("Error: you must specify a file name\n", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d :"));
+    	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8", "-d" ,":"});
+        assertEquals("Error: you must specify a file name\n", cuttool.execute(testDir, null));
     }
     
     @Test
