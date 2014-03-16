@@ -25,9 +25,28 @@ public class UniqIntegrationTest {
     // You need this method.
     private String getStringFromOutput() {
         String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);
-        out = out.substring(out.indexOf("> ") + 2).trim();
-        out = out.substring(0, out.lastIndexOf("\n"));
-        return out;
+        String[] lines = out.split("\n");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+
+            // Ignore empty lines.
+            if (line == "") {
+                continue;
+            }
+
+            // Greedily strip prompts from beginning of line.
+            int promptIndex;
+            if ((promptIndex = line.lastIndexOf("> ")) >= 0) {
+                line = line.substring(promptIndex + 2);
+            }
+
+            // Pack line back into string.
+            sb.append(line).append("\n");
+        }
+
+        // Should not contain trailing newline.
+        return sb.toString().trim();
     }
 
     // You need this method.
@@ -67,6 +86,24 @@ public class UniqIntegrationTest {
     }
 
     /**
+     * uniq | cut
+     */
+    @Test
+    public void uniqCut() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("uniq %s | cut -c1-3", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "hel\nwor\ncat\ndog";
+        assertEquals(expected, result);
+    }
+
+    /**
      * uniq | uniq
      */
     @Test
@@ -78,12 +115,27 @@ public class UniqIntegrationTest {
         fw.close();
 
         // Call and run the shell like this.
-        setupShellWithInput(String.format("uniq %s", TEST_INPUT_FILE));
+        setupShellWithInput(String.format("uniq %s | uniq", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
         // Do your asserts.
         String expected = "hello\nworld\ncat\ndog";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void uniqPaste() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("cd ../../Desktop\r\ncat a"/*, TEST_INPUT_FILE, TEST_INPUT_FILE*/));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "hello";
         assertEquals(expected, result);
     }
 }
