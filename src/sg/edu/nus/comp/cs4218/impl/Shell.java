@@ -108,7 +108,7 @@ public class Shell implements IShell {
      * 6. Report the exit status of the command to the user
      */
 	public void run() {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(is);
 		Thread runningThread = null;
 
         printPrompt();
@@ -130,6 +130,9 @@ public class Shell implements IShell {
                         // Nothing here.
 					}
                 }
+            } else if(cmd.equals("ctrl-c")) {
+                // Quits.
+                break;
             } else {
                 ITool tool = parse(cmd);
 
