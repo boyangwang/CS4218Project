@@ -27,7 +27,9 @@ public class CommTool extends ATool implements ICommTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		statusError();
-		
+		if (args.length < 2) {
+			return "Invalid arguments.\nTry 'comm -help' for more information." + System.lineSeparator();
+		}
 		boolean isCheckOrder = false;
 		boolean isNoCheckOrder = false;
 

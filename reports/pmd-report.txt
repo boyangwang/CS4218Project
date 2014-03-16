@@ -1,0 +1,1105 @@
+src/sg/edu/nus/comp/cs4218/IShell.java:20:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/IShell.java:26:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:9:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:15:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:16:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:21:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:29:	Only variables that are final should contain underscores (except for underscores in standard prefix/suffix), 'option_A' is not final.
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:30:	Only variables that are final should contain underscores (except for underscores in standard prefix/suffix), 'option_B' is not final.
+src/sg/edu/nus/comp/cs4218/extended1/IGrepTool.java:31:	Only variables that are final should contain underscores (except for underscores in standard prefix/suffix), 'option_C' is not final.
+src/sg/edu/nus/comp/cs4218/extended1/IPipingTool.java:9:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended1/IPipingTool.java:16:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended1/IPipingTool.java:26:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/extended1/IPipingTool.java:27:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/extended2/ICommTool.java:8:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended2/ICommTool.java:10:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/ICommTool.java:11:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/ICutTool.java:8:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended2/ICutTool.java:13:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/ICutTool.java:14:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/ICutTool.java:16:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/ICutTool.java:18:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IPasteTool.java:8:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended2/IPasteTool.java:10:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IPasteTool.java:14:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/ISortTool.java:8:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended2/ISortTool.java:15:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:8:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:10:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:13:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:15:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:16:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:17:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/extended2/IUniqTool.java:26:	Variables should start with a lowercase character, 'NUM' starts with uppercase character.
+src/sg/edu/nus/comp/cs4218/extended2/IWcTool.java:8:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/extended2/IWcTool.java:13:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/fileutils/ICopyTool.java:15:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/fileutils/IMoveTool.java:11:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:6:	Abstract classes should be named AbstractXXX
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:7:	Avoid using redundant field initializer for 'statusCode'
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:9:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:10:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:16:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:41:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:43:	Parameter 'statusCode' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:54:	Avoid variables with short names like sh
+src/sg/edu/nus/comp/cs4218/impl/ATool.java:54:	Parameter 'sh' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:13:	All methods are static.  Consider using Singleton instead.  Alternatively, you could add a private constructor or make the class abstract to silence this warning.
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:13:	The class 'CommandParser' has a Cyclomatic Complexity of 8 (Highest = 12).
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:19:	Parameter 'rawInput' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:19:	The method 'parse' has a Cyclomatic Complexity of 12.
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:20:	Local variable 'trimmedCmd' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:21:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:23:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:27:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:30:	Local variable 'tokens' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:31:	Found 'DU'-anomaly for variable 'argList' (lines '30'-'65').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:32:	Local variable 'cmd' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:34:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:34:	When doing a String.toLowerCase()/toUpperCase() call, use a Locale
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:36:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:39:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:42:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:45:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:48:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:51:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:54:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:57:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:60:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:63:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:70:	Parameter 'cmd' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:72:	Found 'DD'-anomaly for variable 'currentQuote' (lines '71'-'81').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:72:	Found 'DU'-anomaly for variable 'currentQuote' (lines '71'-'87').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:75:	Avoid variables with short names like c
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:75:	Local variable 'c' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:78:	Found 'DD'-anomaly for variable 'currentQuote' (lines '76'-'81').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:78:	Found 'DU'-anomaly for variable 'currentQuote' (lines '76'-'87').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:83:	Found 'DD'-anomaly for variable 'currentQuote' (lines '81'-'81').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:83:	Found 'DU'-anomaly for variable 'currentQuote' (lines '81'-'87').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:91:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:92:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:100:	Parameter 'str' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:100:	The method 'tokenizePipeCommands' has a Cyclomatic Complexity of 11.
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:101:	Local variable 'cmds' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:102:	Found 'DU'-anomaly for variable 'curCmd' (lines '100'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:103:	Found 'DU'-anomaly for variable 'inQuotes' (lines '101'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:104:	Found 'DD'-anomaly for variable 'currentQuote' (lines '102'-'115').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:104:	Found 'DU'-anomaly for variable 'currentQuote' (lines '102'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:107:	Avoid variables with short names like c
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:107:	Local variable 'c' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:110:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:110:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:110:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:111:	Avoid instantiating new objects inside loops
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:116:	Found 'DU'-anomaly for variable 'inQuotes' (lines '114'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:117:	Found 'DD'-anomaly for variable 'currentQuote' (lines '115'-'115').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:117:	Found 'DU'-anomaly for variable 'currentQuote' (lines '115'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:118:	Useless parentheses.
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:118:	Useless parentheses.
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:119:	Found 'DU'-anomaly for variable 'inQuotes' (lines '117'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:120:	Found 'DD'-anomaly for variable 'currentQuote' (lines '118'-'115').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:120:	Found 'DU'-anomaly for variable 'currentQuote' (lines '118'-'131').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:123:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:126:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:126:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:127:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:127:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:127:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:128:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:128:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:136:	Parameter 'str' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:136:	The method 'tokenizeString' has a Cyclomatic Complexity of 12.
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:137:	Local variable 'out' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:140:	Found 'DD'-anomaly for variable 'currentQuote' (lines '136'-'148').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:140:	Found 'DU'-anomaly for variable 'currentQuote' (lines '136'-'167').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:141:	Found 'DU'-anomaly for variable 'isInQuote' (lines '137'-'167').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:142:	Avoid variables with short names like sb
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:144:	Avoid variables with short names like c
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:144:	Local variable 'c' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:147:	Found 'DD'-anomaly for variable 'currentQuote' (lines '143'-'148').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:147:	Found 'DU'-anomaly for variable 'currentQuote' (lines '143'-'167').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:152:	Found 'DD'-anomaly for variable 'currentQuote' (lines '148'-'148').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:152:	Found 'DU'-anomaly for variable 'currentQuote' (lines '148'-'167').
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:157:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:158:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:160:	Avoid instantiating new objects inside loops
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:165:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:166:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:174:	Parameter 'tokens' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:175:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:176:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:183:	Parameter 'tokens' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:184:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/CommandParser.java:185:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:15:	Avoid using redundant field initializer for 'level'
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:15:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:16:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:16:	Private field 'out' could be made final; it is only initialized in the declaration or constructor.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:18:	Avoid variables with short names like os
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:18:	Parameter 'os' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:22:	Parameter 'newLevel' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:26:	Parameter 'level' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:26:	Parameter 'message' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:35:	Avoid using redundant field initializer for 'lg'
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:35:	Avoid variables with short names like lg
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:35:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:37:	Avoid variables with short names like os
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:37:	Parameter 'os' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:40:	Avoid instantiating new objects inside loops
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:41:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:41:	Avoid empty catch blocks
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:41:	Avoid empty catch blocks
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:51:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:52:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:53:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:54:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Logging.java:55:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:5:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.impl.extended1.PipingTool'
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:19:	The class 'Shell' has a Cyclomatic Complexity of 2 (Highest = 10).
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:23:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:24:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:24:	Use explicit scoping instead of the default package private level
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:25:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:25:	Use explicit scoping instead of the default package private level
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:26:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:26:	Use explicit scoping instead of the default package private level
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:27:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:27:	Use explicit scoping instead of the default package private level
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:29:	Parameter 'shell' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:29:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:29:	Parameter 'stdout' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:29:	Parameter 'tool' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:40:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:40:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:41:	Avoid empty catch blocks
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:41:	Avoid empty catch blocks
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:47:	Parameter 'output' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:49:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:56:	Avoid printStackTrace(); use a logger call instead.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:65:	Avoid using redundant field initializer for 'cwd'
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:65:	Fields should be declared at the top of the class, before any method declarations, constructors, initializers or inner classes.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:65:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:67:	Local variable 'userDir' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:71:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:76:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:80:	The method 'run' has a Cyclomatic Complexity of 10.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:81:	Avoid variables with short names like sc
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:81:	Local variable 'sc' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:82:	Found 'DU'-anomaly for variable 'runningThread' (lines '82'-'120').
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:82:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:88:	Found 'DU'-anomaly for variable 'cmd' (lines '88'-'120').
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:88:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:88:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:94:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:95:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:98:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:103:	Local variable 'tool' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:107:	System.out.print is used
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:113:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:114:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:119:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:125:	Avoid empty catch blocks
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:125:	Avoid empty catch blocks
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:130:	Parameter 'cwd' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:131:	System.out.print is used
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:135:	Parameter 'commandline' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:140:	Parameter 'tool' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:140:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:142:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:144:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:145:	Avoid variables with short names like t
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:145:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:146:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:149:	Parameter 'toolExecution' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:149:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:150:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:151:	Avoid variables with short names like t
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:151:	Local variable 't' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:151:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:151:	To be compliant to J2EE, a webapp should not use any thread.
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:152:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:163:	Parameter 'newDirectory' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:174:	Parameter 'args' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:175:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:176:	Avoid variables with short names like sh
+src/sg/edu/nus/comp/cs4218/impl/Shell.java:176:	Local variable 'sh' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:10:	Avoid unused imports such as 'java.nio.file.Paths'
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:21:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:27:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:28:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:33:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:38:	The class 'GrepTool' has a Cyclomatic Complexity of 4 (Highest = 19).
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:39:	Use explicit scoping instead of the default package private level
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:41:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:41:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:41:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:42:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:42:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:44:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:49:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:49:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:52:	Found 'DU'-anomaly for variable 'regex' (lines '52'-'76').
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:55:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:61:	Local variable 'scanner' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:62:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:63:	Local variable 'line' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:63:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:65:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:67:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:69:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:73:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:79:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:79:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:85:	Only variables that are final should contain underscores (except for underscores in standard prefix/suffix), 'option_A' is not final.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:85:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:85:	Parameter 'option_A' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:85:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:92:	Only variables that are final should contain underscores (except for underscores in standard prefix/suffix), 'option_B' is not final.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:92:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:92:	Parameter 'option_B' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:92:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:99:	Only variables that are final should contain underscores (except for underscores in standard prefix/suffix), 'option_C' is not final.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:99:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:99:	Parameter 'option_C' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:99:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:106:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:106:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:113:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:113:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:125:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:125:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:125:	The method 'execute' has a Cyclomatic Complexity of 19.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:125:	The method execute() has an NPath complexity of 368
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:126:	Avoid variables with short names like i
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:128:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:128:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:129:	Local variable 'arg' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:139:	Local variable 'contextNum' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:139:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:140:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:143:	Position literals first in String comparisons
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:143:	Position literals first in String comparisons
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:143:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:143:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:146:	Position literals first in String comparisons
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:146:	Position literals first in String comparisons
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:146:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:146:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:151:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:155:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:156:	Local variable 'flag' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:156:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:169:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:177:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:180:	Found 'DU'-anomaly for variable 'pattern' (lines '180'-'199').
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:180:	Local variable 'pattern' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:182:	Found 'DU'-anomaly for variable 'isFirstStdin' (lines '182'-'199').
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:183:	Local variable 'output' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:186:	Local variable 'arg' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:187:	Position literals first in String comparisons
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:187:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:190:	Found 'DU'-anomaly for variable 'isFirstStdin' (lines '190'-'199').
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:191:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:194:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:198:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:206:	Parameter 'pathname' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:206:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:206:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:208:	Local variable 'encoded' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:208:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:208:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:209:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:209:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:209:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:211:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:218:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:218:	Private field 'limit' could be made final; it is only initialized in the declaration or constructor.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:220:	It is a good practice to call super() in a constructor
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:220:	Parameter 'limit' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:225:	Parameter 'element' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:234:	Parameter 'input' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:234:	Parameter 'pattern' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:234:	The method 'grep' has a Cyclomatic Complexity of 15.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:234:	The method grep() has an NPath complexity of 1412
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:236:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:241:	Found 'DU'-anomaly for variable 'regex' (lines '241'-'308').
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:244:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:244:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:248:	Local variable 'output' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:249:	Local variable 'previousLines' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:253:	Local variable 'scanner' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:254:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:257:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:257:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:260:	Local variable 'line' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:260:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:263:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:265:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:269:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:272:	Local variable 'listIterator' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:272:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:274:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:275:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:277:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:284:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:284:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:285:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:291:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:292:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:294:	Useless parentheses.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:294:	Useless parentheses.
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:295:	Avoid assignments in operands
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:296:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:297:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:303:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:305:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/GrepTool.java:307:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:20:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:24:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:26:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:30:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:43:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:43:	Parameter 'from' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:43:	Parameter 'to' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:44:	Local variable 'output' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:58:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:58:	Parameter 'stdout' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:58:	Parameter 'to' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:59:	Local variable 'output' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:79:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:79:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:82:	Found 'DD'-anomaly for variable 'output' (lines '74'-'91').
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:82:	Found 'DU'-anomaly for variable 'output' (lines '74'-'101').
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:87:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:93:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:93:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:95:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:97:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:97:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:100:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:100:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/extended1/PipingTool.java:102:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:8:	Avoid unused imports such as 'java.nio.file.Paths'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:16:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:21:	Parameter 'toRead' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:24:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:28:	Local variable 'fis' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:29:	Local variable 'baos' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:30:	Avoid variables with short names like ch
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:31:	Avoid assignments in operands
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:31:	Found 'DU'-anomaly for variable 'ch' (lines '31'-'49').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:31:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:32:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:34:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:35:	Local variable 'file' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:35:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:37:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:40:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:43:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:59:	Found 'UR'-anomaly for variable 'arg' (lines '59'-'74').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:59:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:59:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:60:	Local variable 'argLength' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:61:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:62:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:65:	Found 'DU'-anomaly for variable 'isFirstStdin' (lines '65'-'91').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:67:	Avoid variables with short names like sb
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:67:	Local variable 'sb' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:68:	Local variable 'arg' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:71:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:71:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:74:	Position literals first in String comparisons
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:74:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:77:	Found 'DU'-anomaly for variable 'isFirstStdin' (lines '77'-'91').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:78:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:81:	Local variable 'result' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:81:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:81:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:81:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:81:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:84:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:85:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:85:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:87:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CatTool.java:90:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:3:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.IShell'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:6:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.impl.Shell'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:9:	Avoid unused imports such as 'java.io.IOException'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:23:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:35:	Parameter 'candidate' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:46:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:50:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:54:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:56:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:57:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:70:	Parameter 'newDirectory' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:72:	Local variable 'dir' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:72:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:72:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:72:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:75:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:91:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:91:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:92:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:94:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:99:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:102:	Local variable 'candidateDir' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:102:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:102:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CdTool.java:106:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:16:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:28:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:28:	Parameter 'from' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:28:	Parameter 'to' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:31:	Local variable 'canCopy' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:31:	Useless parentheses.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:31:	Useless parentheses.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:33:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:37:	Local variable 'fis' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:38:	Local variable 'fos' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:40:	Local variable 'buffer' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:42:	Avoid assignments in operands
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:42:	Found 'DU'-anomaly for variable 'read' (lines '42'-'62').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:42:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:43:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:46:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:47:	Potential violation of Law of Demeter (object not created locally)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:50:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:55:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:70:	Parameter 'candidate' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:73:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:77:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:81:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:83:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:84:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:96:	Parameter 'candidate' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:100:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:105:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:107:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:108:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:119:	Parameter 'trash' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:133:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:133:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:134:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:136:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:139:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:139:	Local variable 'to' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:139:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:139:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:139:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:139:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:140:	Local variable 'from' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:140:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:140:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:140:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:140:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:141:	Local variable 'result' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:144:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:144:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:144:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:144:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/CopyTool.java:144:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:11:	Comment is too large: Line too long
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:20:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:31:	Found 'UR'-anomaly for variable 'f' (lines '31'-'42').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:31:	Parameter 'toDelete' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:36:	Local variable 'files' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:37:	Deeply nested if..then statements are hard to read
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:38:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:41:	Avoid variables with short names like f
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:41:	Local variable 'f' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:42:	Local variable 'result' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:43:	Deeply nested if..then statements are hard to read
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:44:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:51:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:64:	Parameter 'candidate' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:67:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:71:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:73:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:74:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:88:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:88:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:89:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:91:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:99:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:102:	Avoid variables with short names like f
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:102:	Local variable 'f' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:102:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:102:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:102:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:102:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:103:	Local variable 'result' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:109:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:109:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteTool.java:109:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:14:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:20:	Parameter 'toEcho' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:33:	Found 'UR'-anomaly for variable 'str' (lines '33'-'45').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:33:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:33:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:34:	Avoid variables with short names like sb
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:34:	Local variable 'sb' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:38:	Local variable 'str' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:42:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/EchoTool.java:46:	Avoid appending characters as strings in StringBuffer.append.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:7:	Avoid unused imports such as 'java.util.ArrayList'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:11:	Comment is too large: Too many lines
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:26:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:31:	Parameter 'directory' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:34:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:38:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:41:	Local variable 'files' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:43:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:51:	Found 'UR'-anomaly for variable 'f' (lines '51'-'67').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:51:	Parameter 'files' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:53:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:57:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:60:	Avoid variables with short names like sb
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:60:	Local variable 'sb' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:61:	Avoid variables with short names like f
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:61:	Local variable 'f' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:64:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:72:	Avoid variables with short names like wd
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:72:	Parameter 'wd' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:74:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:78:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:84:	Parameter 'candidate' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:95:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:99:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:103:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:105:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:106:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:120:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:120:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:122:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:124:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:124:	Avoid if (x != y) ..; else ..;
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:126:	Local variable 'specified' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:126:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:126:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:126:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:126:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/LsTool.java:129:	Avoid if (x != y) ..; else ..;
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:4:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.fileutils.IDeleteTool'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:10:	Avoid unused imports such as 'java.nio.file.CopyOption'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:15:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:16:	Avoid unused private fields such as 'cwd'.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:16:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:16:	Perhaps 'cwd' could be replaced by a local variable.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:23:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:28:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:28:	Parameter 'from' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:28:	Parameter 'to' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:32:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:36:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:40:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:44:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:50:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:97:	Avoid unused private methods such as 'cleanup(File)'.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:97:	Parameter 'trash' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:111:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:111:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:115:	Avoid using Literals in Conditional Statements
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:117:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:120:	Local variable 'from' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:120:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:120:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:120:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:120:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:121:	Avoid variables with short names like to
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:121:	Local variable 'to' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:121:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:121:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:121:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:121:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:123:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:125:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:125:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:125:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/MoveTool.java:125:	Potential violation of Law of Demeter (method chain calls)
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:6:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.IShell'
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:17:	Parameter 'arguments' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:22:	Parameter 'directory' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:26:	A method should have only one exit point, and that should be the last statement in the method
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:31:	Found 'DD'-anomaly for variable 'canonicalPath' (lines '31'-'33').
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:33:	Assigning an Object to null is a code smell.  Consider refactoring.
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:49:	Parameter 'stdin' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:49:	Parameter 'workingDir' is not assigned and could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:50:	Local variable 'result' could be declared final
+src/sg/edu/nus/comp/cs4218/impl/fileutils/PwdTool.java:53:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:14:	No need to import a type that lives in the same package
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:16:	This class has too many methods, consider refactoring it.
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:17:	Avoid variables with short names like sh
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:17:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:17:	Use explicit scoping instead of the default package private level
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:24:	Document empty method
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:30:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:31:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:32:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:37:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:38:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:39:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:44:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:45:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:46:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:51:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:52:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:53:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:58:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:59:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:60:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:65:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:66:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:67:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:72:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:73:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:74:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:79:	Local variable 'cmd' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:80:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:81:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:86:	Local variable 'tool' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:87:	Local variable 'executor' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:87:	To be compliant to J2EE, a webapp should not use any thread.
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:93:	Local variable 'executor' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:93:	To be compliant to J2EE, a webapp should not use any thread.
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:94:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:99:	Local variable 'tool' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:101:	Local variable 'executor' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTest.java:101:	To be compliant to J2EE, a webapp should not use any thread.
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:18:	Avoid variables with short names like sh
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:18:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:18:	Use explicit scoping instead of the default package private level
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:25:	Document empty method
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:31:	Local variable 'args' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:32:	Local variable 'tool' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:34:	Local variable 'executor' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:34:	To be compliant to J2EE, a webapp should not use any thread.
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:40:	Avoid printStackTrace(); use a logger call instead.
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:42:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:46:	Parameter 'arguments' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:50:	Parameter 'stdin' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:50:	Parameter 'workingDir' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:52:	Avoid empty while statements
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:52:	Avoid empty while statements
+test/sg/edu/nus/comp/cs4218/impl/ShellTestUnexchangable.java:52:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:9:	Avoid unused imports such as 'org.junit.AfterClass'
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:11:	Avoid unused imports such as 'org.junit.BeforeClass'
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:14:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.ITool'
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:15:	Avoid unused imports such as 'sg.edu.nus.comp.cs4218.extended1.IPipingTool'
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:24:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:30:	Document empty method
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:38:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:42:	Comment is too large: Line too long
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:45:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:46:	Local variable 'shell' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:51:	The String literal "echo foo" appears 6 times in this file; the first occurrence is on line 52
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:54:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:56:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:57:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:63:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:64:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:65:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:65:	The String literal "foo" appears 6 times in this file; the first occurrence is on line 64
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:69:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:70:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:71:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:76:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:77:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:78:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:82:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:83:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:84:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:88:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:89:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:90:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:94:	Comment is too large: Line too long
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:97:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:99:	Local variable 'shell' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:101:	Local variable 'from' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:102:	Avoid variables with short names like to
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:102:	Local variable 'to' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:104:	Local variable 'output' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:105:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:106:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:110:	Comment is too large: Line too long
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:113:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:115:	Local variable 'shell' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:119:	Local variable 'catTool' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:125:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:126:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:130:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:131:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:135:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:136:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:140:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:141:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:146:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:147:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:151:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:152:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:155:	Do not add empty strings
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:155:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:158:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:159:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:161:	Do not add empty strings
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:161:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:163:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:164:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:166:	Do not add empty strings
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:166:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:168:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/extended1/PipingToolTest.java:169:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:15:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:24:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:33:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:34:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:34:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:36:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:37:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:48:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:49:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:50:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:60:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:61:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:62:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:72:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:73:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:73:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:75:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CatToolTest.java:76:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:19:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:20:	Avoid variables with short names like sh
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:20:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:20:	Perhaps 'sh' could be replaced by a local variable.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:28:	Comment is too large: Line too long
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:28:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:33:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:41:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:42:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:43:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:52:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:53:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:54:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:65:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:66:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:66:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:69:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:70:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:80:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:81:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:81:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:83:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:84:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:94:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:95:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:96:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:106:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:107:	Found 'DU'-anomaly for variable 'upwards' (lines '107'-'115').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:107:	Local variable 'upwards' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:108:	Local variable 'path' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:112:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:113:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:123:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:124:	Avoid variables with short names like wd
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:124:	Found 'DD'-anomaly for variable 'wd' (lines '123'-'125').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:125:	Avoid variables with short names like i
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:125:	Found 'DD'-anomaly for variable 'i' (lines '124'-'126').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:126:	Avoid assignments in operands
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:126:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:127:	Found 'DD'-anomaly for variable 'i' (lines '126'-'126').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:129:	Found 'DU'-anomaly for variable 'upwards' (lines '128'-'141').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:129:	Local variable 'upwards' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:130:	Local variable 'path' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:131:	Avoid assignments in operands
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:136:	Local variable 'homeDirectory' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:136:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:136:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:137:	Local variable 'expected' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:137:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:139:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:140:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:140:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:141:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:149:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:150:	Local variable 'expected' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:151:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:152:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:152:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CdToolTest.java:153:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:14:	This class has too many methods, consider refactoring it.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:15:	Variables that are final and static should be all capitals, 'testDest' is not all capitals.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:17:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:17:	Use explicit scoping instead of the default package private level
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:19:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:19:	Parameter 'f' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:23:	Local variable 'buf' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:24:	Avoid variables with short names like is
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:24:	Local variable 'is' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:25:	Local variable 'baos' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:26:	Avoid assignments in operands
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:26:	Found 'DU'-anomaly for variable 'read' (lines '26'-'40').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:26:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:27:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:29:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:29:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:31:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:31:	System.out.print is used
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:32:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:34:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:34:	System.out.print is used
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:35:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:42:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:42:	Parameter 'f' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:43:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:45:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:51:	Parameter 'buf1' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:51:	Parameter 'buf2' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:53:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:55:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:56:	Avoid if (x != y) ..; else ..;
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:57:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:61:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:75:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:83:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:84:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:84:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:87:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:91:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:95:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:95:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:96:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:99:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:106:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:107:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:107:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:108:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:110:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:111:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:112:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:123:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:124:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:124:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:128:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:129:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:130:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:131:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:144:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:145:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:145:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:148:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:149:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:150:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:151:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:163:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:164:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:164:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:167:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:170:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:171:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:172:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:184:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:185:	Found 'DU'-anomaly for variable 'rand' (lines '185'-'206').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:185:	Local variable 'rand' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:186:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:186:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:187:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:189:	Found 'DD'-anomaly for variable 'ref' (lines '189'-'194').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:190:	Local variable 'fos' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:192:	Avoid variables with short names like b
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:192:	Local variable 'b' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:192:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:193:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:194:	Found 'DD'-anomaly for variable 'ref' (lines '194'-'194').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:196:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:198:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:200:	Local variable 'contents' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:201:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:202:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:204:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:214:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:215:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:215:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:218:	Avoid variables with short names like pw
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:218:	Local variable 'pw' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:222:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:226:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:227:	Local variable 'contents' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:228:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/CopyToolTest.java:229:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:9:	Avoid unused imports such as 'java.nio.charset.StandardCharsets'
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:10:	Avoid unused imports such as 'java.util.Random'
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:15:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:15:	Use explicit scoping instead of the default package private level
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:24:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:32:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:33:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:34:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:43:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:44:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:44:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:45:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:46:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:56:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:57:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:57:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:61:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:62:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:63:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:76:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:77:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:77:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:81:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:82:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:83:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:84:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:95:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:96:	Local variable 'dir' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:99:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:100:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:101:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:102:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:113:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:114:	Local variable 'dir' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:117:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:117:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:120:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:121:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:122:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:123:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:124:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/DeleteToolTest.java:129:	Comment is too large: Too many lines
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:12:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:21:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:29:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:30:	Local variable 'expected' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:31:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:32:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:33:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:41:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:42:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/EchoToolTest.java:43:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:17:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:26:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:35:	Local variable 'files' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:37:	Local variable 'expected' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:38:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:39:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:48:	Local variable 'files' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:49:	Local variable 'expected' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:50:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:51:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:60:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:61:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:70:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:71:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:80:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:81:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:82:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:92:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:93:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:93:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:96:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:97:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:107:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:108:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:108:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:110:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/LsToolTest.java:111:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:16:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:16:	Use explicit scoping instead of the default package private level
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:18:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:18:	Parameter 'f' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:22:	Local variable 'buf' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:23:	Avoid variables with short names like is
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:23:	Local variable 'is' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:24:	Local variable 'baos' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:25:	Avoid assignments in operands
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:25:	Found 'DU'-anomaly for variable 'read' (lines '25'-'39').
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:25:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:26:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:28:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:28:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:30:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:30:	System.out.print is used
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:31:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:33:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:33:	System.out.print is used
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:34:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:41:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:41:	Parameter 'f' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:42:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:44:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:50:	Avoid unused private methods such as 'compareByteArrays(byte,byte)'.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:50:	Parameter 'buf1' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:50:	Parameter 'buf2' is not assigned and could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:52:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:54:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:55:	Avoid if (x != y) ..; else ..;
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:56:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:60:	A method should have only one exit point, and that should be the last statement in the method
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:74:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:78:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:79:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:79:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:82:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:86:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:90:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:90:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:91:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:94:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:98:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:99:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:99:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:100:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:102:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:103:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:104:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:111:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:112:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:112:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:116:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:117:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:118:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:119:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:127:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:128:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:128:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:131:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:132:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:133:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:134:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:142:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:143:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:143:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:146:	Avoid variables with short names like pw
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:146:	Local variable 'pw' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:150:	Local variable 'dest' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:154:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:155:	Local variable 'contents' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:156:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/MoveToolTest.java:157:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:15:	Found non-transient, non-static member. Please mark as transient or provide accessors.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:24:	Assigning an Object to null is a code smell.  Consider refactoring.
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:33:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:36:	Local variable 'existsDirString' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:36:	Potential violation of Law of Demeter (method chain calls)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:37:	Local variable 'existsDir' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:38:	Local variable 'dirString' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:39:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:39:	Potential violation of Law of Demeter (object not created locally)
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:39:	Use assertEquals(x, y) instead of assertTrue(x.equals(y))
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:40:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:53:	Local variable 'notExistsDir' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:77:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:78:	Local variable 'path' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:79:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:80:	Local variable 'expected' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:81:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:82:	JUnit assertions should include a message
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:92:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:92:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:104:	JUnit tests should not contain more than 1 assert(s).
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:105:	Avoid variables with short names like f
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:105:	Local variable 'f' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:106:	Local variable 'result' could be declared final
+test/sg/edu/nus/comp/cs4218/impl/fileutils/PwdToolTest.java:107:	JUnit assertions should include a message
