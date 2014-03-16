@@ -144,9 +144,8 @@ public class Shell implements IShell {
                 }
 
                 // Block until previous command has finished execution.
-                if (runningThread == null || !runningThread.isAlive()) {
-                	runningThread = (Thread)execute(tool);
-                }
+                while (runningThread != null && runningThread.isAlive());
+                runningThread = (Thread)execute(tool);
 
             }
         }
