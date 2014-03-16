@@ -133,7 +133,7 @@ public class CopyTool extends ATool implements ICopyTool {
     public String execute(File workingDir, String stdin) {
         if (this.args.length != 2) {
             statusError();
-            return "";
+            return "Invalid arguments.";
         }
 
         File to = workingDir.toPath().resolve(this.args[0]).toFile();

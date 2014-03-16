@@ -18,31 +18,31 @@ public class CatTool extends ATool implements ICatTool {
 
     @Override
     public String getStringForFile(File toRead) {
+    	statusError();
+    	
         if (toRead == null) {
-            statusError();
             return null;
         }
         if (toRead.exists() && toRead.isFile() && toRead.canRead()) {
             try {
                 FileInputStream fis = new FileInputStream(toRead);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                
                 int ch;
                 while ((ch = fis.read()) != -1) {
                     baos.write(ch);
                 }
                 fis.close();
                 byte[] file = baos.toByteArray();
+                
                 statusSuccess();
                 return new String(file, StandardCharsets.UTF_8);
             } catch (FileNotFoundException e) {
-                statusError();
                 return null;
             } catch (IOException e) {
-                statusError();
                 return null;
             }
         } else {
-            statusError();
             return null;
         }
     }
@@ -58,6 +58,7 @@ public class CatTool extends ATool implements ICatTool {
     public String execute(File workingDir, String stdin) {
         int argLength = this.args.length;
         if (argLength == 0) {
+        	statusSuccess();
             return stdin;
         }
 

@@ -3,6 +3,7 @@ package sg.edu.nus.comp.cs4218.impl.fileutils;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.After;
@@ -76,5 +77,47 @@ public class CatToolTest {
         assertNull(result);
         assertNotEquals(catTool.getStatusCode(), 0);
         f.delete();
+    }
+    
+    @Test
+    public void getCorrectString() throws IOException {
+    	String expected = "hello world!";
+    	FileWriter fw = new FileWriter("catTest.txt", false);
+    	fw.write(expected);
+    	fw.close();
+    	
+    	File f = new File("catTest.txt");
+    	String result = catTool.getStringForFile(f);
+    	assertEquals(expected, result);
+    	assertEquals(0, catTool.getStatusCode());
+    	
+    	f.delete();
+    }
+    
+    @Test
+    public void executeCatStdin() {
+    	String expected = "This is stdin!";
+    	
+    	String result = catTool.execute(new File(System.getProperty("user.dir")), expected);
+    	
+    	assertEquals(expected, result);
+    	assertEquals(0, catTool.getStatusCode());
+    }
+    
+    @Test
+    public void executeCorrectString() throws IOException {
+    	String expected = "hello world!";
+    	FileWriter fw = new FileWriter("catTest.txt", false);
+    	fw.write(expected);
+    	fw.close();
+    	
+    	catTool = new CatTool(new String[]{"catTest.txt"});
+    	File f = new File("catTest.txt");
+    	String result = catTool.execute(new File(System.getProperty("user.dir")), "");
+    	
+    	assertEquals(expected, result);
+    	assertEquals(0, catTool.getStatusCode());
+    	
+    	f.delete();
     }
 }
