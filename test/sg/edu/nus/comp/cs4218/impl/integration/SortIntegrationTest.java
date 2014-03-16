@@ -123,4 +123,19 @@ public class SortIntegrationTest {
         String expected = "cat\ndog\nhello\nworld";
         assertEquals(expected, result);
     }
+
+    @Test
+    public void sortWc() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("sort %s | wc", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "5\t5\t26";
+        assertEquals(expected, result);
+    }
 }
