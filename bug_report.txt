@@ -1,2 +1,5 @@
-comm a b | cut -c 1 - This doesn't work as the output is not cut
+comm a b | cut -c 1 - 
+This doesn't work as the output is not cut
 
+comm a b | wc -
+This also doesn't work. It seems that comm can't pass output properly
