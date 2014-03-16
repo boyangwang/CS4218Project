@@ -155,7 +155,6 @@ public class DeleteToolTest {
     
     @Test
     public void toolExecute() {
-    	
     	File dir = new File("testDir");
         dir.mkdir();
 
@@ -164,8 +163,17 @@ public class DeleteToolTest {
         
         assertFalse(dir.exists());
         assertEquals("", result);
-        assertEquals(0, deleteTool.getStatusCode());
+        assertEquals(0, tool.getStatusCode());
 
         dir.delete();
+    }
+    
+    @Test
+    public void toolExecuteInvalidArgs() {
+        DeleteTool tool = new DeleteTool(new String[]{});
+        String result = tool.execute(new File(System.getProperty("user.dir")), "");
+        
+        assertEquals("Invalid arguments.", result);
+        assertNotEquals(0, tool.getStatusCode());
     }
 }
