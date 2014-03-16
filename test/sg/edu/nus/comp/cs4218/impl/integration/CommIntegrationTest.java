@@ -36,9 +36,9 @@ public class CommIntegrationTest {
 
     private void setupShellWithInput(String input) {
         // Terminate at the end of this command.
-        input += "\r\nctrl-c\r\n";
+        String myInput = "\r\nctrl-c\r\n";
 
-        simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+        simIn = new ByteArrayInputStream(myInput.getBytes(StandardCharsets.UTF_8));
         shell = new Shell(simIn, simOut);
     }
 
