@@ -107,7 +107,7 @@ public class ShellIntegrationTest {
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "";
+        String expected = "hello\nhello\nworld\ncat";
         assertEquals(expected, result);
     }
     
@@ -125,12 +125,12 @@ public class ShellIntegrationTest {
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "";
+        String expected = "hello\nhello\nworld\ncat";
         assertEquals(expected, result);
     }
     
     /**
-     * State of the Shell scenario 3
+     * State of the Shell scenario 3 (negative)
      */
     @Test
     public void shellStateSequenceThree() throws IOException {
@@ -139,11 +139,11 @@ public class ShellIntegrationTest {
         fw.write(input);
         fw.close();
 
-        setupShellWithInput(String.format("copy %s b\r\nmove b c\r\ncat c\r\ndelete c\r\necho s", TEST_INPUT_FILE));
+        setupShellWithInput(String.format("copy %s b\r\nmove b c\r\ndelete c\r\ncat c", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "s";
+        String expected = "Error: Could not read file: c";
         assertEquals(expected, result);
     }
     
@@ -161,7 +161,7 @@ public class ShellIntegrationTest {
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "";
+        String expected = "hello\nhello\nworld\ncat";
         assertEquals(expected, result);
     }
 }
