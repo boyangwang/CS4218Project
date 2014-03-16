@@ -18,7 +18,7 @@ public class ShellTestUnexchangable {
 	IShell sh;
 	@Before
 	public void setUp() throws Exception {
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 	}
 
 	@After
@@ -27,7 +27,7 @@ public class ShellTestUnexchangable {
 
 	@Test
 	public void stopThreadTest(){
-		sh = new Shell();
+		sh = new Shell(System.in, System.out);
 		String[] args = {};
 		ITool tool = (ITool) new TestInterruptTool(args);
 

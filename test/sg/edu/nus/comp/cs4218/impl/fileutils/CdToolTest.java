@@ -20,7 +20,7 @@ public class CdToolTest {
      */
     @Before
     public void before() {
-        Shell shell = new Shell();
+        Shell shell = new Shell(System.in, System.out);
         cdTool = new CdTool(new String[0], shell);
     }
 
@@ -151,7 +151,7 @@ public class CdToolTest {
     
     @Test
     public void toolExecute() throws IOException {
-    	CdTool tool = new CdTool(new String[]{"."}, new Shell());
+    	CdTool tool = new CdTool(new String[]{"."}, new Shell(System.in, System.out));
     	String result = tool.execute(new File(System.getProperty("user.dir")), "");
     	assertEquals("", result);
     	assertEquals(0, cdTool.getStatusCode());

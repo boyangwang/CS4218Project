@@ -26,7 +26,7 @@ public class COMMToolTest {
 	 */
 
 	public void setUp() throws Exception {
-        shell = new Shell();
+        shell = new Shell(System.in, System.out);
 		commtool = new CommTool(null);
 	}
 
