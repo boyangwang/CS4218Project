@@ -162,4 +162,106 @@ public class UniqIntegrationTest {
         String expected = "4\t4\t20";
         assertEquals(expected, result);
     }
+
+    /**
+     * uniq | paste | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqPasteGrep() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("uniq %s | paste %s | grep cat", TEST_INPUT_FILE, TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "cat";
+        assertEquals(expected, result);
+    }
+
+    /**
+     * uniq | wc | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqWcGrep() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("uniq %s | wc | grep 4", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "4\t4\t20";
+        assertEquals(expected, result);
+    }
+
+    /**
+     * uniq | cut | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqCutGrep() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("uniq %s | cut -c1-3 | grep wor", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "wor";
+        assertEquals(expected, result);
+    }
+
+    /**
+     * uniq | uniq | grep
+     * @throws IOException
+     */
+    @Test
+    public void uniqUniqGrep() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        setupShellWithInput(String.format("uniq %s | uniq | grep dog", TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "dog";
+        assertEquals(expected, result);
+    }
+
+    /**
+     * cd
+     * uniq
+     * @throws IOException
+     */
+    @Test
+    public void stateChangeTest() throws IOException {
+        String input = "hello\nhello\nworld\ncat\ndog";
+        FileWriter fw = new FileWriter(fin);
+        fw.write(input);
+        fw.close();
+
+        String TEST_DIR = "uniq-test-dir";
+        File dir = new File(TEST_DIR);
+        dir.mkdir();
+
+        setupShellWithInput(String.format("cd %s\r\nuniq %s", TEST_DIR, TEST_INPUT_FILE));
+        shell.run();
+        String result = getStringFromOutput();
+
+        String expected = "";
+        assertEquals(expected, result);
+
+        dir.delete();
+    }
 }
