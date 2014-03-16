@@ -34,8 +34,14 @@ public class PasteTool extends ATool implements IPasteTool {
 			if (args[i].startsWith("-") && args[i].length()>1){
 				if(args[i].compareTo("-s")==0){
 					serialDisplay=true;
-				}else if(args[i].compareTo("-d")==0){
-					if (args.length>i+1){
+				}else if(args[i].startsWith("-d")){
+					if (args[i].length()>2){
+						String strDelimiters = args[i].substring(2);
+						delimiters = new String[strDelimiters.length()];
+						for (int j = 0; j < strDelimiters.length(); j++) {
+							delimiters[j] = strDelimiters.substring(j, j+1);
+						}
+					}else if (args.length>i+1){
 						String strDelimiters = args[i+1];
 						delimiters = new String[strDelimiters.length()];
 						for (int j = 0; j < strDelimiters.length(); j++) {
@@ -45,9 +51,10 @@ public class PasteTool extends ATool implements IPasteTool {
 					}else{
 						return ERROR_NO_DELIMITER;
 					};
+
 				}else if (args[i].compareTo("-help")==0){
 					return getHelp();
-					
+
 				}else{
 					return String.format(ERROR_INVALID_OPTION, args[i]);
 				}
@@ -138,8 +145,7 @@ public class PasteTool extends ATool implements IPasteTool {
 	@Override
 	public String getHelp() {
 		// TODO Auto-generated method stub
-		return "NAME" + LINE_SEPARATOR + LINE_SEPARATOR +
-				"Paste - merge lines of files" + LINE_SEPARATOR +
+		return "Paste - merge lines of files" + LINE_SEPARATOR +
 				"-d DELIM:\tUser custom delimiter instead of the default tab" + LINE_SEPARATOR +
 				"-s\t\tpaste one file at a time instead of in parallel"   + LINE_SEPARATOR +
 				"-help\t\tBrief information about supported options." + LINE_SEPARATOR ;

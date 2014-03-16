@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 
 public abstract class ATool {
-    private int statusCode = 0;
+    public int statusCode = 0;
 
 	protected String[] args;
     protected Shell parent;

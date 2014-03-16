@@ -3,8 +3,12 @@ package sg.edu.nus.comp.cs4218.impl;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
+import sg.edu.nus.comp.cs4218.extended2.ISortTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 
 import java.io.File;
 import java.io.IOException;
@@ -162,7 +166,11 @@ public class Shell implements IShell {
 			return null;
 		}
 		String stdin = "";
-		if(tool instanceof IGrepTool || tool instanceof ICatTool || tool instanceof IPasteTool){
+		if(tool instanceof IGrepTool || tool instanceof ICatTool 
+				|| tool instanceof IPasteTool || tool instanceof ICutTool 
+				|| tool instanceof ISortTool || tool instanceof UniqTool 
+				|| tool instanceof WcTool){
+
 			ATool aTool = (ATool) tool;
 			int argLength = aTool.args.length;
 			boolean alreadyReadFromStdin = false;;

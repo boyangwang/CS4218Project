@@ -55,7 +55,7 @@ public class CommTool extends ATool implements ICommTool {
 					fileName2 = arg;
 				}
 				else {	// extra non-recognizable arg, return err
-					return "Error: comm: unrecognized option '"+arg+"'\nTry 'comm -help' for more information.\n";
+					return "Error: comm: unrecognized option '"+arg+"'\nTry 'comm -help' for more information." + System.lineSeparator();
 				}
 			}
 		}
@@ -83,23 +83,19 @@ public class CommTool extends ATool implements ICommTool {
     			return compareFilesDoNotCheckSortStatus(fileContent1, fileContent2);
     		}
     		else {	// should be unreachable
-    			return "Invalid arguments. -d and -c flags cannot be both present";
+    			return "Invalid arguments. -d and -c flags cannot be both present" + System.lineSeparator();
     		}
 		}
 		catch (InvalidPathException e) {
-			System.out.println("File invalid.");
-			return "File invalid.";
+			return "File invalid." + System.lineSeparator();
 		}
         catch (FileNotFoundException ex) {
-            System.out.println("File not found.");
-            return "File not found.";
+            return "File not found." + System.lineSeparator();
         } 
         catch (IOException e) {
-            System.out.println("An error occurred processing this path.");
-            return "An error occurred processing this path.";
+            return "An error occurred processing this path." + System.lineSeparator();
         }
 		catch (Exception e) {
-			System.out.println("An "+ e +" error has occured");
 			return "An "+ e +" error has occured";
 		}
         
@@ -125,6 +121,9 @@ public class CommTool extends ATool implements ICommTool {
 	}
 
 	private String compareFilesHelper(String input1, String input2, int type) {
+		if (input1 == null || input2 == null) {
+			return "Internal NullPointerError.\n";
+		}
 		if (input1.equals("") && input2.equals("")) {
 			return "";
 		}
@@ -314,9 +313,9 @@ public class CommTool extends ATool implements ICommTool {
 		return res;
 	}
 	
-    private String readContentsOfFile(File file) throws IOException {
+    private String readContentsOfFile(File file) throws IOException, FileNotFoundException, NullPointerException {
         FileInputStream is;
-        is = new FileInputStream(file);
+       	is = new FileInputStream(file);
 
         StringBuilder sb = new StringBuilder();
         byte buf[] = new byte[BUF_SIZE];
