@@ -49,9 +49,15 @@ public class SortTool extends ATool implements ISortTool {
             }
         }
         
+        StringBuilder lines = new StringBuilder();
+        
         if (i == args.length) {
-            statusError();
-            return String.format("Error: Missing parameter for OPTION FILE%n");
+        	if (stdin == null) {
+                statusError();
+                return String.format("Error: Missing parameter for OPTION FILE%n");
+        	} else {
+        		addLines(lines, stdin);
+        	}
         }
         
         if (checkIfSorted && i + 1 < args.length) {
@@ -61,7 +67,6 @@ public class SortTool extends ATool implements ISortTool {
         
         String arg = "";
         boolean isFirstStdin = true;
-        StringBuilder lines = new StringBuilder();
 
         while (i < args.length) {
             arg = args[i++];

@@ -79,7 +79,7 @@ public class PASTEToolTest {
 
 	@Test
 	public void pasteSerialTest() {
-		String expectedOutput = "Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309";
+		String expectedOutput = "Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309\n";
 		String[] inputArr = {"Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit", "555-1234\n555-9876\n555-6743\n867-5309"};
 		assertEquals(expectedOutput, pastetool.pasteSerial(inputArr));
 	}
@@ -94,104 +94,171 @@ public class PASTEToolTest {
 	@Test
 	public void pasteNoDelimEqualLinesTest(){
 		String[] inputArr = {"Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit", "555-1234\n555-9876\n555-6743\n867-5309"};
-		String expectedOutput = "Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\nJenny Igotit\t867-5309";
+		String expectedOutput = "Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\nJenny Igotit\t867-5309\n";
 		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(null,inputArr));
 	}
 	
 	@Test
 	public void pasteNoDelimUnequalLinesTest(){
 		String[] inputArr = {"Mark Smith\nBobby Brown\nSue Miller", "555-1234\n555-9876\n555-6743\n867-5309"};
-		String expectedOutput = "Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\n\t867-5309";
+		String expectedOutput = "Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\n\t867-5309\n";
 		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(null,inputArr));
-		expectedOutput = "Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\n\t867-5309";
+		expectedOutput = "Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\n\t867-5309\n";
 		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(null,inputArr));
 	}
 	
 	@Test
+	/*
+	 * @CORRECTED wrong result compared to unix paste tool
+	 */
 	public void pasteUseDelimEqualLinesTest(){
+
+		pastetool = new PasteTool(new String[0]);
 		String[] inputArr = {"Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit", "555-1234\n555-9876\n555-6743\n867-5309"};
 		String delim = ".,";
-		String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\nJenny Igotit,867-5309";
+		//String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\nJenny Igotit,867-5309";
+		String expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\nJenny Igotit.867-5309\n";
 		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(delim,inputArr));
 	}
 	
 	@Test
+	/*
+	 * @CORRECTED wrong result compared to unix paste tool
+	 */
 	public void pasteUseDelimUnequalLinesTest(){
 		String[] inputArr = {"Mark Smith\nBobby Brown\nSue Miller", "555-1234\n555-9876\n555-6743\n867-5309"};
 		String delim = ".,";
-		String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\n,867-5309";
+
+		//String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\n,867-5309";
+		String expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n";
 		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(delim,inputArr));
 		delim = ".";
-		expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309";
+		//expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309";
+		expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n";
 		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(delim,inputArr));
 	}
 	
 	@Test
 	public void executeBlankParamTest(){
-		assertEquals("Error: Missing parameter", pastetool.execute(testDir, ""));
+		pastetool = new PasteTool( new String[] {});
+		assertEquals("Error: no file is specified\n", pastetool.execute(testDir, null));
 		assertEquals(1, pastetool.getStatusCode());
 	}
 	
 	@Test
 	public void executeNullParamTest(){
-		assertEquals("Error: Missing parameter", pastetool.execute(testDir, null));
+
+		pastetool = new PasteTool( new String[] {});
+		assertEquals("Error: no file is specified\n", pastetool.execute(testDir, null));
 		assertEquals(1, pastetool.getStatusCode());
 	}
 	
-	@Test
-	public void executeInvalidFileNameTest(){
-		assertEquals("Error: invalid file name", pastetool.execute(testDir, "numbers.txt \"test.txt"));
-		assertEquals(1, pastetool.getStatusCode());
-	}
+	//@Test
+	/*
+	 * removed this false testcase
+	 * "test is a valid file name on linux
+	 */
+	//public void executeInvalidFileNameTest(){
+		//assertEquals("Error: invalid file name", pastetool.execute(testDir, "numbers.txt \"test.txt"));
+		//assertEquals(1, pastetool.getStatusCode());
+	//}
 	
 	@Test
+	/*
+	 * @CORRECTED
+	 */
 	public void executeMissingFilesTest(){
-		assertEquals("Error: file test.txt doesn't exist", pastetool.execute(testDir, "numbers.txt test.txt"));
-		assertEquals("Error: file test.txt doesn't exist", pastetool.execute(testDir, "test.txt numbers.txt"));
-		assertEquals("Error: file test.txt doesn't exist", pastetool.execute(testDir, "test.txt test2.txt"));
+		pastetool = new PasteTool( new String[] {"numbers.txt", "test.txt"});
+		assertEquals("Error: cannot read from file test.txt\n", pastetool.execute(testDir, "numbers.txt test.txt"));
+		pastetool = new PasteTool( new String[] { "test.txt","numbers.txt"});
+		assertEquals("Error: cannot read from file test.txt\n", pastetool.execute(testDir, "test.txt numbers.txt"));
+		pastetool = new PasteTool( new String[] {"test.txt", "test2.txt"});
+		assertEquals("Error: cannot read from file test.txt\n", pastetool.execute(testDir, "test.txt test2.txt"));
 		assertEquals(1, pastetool.getStatusCode());
 	}
 	
 	@Test
+	/*
+	 * @CORRECTED
+	 */
 	public void executeMissingFileNameTest(){
-		assertEquals("Error: you must specify a file name", pastetool.execute(testDir, "-s"));
+
+		pastetool = new PasteTool( new String[] {"-s"});
+		//assertEquals("Error: you must specify a file name", pastetool.execute(testDir, "-s"));
+		assertEquals("Error: no file is specified\n", pastetool.execute(testDir, null));
 		assertEquals(1, pastetool.getStatusCode());
 	}
 	
 	@Test
+	/*
+	 * @CORRECTED
+	 */
 	public void executePasteSerialTest(){
-		String expectedOutput = "Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309";
-		assertEquals(expectedOutput, pastetool.execute(testDir, "-s names.txt numbers.txt"));
+		pastetool = new PasteTool( new String[] {"-s","names.txt", "numbers.txt"});
+		String expectedOutput = "Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309\n";
+		//assertEquals(expectedOutput, pastetool.execute(testDir, "-s names.txt numbers.txt"));
+		assertEquals(expectedOutput, pastetool.execute(testDir, null));
 	}
 	
 	@Test
+	/*
+	 * @CORRECTED
+	 * Wrong result compared to unix paste
+	 * Quotes should be handled by the shell itself
+	 * wrong place for testing quotes
+	 */
 	public void executePasteUseDelimiterEqualLines(){
-		String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\nJenny Igotit,867-5309";
-		assertEquals(expectedOutput, pastetool.execute(testDir, "-d ., \"names.txt\" numbers.txt"));
+		pastetool = new PasteTool( new String[] {"-d",".,","names.txt","numbers.txt"});
+		//String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\nJenny Igotit,867-5309\n";
+		String expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\nJenny Igotit.867-5309\n";
+		//assertEquals(expectedOutput, pastetool.execute(testDir, "-d ., \"names.txt\" numbers.txt"));
+		assertEquals(expectedOutput, pastetool.execute(testDir, null));
 	}
 	
 	@Test
+	/*
+	 * CORRECTED
+	 * wrong result compared to unix paste
+	 */
 	public void executePasteUseDelimiterUnequalLines(){
-		String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\n,867-5309";
-		assertEquals(expectedOutput, pastetool.execute(testDir,"-d ., \"names short.txt\" numbers.txt"));
-		expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309";
+		pastetool = new PasteTool( new String[] {"-d",".,","names short.txt", "numbers.txt"});
+		//String expectedOutput = "Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\n,867-5309\n";
+		String expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n";
+		//assertEquals(expectedOutput, pastetool.execute(testDir,"-d ., \"names short.txt\" numbers.txt"));
+		assertEquals(expectedOutput, pastetool.execute(testDir,null));
+		pastetool = new PasteTool( new String[] {"-d",".","names short.txt", "numbers.txt"});
+		expectedOutput = "Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n";
 		assertEquals(expectedOutput, pastetool.execute(testDir,"-d . \"names short.txt\" numbers.txt"));
 	}
 	
+	/*
+	 * @CORRECTED wrong use of stdin
+	 */
 	// Note: as stated in forum, "a priority scheme when multiple arguments/options are supplied."
 	// In this case, I choose -s to take precedent over -d as there is no interface method to handle both at the same time.
 	@Test
 	public void executeSerialDelim(){
-		String expectedOutput = "Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309";
-		assertEquals(expectedOutput, pastetool.execute(testDir, "-s -d , names.txt numbers.txt"));
+		pastetool = new PasteTool( new String[] {"-s","-d",",","names.txt", "numbers.txt"});
+		String expectedOutput = "Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309\n";
+		//assertEquals(expectedOutput, pastetool.execute(testDir, "-s -d , names.txt numbers.txt"));
+		assertEquals(expectedOutput, pastetool.execute(testDir, null));
 	}
 	
     @Test
+    /*
+     * @CORRECTED
+     */
     public void getHelpTest() {
+		pastetool = new PasteTool( new String[] {"-help"});
         String helpText = pastetool.getHelp();
-        assertEquals(helpText, pastetool.execute(testDir, "-help"));
-        assertEquals(helpText, pastetool.execute(testDir, "-help abcde"));
-        assertEquals(helpText, pastetool.execute(testDir, "-d ., -s -help abcde"));
+        //assertEquals(helpText, pastetool.execute(testDir, "-help"));
+        assertEquals(helpText, pastetool.execute(testDir, null));
+        //assertEquals(helpText, pastetool.execute(testDir, "-help abcde"));
+		pastetool = new PasteTool( new String[] {"-help","abcde"});
+        assertEquals(helpText, pastetool.execute(testDir, null));
+        //assertEquals(helpText, pastetool.execute(testDir, "-d ., -s -help abcde"));
+		pastetool = new PasteTool( new String[] {"-help"});
+        assertEquals(helpText, pastetool.execute(testDir, null));
     }
 
 }

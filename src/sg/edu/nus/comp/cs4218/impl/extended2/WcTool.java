@@ -52,18 +52,24 @@ public class WcTool extends ATool implements IWcTool {
                 }
             }
         }
-
-        if (i == args.length) {
-            statusError();
-            return getHelp();
-        }
         
+        StringBuilder output = new StringBuilder();
+
         if (!printCharacterCount && !printWordCount && !printNewLineCount) {
         	printCharacterCount = printWordCount = printNewLineCount = true;
         }
+        
+        if (i == args.length) {
+        	if (stdin == null) {
+	            statusError();
+	            return getHelp();
+        	} else {
+        		output.append(wc(stdin));
+        		output.append(String.format("%n"));
+        	}
+        }
 
         boolean isFirstStdin = true;
-        StringBuilder output = new StringBuilder();
 
         while (i < args.length) {
             String arg = args[i++];
@@ -72,6 +78,7 @@ public class WcTool extends ATool implements IWcTool {
                 if (isFirstStdin) {
                     isFirstStdin = false;
                     output.append(wc(stdin));
+            		output.append(String.format("%n"));
                 }
             } else {
                 output.append(wc(arg, workingDir));

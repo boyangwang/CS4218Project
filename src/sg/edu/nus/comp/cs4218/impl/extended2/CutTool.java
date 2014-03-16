@@ -132,6 +132,11 @@ public class CutTool extends ATool implements ICutTool {
 				}
 			}
 		}
+		if (filesContent.size() == 0){
+			if (stdin!=null){
+				filesContent.add(stdin);
+			}
+		}
 		if (isDelimMode && (fieldList==null || fieldList=="")){
 			return ERROR_NO_MODE_SPECIFIED;
 		}
@@ -175,17 +180,13 @@ public class CutTool extends ATool implements ICutTool {
 	 * @return 			array of inclusive range, null if there is error in the string list
 	 */
 	private Range[] convertListToRange(String list) {
-		String[] ranges = list.split(",");
+		String[] ranges = list.split(",",-1);
 		ArrayList<Range> out = new ArrayList<Range>();
 
 		for (int i = 0; i < ranges.length; i++) {
 			String strRange = ranges[i];
 			if(strRange.indexOf("-")>=0){
-				String[] tokens = strRange.split("-");
-				if (strRange.endsWith("-")){
-					tokens = Arrays.copyOf(tokens, tokens.length+1);
-					tokens[tokens.length-1]="";
-				}
+				String[] tokens = strRange.split("-",-1);
 
 				if(tokens.length==2){
 					try {
@@ -235,7 +236,7 @@ public class CutTool extends ATool implements ICutTool {
 
 	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
-		String[] inputTokens = input.split(LINE_SEPARATOR);
+		String[] inputTokens = input.split(LINE_SEPARATOR,-1);
 		Range[] ranges = convertListToRange(list);
 		if(ranges==null){
 			statusError();
@@ -279,7 +280,7 @@ public class CutTool extends ATool implements ICutTool {
 		if (input==null){
 			return "";
 		}
-		String[] inputTokens = input.split(LINE_SEPARATOR);
+		String[] inputTokens = input.split(LINE_SEPARATOR,-1);
 		Range[] ranges = convertListToRange(list);
 		if(ranges==null){
 			statusError();
@@ -299,7 +300,7 @@ public class CutTool extends ATool implements ICutTool {
 				//don't touch this line
 				out += inputTokens[i];
 			}else{
-				String[] lineTokens = line.split(delim);
+				String[] lineTokens = line.split(delim,-1);
 				StringBuilder outLine = new StringBuilder();
 				boolean isFirstTokenInLine=true;
 				for (int j = 0; j < lineTokens.length; j++) {
