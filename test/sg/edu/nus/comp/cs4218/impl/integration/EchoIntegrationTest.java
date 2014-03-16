@@ -99,17 +99,4 @@ public class EchoIntegrationTest {
 		assertEquals(expected, result);
 	}
 
-	/**
-	 * ls | grep
-	 */
-	@Test
-	public void lsPipeGrepNonExistent() throws IOException {
-
-		setupShellWithInput("ls inteTestLsFold | grep nonexist");
-		shell.run();
-		String result = getStringFromOutput();
-
-		String expected = "";
-		assertEquals(expected, result);
-	}
 }
