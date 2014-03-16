@@ -23,28 +23,28 @@ public class CutTool extends ATool implements ICutTool {
 	}
 	String LINE_SEPARATOR = System.lineSeparator();
 
-	String ERROR_CUT_AND_DELIM_MODE = "Error: please choose to work with cut or delimiter & field\n";
-	String ERROR_MORE_THAN_ONE_CUT_LIST = "Error: only one list can be specified\n";
-	String ERROR_MORE_THAN_ONE_FIELD_LIST = "Error: only one list can be specified\n";
+	String ERROR_CUT_AND_DELIM_MODE = "Error: only one type of list may be specified\n";
+	String ERROR_MORE_THAN_ONE_CUT_LIST = "Error: only one type of list may be specified\n";
+	String ERROR_MORE_THAN_ONE_FIELD_LIST = "Error: only one type of list may be specified\n";
 	String ERROR_NO_CUT_LIST = "Error: no cut list specified\n";
 	String ERROR_NO_FIELD_LIST = "Error: no field list specified\n";
-	String ERROR_INVALID_CUT_LIST = "Error: invalid cut list\n";
-	String ERROR_INVALID_FIELD_LIST = "Error: invalid field list\n";
+	String ERROR_INVALID_CUT_LIST = "Error: invalid list argument for -c";
+	String ERROR_INVALID_FIELD_LIST = "Error: invalid list argument for -f";
 	String ERROR_DELIM_MORE_THAN_ONE_CHAR = "Error: delimter must be one char\n";
 	String ERROR_INVALID_DELIM = "Error: delimter is invalid\n";
-	String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s " + LINE_SEPARATOR;
-	String ERROR_NO_MODE_SPECIFIED = "Error: no mode specified\n";
-	String ERROR_NO_FILE = "Error: please specify at least one file\n";
+	String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s" + LINE_SEPARATOR;
+	String ERROR_NO_MODE_SPECIFIED = "Error: you must specify a list of bytes, characters, or fields\n";
+	String ERROR_DELIM_WITHOUT_FIELD = "Error: an input delimiter may be specified only when operating on fields\n";
+	String ERROR_NO_FILE = "Error: you must specify a file name\n";
+	String ERROR_DECREASING_RANGE = "Error: you must specify a file name\n";
 
 
 	public CutTool(String[] args) {
-		// TODO Auto-generated constructor stub
 		super(args);
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
 		boolean isDelimMode	= false;
 		boolean isCutMode	= false;
 		boolean isFirstStdin = true;
@@ -59,10 +59,14 @@ public class CutTool extends ATool implements ICutTool {
 				if (isFirstStdin && arg.compareTo("-")==0){
 					isFirstStdin = false;
 					filesContent.add(stdin);
-				} else if(arg.startsWith("-c")){
+				} else if (arg.compareTo("-help")==0){
+					return getHelp();
+				}else if(arg.startsWith("-c")){
 					if (isDelimMode){
+						statusError();
 						return ERROR_CUT_AND_DELIM_MODE;
 					}else if(cutList!=null){
+						statusError();
 						return ERROR_MORE_THAN_ONE_CUT_LIST;
 					}else{
 						isCutMode=true;
@@ -71,14 +75,17 @@ public class CutTool extends ATool implements ICutTool {
 						}else if (args.length>i+1){
 							cutList = args[++i];
 						}else{
+							statusError();
 							return ERROR_NO_CUT_LIST;
 						}
 					}
 				}else if (arg.startsWith("-f")){
 					
 					if (isCutMode){
+						statusError();
 						return ERROR_CUT_AND_DELIM_MODE;
 					}else if(fieldList!=null){
+						statusError();
 						return ERROR_MORE_THAN_ONE_FIELD_LIST;
 					}else{
 						isDelimMode = true;
@@ -87,26 +94,31 @@ public class CutTool extends ATool implements ICutTool {
 						}else if (args.length>i+1){
 							fieldList = args[++i];
 						}else{
+							statusError();
 							return ERROR_NO_FIELD_LIST;
 						}
 					}
 				}else if (arg.startsWith("-d")){
-
+					isDelimMode = true;
 					if (isCutMode){
-						return ERROR_CUT_AND_DELIM_MODE;
+						statusError();
+						return ERROR_DELIM_WITHOUT_FIELD;
 					}else{
 						isDelimMode = true;
 						if(arg.length()==3){
 							delimChar = arg.substring(2);
 						}else if(arg.length()>=3){
+							statusError();
 							return ERROR_DELIM_MORE_THAN_ONE_CHAR;
 						} else if (args.length>i+1){
 							//arg.length == 2, expect delimiter char
 							delimChar = args[++i];
 							if(delimChar.length()>1){
+								statusError();
 								return ERROR_DELIM_MORE_THAN_ONE_CHAR;
 							}
 						}else{
+							statusError();
 							return ERROR_NO_FIELD_LIST;
 						}
 					}
@@ -120,18 +132,37 @@ public class CutTool extends ATool implements ICutTool {
 				}
 			}
 		}
+		if (isDelimMode && (fieldList==null || fieldList=="")){
+			return ERROR_NO_MODE_SPECIFIED;
+		}
 		if (filesContent.size() == 0){
+			statusError();
 			return ERROR_NO_FILE;
 		}
+		boolean isFirstFile = true;
 		if (isCutMode){
 			for (int j = 0; j < filesContent.size(); j++) {
+				if(isFirstFile){
+					isFirstFile=false;
+				}else{
+					out += LINE_SEPARATOR;
+				}
 				out += cutSpecfiedCharacters(cutList, filesContent.get(j));
 			}
 		}else if (isDelimMode){
+			if (fieldList==null || fieldList==""){
+				return ERROR_NO_MODE_SPECIFIED;
+			}
 			for (int j = 0; j < filesContent.size(); j++) {
+				if(isFirstFile){
+					isFirstFile=false;
+				}else{
+					out += LINE_SEPARATOR;
+				}
 				out += cutSpecifiedCharactersUseDelimiter(fieldList, delimChar, filesContent.get(j));
 			}
 		}else {
+			statusError();
 			return ERROR_NO_MODE_SPECIFIED;
 		}
 
@@ -181,7 +212,8 @@ public class CutTool extends ATool implements ICutTool {
 					} catch (Exception e) {
 						return null;
 					}
-					
+				}else{
+					return null;
 				}
 			}else{
 				try {
@@ -202,17 +234,11 @@ public class CutTool extends ATool implements ICutTool {
 	}
 
 	@Override
-	public int getStatusCode() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
-		// TODO Auto-generated method stub
 		String[] inputTokens = input.split(LINE_SEPARATOR);
 		Range[] ranges = convertListToRange(list);
 		if(ranges==null){
+			statusError();
 			return ERROR_INVALID_CUT_LIST;
 		}
 		String out = "";
@@ -256,6 +282,7 @@ public class CutTool extends ATool implements ICutTool {
 		String[] inputTokens = input.split(LINE_SEPARATOR);
 		Range[] ranges = convertListToRange(list);
 		if(ranges==null){
+			statusError();
 			return ERROR_INVALID_FIELD_LIST;
 		}
 		String out = "";
@@ -299,8 +326,7 @@ public class CutTool extends ATool implements ICutTool {
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
+		return "help cut tool";
 	}
     private String readContentsOfFile(File file) throws IOException {
     	String out = "";

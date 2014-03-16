@@ -249,17 +249,25 @@ public class CUTToolTest {
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeCRangeTest() throws IOException {
+    	cuttool = new CutTool(new String[] {"-c","4-10,20-25", "test.txt"});
         StringBuilder sb = new StringBuilder();
         sb.append(":bar:bax\n");
         sb.append(":two:thfive:s\n");
         sb.append("ha:betalta:ep\n");
-        sb.append(" quick  jumps");
+        sb.append(" quick  jumps\n");
         String expectedOutput = sb.toString();
+        //assertEquals(expectedOutput, cuttool.execute(testDir, "-c 4-10,20-25 test.txt"));
         assertEquals(expectedOutput, cuttool.execute(testDir, "-c 4-10,20-25 test.txt"));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeFRangeWithDTest() throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("foo:bar:baz:qux:quux\n");
@@ -267,74 +275,124 @@ public class CUTToolTest {
         sb.append("alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n");
         sb.append("the quick brown fox jumps over the lazy dog");
         String expectedOutput = sb.toString();
-        assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" test.txt"));
-        assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d : test.txt"));
+    	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-d","\":\"","test.txt"});
+        //assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" test.txt"));
+    	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-d",":","test.txt"});
+        //assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d : test.txt"));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeFRangeWithoutDTest() throws IOException {
+    	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","test.txt"});
+    	
         StringBuilder sb = new StringBuilder();
         sb.append("foo:bar:baz:qux:quux\n");
         sb.append("one:two:three:four:five:six:seven\n");
         sb.append("alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n");
-        sb.append("the quick brown fox jumps over the lazy dog");
+        sb.append("the quick brown fox jumps over the lazy dog\n");
         String expectedOutput = sb.toString();
-        assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 test.txt"));
+        assertEquals(expectedOutput, cuttool.execute(testDir, null));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeCAndFRangeTest() throws IOException {
-        assertEquals("Error: only one type of list may be specified", cuttool.execute(testDir, "-f -5,9-,4-6,8 -c 4,5,6 test.txt"));
+    	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-c","4,5,6","test.txt"});
+        assertEquals("Error: only one type of list may be specified\n", cuttool.execute(testDir, null));
+        //assertEquals("Error: only one type of list may be specified", cuttool.execute(testDir, "-f -5,9-,4-6,8 -c 4,5,6 test.txt"));
         assertEquals(1, cuttool.getStatusCode());
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeNoRangeListTest() throws IOException {
-        assertEquals("Error: you must specify a list of bytes, characters, or fields", cuttool.execute(testDir, "-d \":\" test.txt"));
-        assertEquals("Error: you must specify a list of bytes, characters, or fields", cuttool.execute(testDir, "test.txt"));
+    	cuttool = new CutTool(new String[] {"-d",":","test.txt"});
+        //assertEquals("Error: you must specify a list of bytes, characters, or fields", cuttool.execute(testDir, "-d \":\" test.txt"));
+        assertEquals("Error: you must specify a list of bytes, characters, or fields\n", cuttool.execute(testDir, null));
+    	cuttool = new CutTool(new String[] {"test.txt"});
+        //assertEquals("Error: you must specify a list of bytes, characters, or fields", cuttool.execute(testDir, "test.txt"));
+        assertEquals("Error: you must specify a list of bytes, characters, or fields\n", cuttool.execute(testDir, null));
         assertEquals(1, cuttool.getStatusCode());
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeCAndDTest() throws IOException {
-        assertEquals("Error: an input delimiter may be specified only when operating on fields", cuttool.execute(testDir, "-c 4,5,6 -d \":\" test.txt"));
+    	cuttool = new CutTool(new String[] {"-c","4,5,6", "-d" ,":" ,"test.txt"});
+        assertEquals("Error: an input delimiter may be specified only when operating on fields\n", cuttool.execute(testDir, ""));
+        //assertEquals("Error: an input delimiter may be specified only when operating on fields", cuttool.execute(testDir, "-c 4,5,6 -d \":\" test.txt"));
         assertEquals(1, cuttool.getStatusCode());
     }
 
+    /*
+     * @CORRECTED wrong error msg
+     * should show error when use -f with -c, not until -d
+     * wrong use of stdin
+     */
     @Test
     public void executeCDFTest() throws IOException {
-        assertEquals("Error: an input delimiter may be specified only when operating on fields", cuttool.execute(testDir, "-c 4,5,6 -f 3,4 -d \":\" test.txt"));
+    	String[] args = {"-c","4,5,6","-f","3,4","-d","\":\"","test.txt"};
+    	cuttool = new CutTool(args);
+
+        assertEquals("Error: only one type of list may be specified\n"
+        		, cuttool.execute(testDir, null));
+        //assertEquals("Error: an input delimiter may be specified only when operating on fields"
+        //		, cuttool.execute(testDir, "-c 4,5,6 -f 3,4 -d \":\" test.txt"));
         assertEquals(1, cuttool.getStatusCode());
     }
     
     @Test
     public void executeInvalidRangeTest() throws IOException {
-        assertEquals("Error: invalid decreasing range", cuttool.execute(testDir, "-c 5-3,10 test.txt"));
+    	cuttool = new CutTool(new String[] {"-c","5-3,10","test.txt"});
+        assertEquals("Error: invalid list argument for -c\n", cuttool.execute(testDir, null));
         assertEquals(1, cuttool.getStatusCode());
-        assertEquals("Error: invalid list argument for -c", cuttool.execute(testDir, "-c abc test.txt"));
+    	cuttool = new CutTool(new String[] {"-c","abc","test.txt"});
+        assertEquals("Error: invalid list argument for -c\n", cuttool.execute(testDir, "-c abc test.txt"));
         assertEquals(1, cuttool.getStatusCode());
-        assertEquals("Error: invalid list argument for -c", cuttool.execute(testDir, "-c 5--3 test.txt"));
+    	cuttool = new CutTool(new String[] {"-c","5--3","test.txt"});
+        assertEquals("Error: invalid list argument for -c\n", cuttool.execute(testDir, "-c 5--3 test.txt"));
         assertEquals(1, cuttool.getStatusCode());
-        assertEquals("Error: invalid decreasing range", cuttool.execute(testDir, "-f 5-3,10 -d : test.txt"));
+    	cuttool = new CutTool(new String[] {"-f","5-3,10","-d",":","test.txt"});
+        assertEquals("Error: invalid list argument for -f\n", cuttool.execute(testDir, "-f 5-3,10 -d : test.txt"));
         assertEquals(1, cuttool.getStatusCode());
-        assertEquals("Error: invalid list argument for -f", cuttool.execute(testDir, "-f abc -d : test.txt"));
+    	cuttool = new CutTool(new String[] {"-f","abc","-d",":","test.txt"});
+        assertEquals("Error: invalid list argument for -f\n", cuttool.execute(testDir, "-f abc -d : test.txt"));
         assertEquals(1, cuttool.getStatusCode());
-        assertEquals("Error: invalid list argument for -f", cuttool.execute(testDir, "-f 5--3 -d : test.txt"));
+    	cuttool = new CutTool(new String[] {"-f","5--3,10","-d",":","test.txt"});
+        assertEquals("Error: invalid list argument for -f\n", cuttool.execute(testDir, "-f 5--3 -d : test.txt"));
         assertEquals(1, cuttool.getStatusCode());
     }
     
     @Test
     public void executeNoFileOptionTest() throws IOException {
-        assertEquals("Error: you must specify a file name", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d :"));
+        assertEquals("Error: you must specify a file name\n", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d :"));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeFileDoesNotExistTest() throws IOException {
-        assertEquals("Error: file test1.txt doesn't exist", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d : test1.txt"));
+    	cuttool = new CutTool(new String[] {"-f", "-5,9-,4-6,8" ,"-d" ,":" ,"test1.txt"});
+        assertEquals("Error: cannot read from file test1.txt\n", cuttool.execute(testDir, null));
+        //assertEquals("Error: file test1.txt doesn't exist", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d : test1.txt"));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeManyFilesTest() throws IOException {
+    	cuttool = new CutTool(new String[] {"-c","4-10,20-25", "test.txt", "test.txt"});
         StringBuilder sb = new StringBuilder();
         sb.append(":bar:bax\n");
         sb.append(":two:thfive:s\n");
@@ -343,10 +401,14 @@ public class CUTToolTest {
         sb.append(":bar:bax\n");
         sb.append(":two:thfive:s\n");
         sb.append("ha:betalta:ep\n");
-        sb.append(" quick  jumps");
+        sb.append(" quick  jumps\n");
         String expectedOutput = sb.toString();
-        assertEquals(expectedOutput, cuttool.execute(testDir, "-c 4-10,20-25 test.txt test.txt"));
+        //assertEquals(expectedOutput, cuttool.execute(testDir, "-c 4-10,20-25 test.txt test.txt"));
+        assertEquals(expectedOutput, cuttool.execute(testDir, null));
+
         
+        //assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" test.txt test.txt"));
+        cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8", "-d", ":","test.txt","test.txt"});
         sb = new StringBuilder();
         sb.append("foo:bar:baz:qux:quux\n");
         sb.append("one:two:three:four:five:six\n");
@@ -355,14 +417,23 @@ public class CUTToolTest {
         sb.append("foo:bar:baz:qux:quux\n");
         sb.append("one:two:three:four:five:six\n");
         sb.append("alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n");
-        sb.append("the quick brown fox jumps over the lazy dog");
+        sb.append("the quick brown fox jumps over the lazy dog\n");
         expectedOutput = sb.toString();
-        assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" test.txt test.txt"));
+        //assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" test.txt test.txt"));
+        assertEquals(expectedOutput, cuttool.execute(testDir, null));
     }
     
     @Test
+    /*
+     * @CORRECTED wrong use of stdin
+     * On a side note, quotes should be handled by the shell, 
+     * this test case handles cases that are not for cuttool
+     * 
+     */
     public void executeFileWithSpace() throws IOException{
         // create new file with text
+        cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-d",":","test with space.txt"});
+
         File test = new File(testDir, "test with space.txt");
         test.createNewFile();
         FileWriter fw = new FileWriter(test.getAbsoluteFile());
@@ -371,7 +442,7 @@ public class CUTToolTest {
         sb.append("foo:bar:baz:qux:quux\n");
         sb.append("one:two:three:four:five:six:seven\n");
         sb.append("alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n");
-        sb.append("the quick brown fox jumps over the lazy dog");
+        sb.append("the quick brown fox jumps over the lazy dog\n");
         bw.write(sb.toString());
         bw.close();
         
@@ -379,22 +450,36 @@ public class CUTToolTest {
         sb.append("foo:bar:baz:qux:quux\n");
         sb.append("one:two:three:four:five:six\n");
         sb.append("alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n");
-        sb.append("the quick brown fox jumps over the lazy dog");
+        sb.append("the quick brown fox jumps over the lazy dog\n");
         String expectedOutput = sb.toString();
-        assertEquals(expectedOutput, cuttool.execute(testDir, "-f -5,9-,4-6,8 -d \":\" \"test with space.txt\""));
+        assertEquals(expectedOutput, cuttool.execute(testDir, null));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void executeFileWithSpaceNotExist() throws IOException{
-        assertEquals("Error: file test wrong file name.txt doesn't exist", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d : \"test wrong file name.txt\""));
+    	cuttool = new CutTool(new String[] {"-f","-5,9-,4-6,8","-d",":","test wrong file name.txt"});
+        //assertEquals("Error: file test wrong file name.txt doesn't exist", cuttool.execute(testDir, "-f -5,9-,4-6,8 -d : \"test wrong file name.txt\""));
+        assertEquals("Error: cannot read from file test wrong file name.txt\n", cuttool.execute(testDir, null));
     }
     
     @Test
+    /*
+     * @CORRECTED
+     */
     public void getHelpTest() {
         String helpText = cuttool.getHelp();
-        assertEquals(helpText, cuttool.execute(testDir, "-help"));
-        assertEquals(helpText, cuttool.execute(testDir, "-help abcde"));
-        assertEquals(helpText, cuttool.execute(testDir, "-c 2,3,4 -help abcde"));
+        cuttool = new CutTool(new String[] {"-help"});
+        assertEquals(helpText, cuttool.execute(testDir, null));
+        //assertEquals(helpText, cuttool.execute(testDir, "-help"));
+        cuttool = new CutTool(new String[] {"-help","abcde"});
+        //assertEquals(helpText, cuttool.execute(testDir, "-help abcde"));
+        assertEquals(helpText, cuttool.execute(testDir, null));
+        cuttool = new CutTool(new String[] {"-c 2,3,4", "-help", "abcde"});
+        //assertEquals(helpText, cuttool.execute(testDir, "-c 2,3,4 -help abcde"));
+        assertEquals(helpText, cuttool.execute(testDir, null));
     }
     
     
