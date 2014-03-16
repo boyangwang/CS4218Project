@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
 
-public class SortIntegrationTest {
+public class PasteIntegrationTest {
     // Used to abstract Shell testing. You'll need these in a new suite.
     private ByteArrayInputStream simIn;
     private ByteArrayOutputStream simOut;
@@ -86,55 +86,55 @@ public class SortIntegrationTest {
     }
 
     /**
-     * sort | cut
-     * @throws IOException
+     * paste | cut
+     * @throws java.io.IOException
      */
     @Test
-    public void sortCut() throws IOException {
+    public void pasteCut() throws IOException {
         String input = "hello\nhello\nworld\ncat\ndog";
         FileWriter fw = new FileWriter(fin);
         fw.write(input);
         fw.close();
 
-        setupShellWithInput(String.format("sort %s | cut -c1-3", TEST_INPUT_FILE));
+        setupShellWithInput(String.format("paste %s | cut -c1-3", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "cat\ndog\nhel\nhel\nwor";
+        String expected = "hel\nhel\nwor\ncat\ndog";
         assertEquals(expected, result);
     }
 
     /**
-     * sort | uniq
+     * paste | uniq
      * @throws IOException
      */
     @Test
-    public void sortUniq() throws IOException {
+    public void pasteUniq() throws IOException {
         String input = "hello\nhello\nworld\ncat\ndog";
         FileWriter fw = new FileWriter(fin);
         fw.write(input);
         fw.close();
 
-        setupShellWithInput(String.format("sort %s | uniq", TEST_INPUT_FILE));
+        setupShellWithInput(String.format("paste %s | uniq", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
-        String expected = "cat\ndog\nhello\nworld";
+        String expected = "hello\nworld\ncat\ndog";
         assertEquals(expected, result);
     }
 
     /**
-     * sort | wc
+     * paste | wc
      * @throws IOException
      */
     @Test
-    public void sortWc() throws IOException {
+    public void pasteWc() throws IOException {
         String input = "hello\nhello\nworld\ncat\ndog";
         FileWriter fw = new FileWriter(fin);
         fw.write(input);
         fw.close();
 
-        setupShellWithInput(String.format("sort %s | wc", TEST_INPUT_FILE));
+        setupShellWithInput(String.format("paste %s | wc", TEST_INPUT_FILE));
         shell.run();
         String result = getStringFromOutput();
 
