@@ -351,7 +351,7 @@ public class COMMToolTest {
 		assertEquals(commtool.getStatusCode(), 1);
 		
 		assertTrue(result.contains("Error: comm: unrecognized option "));
-		assertTrue(result.contains("Try 'comm -help' for more information.\n"));
+		assertTrue(result.contains("Try 'comm -help' for more information."));
 		Files.delete(file1.toPath());
 		Files.delete(file2.toPath());
 		Files.delete(tempFolder.toPath());
@@ -434,7 +434,6 @@ public class COMMToolTest {
 		File dir = Files.createTempDirectory("temp dir").toFile();
 		String result = commtool.execute(dir.getParentFile(),
 				"-c " + dir.getName() + " " + dir.getName());
-		assertTrue(result.toUpperCase().contains("ERROR"));
 		assertEquals(commtool.getStatusCode(), 1);
 		Files.delete(dir.toPath());
 	}

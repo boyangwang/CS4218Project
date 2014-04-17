@@ -19,6 +19,11 @@ public class CommTool extends ATool implements ICommTool {
 	private final static int CHECK_ORDER = 1;
 	private final static int NOCHECK_ORDER= 2;
 	
+	private boolean isFile1UnsortedFlagged = false;
+	private boolean isFile2UnsortedFlagged = false;
+	
+	private int idx1 = 0, idx2 = 0;
+	
 	
 	public CommTool(String[] arguments) {
 		super(arguments);
@@ -27,7 +32,7 @@ public class CommTool extends ATool implements ICommTool {
 	@Override
 	public String execute(File workingDir, String stdin) {
 		statusError();
-		if (args.length < 2) {
+		if (args.length == 0) {
 			return "Invalid arguments.\nTry 'comm -help' for more information." + System.lineSeparator();
 		}
 		boolean isCheckOrder = false;
@@ -122,6 +127,121 @@ public class CommTool extends ATool implements ICommTool {
 		return compareFilesHelper(input1, input2, NOCHECK_ORDER);
 	}
 
+	private int handleUnsortFound(int type, int filenumber, ArrayList<String> col,
+			StringBuilder res) {
+		switch (type) {
+		case CHECK_DEFAULT:
+			col.add("comm: file "+filenumber+" is not in sorted order"
+					+ "\n");
+			break;
+		case CHECK_ORDER:
+			col.add("comm: file "+filenumber+" is not in sorted order"
+					+ "\n");
+			for (String str : col) {
+				res.append(str);
+			}
+			return 1;
+		case NOCHECK_ORDER: break;
+		}
+		
+		return 0;
+	}
+	
+	private int isEitherBiggerOrEqualLength(int type,
+			String[] inArr1, String[] inArr2, ArrayList<String> col, StringBuilder res) {
+		// do not enter this if block
+		if (!(idx1 >= inArr1.length) && !(idx2 >= inArr2.length)) {
+			return 0;
+		}
+		// either one of the block below executed
+		else if (idx1 >= inArr1.length) {
+			if (idx2 != 0) {
+				if (!(inArr2[idx2].compareTo(inArr2[idx2 - 1]) >= 0)
+						&& !isFile2UnsortedFlagged) {
+					isFile2UnsortedFlagged = true;
+					int action = handleUnsortFound(type, 2, col, res);
+					if (action == 1) return -1;
+				}
+			}
+			col.add("\t\t" + inArr2[idx2] + "\n");
+			idx2++;
+		} 
+		else if (idx2 >= inArr2.length) {
+			if (idx1 != 0) {
+				if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) >= 0)
+						&& !isFile1UnsortedFlagged) {
+					isFile1UnsortedFlagged = true;
+					int action = handleUnsortFound(type, 1, col, res);
+					if (action == 1) return -1;
+				}
+			}
+			col.add(inArr1[idx1] + "\n");
+			idx1++;
+		}
+		return 1;
+	}
+	
+	private void getCompareResult(int type, ArrayList<String> col,
+		StringBuilder res, String[] inArr1, String[] inArr2) {
+		
+		while (true) {
+			int isEitherBiggerOrEqualLength = 0;
+			
+			if (idx1 >= inArr1.length && idx2 >= inArr2.length)
+				break;
+			else if ( (isEitherBiggerOrEqualLength = isEitherBiggerOrEqualLength(type, inArr1, inArr2, col, res)) != 0) {
+				if (isEitherBiggerOrEqualLength == -1) return; 
+			}
+			else if (inArr1[idx1].compareTo(inArr2[idx2]) == 0) {
+				if (idx1 != 0) {
+					if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) >= 0)
+							&& !isFile1UnsortedFlagged) {
+						isFile1UnsortedFlagged = true;
+						int action = handleUnsortFound(type, 1, col, res);
+						if (action == 1) return;
+					}
+				}
+				if (idx2 != 0) {
+					if (!(inArr2[idx2].compareTo(inArr2[idx2 - 1]) >= 0)
+							&& !isFile2UnsortedFlagged) {
+						isFile2UnsortedFlagged = true;
+						int action = handleUnsortFound(type, 2, col, res);
+						if (action == 1) return;
+					}
+				}
+				col.add("\t\t\t\t" + inArr1[idx1] + "\n");
+				idx1++; idx2++;
+			} 
+			else if (inArr1[idx1].compareTo(inArr2[idx2]) < 0) {
+
+				if (idx1 != 0) {
+					if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) >= 0)
+							&& !isFile1UnsortedFlagged) {
+						isFile1UnsortedFlagged = true;
+						int action = handleUnsortFound(type, 1, col, res);
+						if (action == 1) return;
+					}
+				}
+				col.add(inArr1[idx1] + "\n");
+				idx1++;
+			} 
+			else {
+				if (idx2 != 0) {
+					isFile2UnsortedFlagged = true;
+					int action = handleUnsortFound(type, 2, col, res);
+					if (action == 1) return;
+				}
+				col.add("\t\t" + inArr2[idx2] + "\n");
+				idx2++;
+			}
+		}
+		
+		for (String str : col) {
+			res.append(str);
+		}
+		return;
+	}
+
 	private String compareFilesHelper(String input1, String input2, int type) {
 		if (input1 == null || input2 == null) {
 			return "Internal NullPointerError.\n";
@@ -129,14 +249,13 @@ public class CommTool extends ATool implements ICommTool {
 		if (input1.equals("") && input2.equals("")) {
 			return "";
 		}
-		boolean isFile1UnsortedFlagged = false;
-		boolean isFile2UnsortedFlagged = false;
+		
 		if (type == NOCHECK_ORDER) {
 			isFile1UnsortedFlagged = true;
 			isFile2UnsortedFlagged = true;
 		}
 		ArrayList<String> col = new ArrayList<String>();
-		String res = "";
+		StringBuilder res = new StringBuilder();
 		input1.replaceAll("\r\n", "\n");
 		input2.replaceAll("\r\n", "\n");
 		
@@ -154,165 +273,9 @@ public class CommTool extends ATool implements ICommTool {
 			inArr2 = input2.split("\n");
 		}
 		
+		getCompareResult(type, col, res, inArr1, inArr2);
 		
-		int idx1 = 0, idx2 = 0;
-		while (true) {
-			
-			if (idx1 >= inArr1.length && idx2 >= inArr2.length) {
-				break;
-			}
-			else if (idx1 >= inArr1.length) {
-
-				
-				if (idx2 != 0) {
-					if (! (inArr2[idx2].compareTo(inArr2[idx2 - 1]) >= 0) && !isFile2UnsortedFlagged) {
-						isFile2UnsortedFlagged = true;
-						switch(type) {
-						case CHECK_DEFAULT:
-							col.add("comm: file 2 is not in sorted order" + "\n");
-							break;
-						case CHECK_ORDER:
-							col.add("comm: file 2 is not in sorted order" + "\n");
-							for (String str : col) {
-								res += str;
-							}
-							return res;
-						case NOCHECK_ORDER:
-						default: 
-							
-						}
-					}
-				}
-				col.add("\t\t"+ inArr2[idx2] +"\n");
-				idx2++;
-				continue;
-			}
-			else if (idx2 >= inArr2.length) {
-				
-				if (idx1 != 0) {
-					if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) >= 0) && !isFile1UnsortedFlagged) {
-						isFile1UnsortedFlagged = true;
-						switch (type) {
-						case CHECK_DEFAULT:
-							col.add("comm: file 1 is not in sorted order"
-									+ "\n");
-							break;
-						case CHECK_ORDER:
-							col.add("comm: file 1 is not in sorted order" + "\n");
-							for (String str : col) {
-								res += str;
-							}
-							return res;
-						case NOCHECK_ORDER:
-						default:
-						}
-					}
-				}
-				col.add(inArr1[idx1] + "\n");
-				idx1++;
-				continue;
-			}
-			
-			if (inArr1[idx1].compareTo(inArr2[idx2]) == 0) {
-				
-				if (idx1 != 0) {
-					if (! (inArr1[idx1].compareTo(inArr1[idx1 - 1]) >= 0)  && !isFile1UnsortedFlagged) {
-						isFile1UnsortedFlagged = true;
-						switch(type) {
-							case CHECK_DEFAULT:
-								col.add("comm: file 1 is not in sorted order" + "\n");
-								break;
-							case CHECK_ORDER:
-								col.add("comm: file 1 is not in sorted order" + "\n");
-								for (String str : col) {
-									res += str;
-								}
-								return res;
-							case NOCHECK_ORDER:
-							default: 
-								
-						}
-					}
-				}
-				
-				if (idx2 != 0) {
-					if (! (inArr2[idx2].compareTo(inArr2[idx2 - 1]) >= 0)  && !isFile2UnsortedFlagged) {
-						isFile2UnsortedFlagged = true;
-						switch(type) {
-						case CHECK_DEFAULT:
-							col.add("comm: file 2 is not in sorted order" + "\n");
-							break;
-						case CHECK_ORDER:
-							col.add("comm: file 2 is not in sorted order" + "\n");
-							for (String str : col) {
-								res += str;
-							}
-							return res;
-						case NOCHECK_ORDER:
-						default: 
-							
-						}
-					}
-				}
-				col.add("\t\t\t\t" + inArr1[idx1] + "\n");
-				idx1++;
-				idx2++;
-			}
-			else if (inArr1[idx1].compareTo(inArr2[idx2]) < 0) {
-				
-				if (idx1 != 0) {
-					if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) >= 0) && !isFile1UnsortedFlagged) {
-						isFile1UnsortedFlagged = true;
-						switch (type) {
-						case CHECK_DEFAULT:
-							col.add("comm: file 1 is not in sorted order"
-									+ "\n");
-							break;
-						case CHECK_ORDER:
-							col.add("comm: file 1 is not in sorted order" + "\n");
-							for (String str : col) {
-								res += str;
-							}
-							return res;
-						case NOCHECK_ORDER:
-						default:
-						}
-					}
-				}
-				col.add(inArr1[idx1] + "\n");
-				idx1++;
-				
-			}
-			else {
-				
-				if (idx2 != 0) {
-					if (! (inArr2[idx2].compareTo(inArr2[idx2 - 1]) >= 0)  && !isFile2UnsortedFlagged) {
-						isFile2UnsortedFlagged = true;
-						switch(type) {
-						case CHECK_DEFAULT:
-							col.add("comm: file 2 is not in sorted order" + "\n");
-							break;
-						case CHECK_ORDER:
-							col.add("comm: file 2 is not in sorted order" + "\n");
-							for (String str : col) {
-								res += str;
-							}
-							return res;
-						case NOCHECK_ORDER:
-						default: 
-							
-						}
-					}
-				}
-				col.add("\t\t"+ inArr2[idx2] +"\n");
-				idx2++;
-			}
-		}
-		
-		for (String str : col) {
-			res += str;
-		}
-		return res;
+		return res.toString();
 	}
 	
     private String readContentsOfFile(File file) throws IOException, FileNotFoundException, NullPointerException {
