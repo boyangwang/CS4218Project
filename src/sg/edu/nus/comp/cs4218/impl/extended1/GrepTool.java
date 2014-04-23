@@ -217,7 +217,7 @@ public class GrepTool extends ATool implements IGrepTool {
                         }
                     } catch (NumberFormatException e) {
                         statusError();
-                        return String.format("%s requires a positive number%n");
+                        return String.format("%s requires a positive number%n", arg);
                     }
                     break;
                 default:
