@@ -111,8 +111,8 @@ public class PasteTool extends ATool implements IPasteTool {
 	}
 
 	@Override
-	public String pasteUseDelimiter(String delimiters, String[] filesContent) {
-		String strDelimiters = delimiters;
+	public String pasteUseDelimiter(String delimiter, String[] filesContent) {
+		String strDelimiters = delimiter;
 		
 		if (strDelimiters == null || strDelimiters.length()==0){
 			strDelimiters = "\t";
