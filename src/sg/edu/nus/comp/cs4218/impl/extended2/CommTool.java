@@ -39,6 +39,7 @@ public class CommTool extends ATool implements ICommTool {
 		boolean isNoCheckOrder = false;
 
 		String fileName1 = null, fileName2 = null;
+		ArrayList<String> fileArgs = new ArrayList<String>();
 		
 		for (String arg : args) {
 			if (arg.equals("-c")) {
@@ -55,16 +56,16 @@ public class CommTool extends ATool implements ICommTool {
 				return getHelp();
 			}
 			else {	// must be file name
-				if (fileName1 == null) {
-					fileName1 = arg;
-				}
-				else if (fileName2 == null) {
-					fileName2 = arg;
-				}
-				else {	// extra non-recognizable arg, return err
-					return "Error: comm: unrecognized option '"+arg+"'\nTry 'comm -help' for more information." + System.lineSeparator();
-				}
+				fileArgs.add(arg);
 			}
+		}
+		
+		// Unpack filenames.
+		if (fileArgs.size() != 2) {
+			return "Incorrect number of arguments passed to 'comm'.\nTry 'comm -help' for more information." + System.lineSeparator();
+		} else {
+			fileName1 = fileArgs.get(0);
+			fileName2 = fileArgs.get(1);
 		}
 		
 		
@@ -103,7 +104,8 @@ public class CommTool extends ATool implements ICommTool {
             return "An error occurred processing this path." + System.lineSeparator();
         }
 		catch (Exception e) {
-			return "An "+ e +" error has occured";
+			e.printStackTrace();
+			return "An unexpected error has occured." + System.lineSeparator();
 		}
         
 		
