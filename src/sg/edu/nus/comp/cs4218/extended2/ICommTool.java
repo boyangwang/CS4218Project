@@ -19,10 +19,13 @@ import sg.edu.nus.comp.cs4218.ITool;
  *      -help : Brief information about supported options
  */
 
-public interface ICommTool extends ITool{
+public interface ICommTool extends ITool {
 	String compareFiles(String input1, String input2);
+
 	String compareFilesCheckSortStatus(String input1, String input2);
+
 	String compareFilesDoNotCheckSortStatus(String input1, String input2);
+
 	String getHelp();
 
 }

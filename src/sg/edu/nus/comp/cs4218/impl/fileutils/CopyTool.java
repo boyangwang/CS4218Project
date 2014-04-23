@@ -6,152 +6,152 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 import java.io.*;
 
 public class CopyTool extends ATool implements ICopyTool {
-    private final static int BUF_SIZE = 16384;
+	private final static int BUF_SIZE = 16384;
 
-    /**
-     * Constructor
-     *
-     * @param arguments Arguments the tool is going to be executed with.
-     */
-    public CopyTool(String[] arguments) {
-        super(arguments);
-    }
+	/**
+	 * Constructor
+	 *
+	 * @param arguments Arguments the tool is going to be executed with.
+	 */
+	public CopyTool(String[] arguments) {
+		super(arguments);
+	}
 
-    /**
-     * Copies a file.
-     *
-     * @param from The file to copy.
-     * @param to The destination file.
-     * @return `true' iff the file was successfully copied.
-     */
-    @Override
-    public boolean copy(File from, File to) {
-        statusError();
+	/**
+	 * Copies a file.
+	 *
+	 * @param from The file to copy.
+	 * @param to The destination file.
+	 * @return `true' iff the file was successfully copied.
+	 */
+	@Override
+	public boolean copy(File from, File to) {
+		statusError();
 
-        boolean canCopy = (isValidSource(from) && isValidDestination(to));
-        if (!canCopy) {
-            return false;
-        }
-        
-        // If the source and destination are the same, no action needs to be
-        // taken.
-        if (to.equals(from)) {
-        	statusSuccess();
-        	return true;
-        }
+		boolean canCopy = (isValidSource(from) && isValidDestination(to));
+		if (!canCopy) {
+			return false;
+		}
 
-        try {
-            FileInputStream fis = new FileInputStream(from);
-            FileOutputStream fos = new FileOutputStream(to);
+		// If the source and destination are the same, no action needs to be
+		// taken.
+		if (to.equals(from)) {
+			statusSuccess();
+			return true;
+		}
 
-            byte[] buffer = new byte[BUF_SIZE];
-            int read;
-            while ((read = fis.read(buffer)) > 0) {
-                fos.write(buffer, 0, read);
-            }
+		try {
+			FileInputStream fis = new FileInputStream(from);
+			FileOutputStream fos = new FileOutputStream(to);
 
-            fis.close();
-            fos.close();
+			byte[] buffer = new byte[BUF_SIZE];
+			int read;
+			while ((read = fis.read(buffer)) > 0) {
+				fos.write(buffer, 0, read);
+			}
 
-            statusSuccess();
-            return true;
-        } catch (FileNotFoundException e) {
-            cleanup(to);
+			fis.close();
+			fos.close();
 
-            statusError();
-            return false;
-        } catch (IOException e) {
-            cleanup(to);
+			statusSuccess();
+			return true;
+		} catch (FileNotFoundException e) {
+			cleanup(to);
 
-            statusError();
-            return false;
-        }
-    }
+			statusError();
+			return false;
+		} catch (IOException e) {
+			cleanup(to);
 
-    /**
-     * Checks if the specified File is a valid source.
-     *
-     * @param candidate The File to check.
-     * @return `true' iff the File is a valid source.
-     */
-    private boolean isValidSource(File candidate) {
-        try {
-            if (!candidate.exists()) {
-                return false;
-            }
+			statusError();
+			return false;
+		}
+	}
 
-            if (!candidate.isFile()) {
-                return false;
-            }
+	/**
+	 * Checks if the specified File is a valid source.
+	 *
+	 * @param candidate The File to check.
+	 * @return `true' iff the File is a valid source.
+	 */
+	private boolean isValidSource(File candidate) {
+		try {
+			if (!candidate.exists()) {
+				return false;
+			}
 
-            if (!candidate.canRead()) {
-                return false;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
+			if (!candidate.isFile()) {
+				return false;
+			}
 
-        return true;
-    }
+			if (!candidate.canRead()) {
+				return false;
+			}
+		} catch (Exception ex) {
+			return false;
+		}
 
-    /**
-     * Checks if the specified File represents a valid destination.
-     *
-     * @param candidate The file to check.
-     * @return `true' iff the File is a valid destination.
-     */
-    private boolean isValidDestination(File candidate) {
-        try {
-            // Cannot overwrite a directory.
-            if (candidate.exists() && candidate.isDirectory()) {
-                return false;
-            }
+		return true;
+	}
 
-            // Cannot overwrite a readonly file.
-            if (candidate.exists() && !candidate.canWrite()) {
-                return false;
-            }
-        } catch (Exception ex) {
-            return false;
-        }
+	/**
+	 * Checks if the specified File represents a valid destination.
+	 *
+	 * @param candidate The file to check.
+	 * @return `true' iff the File is a valid destination.
+	 */
+	private boolean isValidDestination(File candidate) {
+		try {
+			// Cannot overwrite a directory.
+			if (candidate.exists() && candidate.isDirectory()) {
+				return false;
+			}
 
-        return true;
-    }
+			// Cannot overwrite a readonly file.
+			if (candidate.exists() && !candidate.canWrite()) {
+				return false;
+			}
+		} catch (Exception ex) {
+			return false;
+		}
 
-    /**
-     * Tries to remove a partially copied file in case of failure.
-     *
-     * @param trash The file to remove.
-     */
-    private void cleanup(File trash) {
-        if (trash.exists() && trash.canWrite()) {
-            trash.delete();
-        }
-    }
+		return true;
+	}
 
-    /**
-     * Executes the tool with args provided in the constructor
-     *
-     * @param workingDir
-     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
-     * @return Output on stdout
-     */
-    @Override
-    public String execute(File workingDir, String stdin) {
-        if (this.args.length != 2) {
-            statusError();
-            return "Invalid arguments.";
-        }
+	/**
+	 * Tries to remove a partially copied file in case of failure.
+	 *
+	 * @param trash The file to remove.
+	 */
+	private void cleanup(File trash) {
+		if (trash.exists() && trash.canWrite()) {
+			trash.delete();
+		}
+	}
 
-        File to = workingDir.toPath().resolve(this.args[0]).toFile();
-        File from = workingDir.toPath().resolve(this.args[1]).toFile();
-        boolean result = copy(to, from);
-        if (!result) {
-            statusError();
-            return String.format("Could not copy file: %s to: %s%n", this.args[0], this.args[1]);
-        }
+	/**
+	 * Executes the tool with args provided in the constructor
+	 *
+	 * @param workingDir
+	 * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+	 * @return Output on stdout
+	 */
+	@Override
+	public String execute(File workingDir, String stdin) {
+		if (this.args.length != 2) {
+			statusError();
+			return "Invalid arguments.";
+		}
 
-        statusSuccess();
-        return "";
-    }
+		File to = workingDir.toPath().resolve(this.args[0]).toFile();
+		File from = workingDir.toPath().resolve(this.args[1]).toFile();
+		boolean result = copy(to, from);
+		if (!result) {
+			statusError();
+			return String.format("Could not copy file: %s to: %s%n", this.args[0], this.args[1]);
+		}
+
+		statusSuccess();
+		return "";
+	}
 }

@@ -17,8 +17,10 @@ import sg.edu.nus.comp.cs4218.ITool;
  * 		-help : Brief information about supported options
  */
 
-public interface IPasteTool extends ITool{
+public interface IPasteTool extends ITool {
 	String pasteSerial(String[] input);
+
 	String pasteUseDelimiter(String delim, String[] input);
+
 	String getHelp();
 }

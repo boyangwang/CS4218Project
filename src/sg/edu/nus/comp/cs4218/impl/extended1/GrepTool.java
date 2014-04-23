@@ -35,385 +35,385 @@ import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
  *   -help : Brief information about supported options
  */
 public class GrepTool extends ATool implements IGrepTool {
-    static final Charset UTF_8 = StandardCharsets.UTF_8;
+	static final Charset UTF_8 = StandardCharsets.UTF_8;
 
-    private boolean count, onlyMatching, invertMatch;
-    private int afterContext, beforeContext;
+	private boolean count, onlyMatching, invertMatch;
+	private int afterContext, beforeContext;
 
-    public GrepTool(String[] arguments){
-        super(arguments);
-    }
+	public GrepTool(String[] arguments) {
+		super(arguments);
+	}
 
-    /**
-     * Get count of matching lines
-     *
-     * @param pattern
-     * @param input
-     * @return count of matching lines
-     */
-    @Override
-    public int getCountOfMatchingLines(String pattern, String input) {
-        if (pattern == null || input == null) {
-            statusError();
-            return -1;
-        }
+	/**
+	 * Get count of matching lines
+	 *
+	 * @param pattern
+	 * @param input
+	 * @return count of matching lines
+	 */
+	@Override
+	public int getCountOfMatchingLines(String pattern, String input) {
+		if (pattern == null || input == null) {
+			statusError();
+			return -1;
+		}
 
-        Pattern regex;
-        try {
-            regex = Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
-            statusError();
-            return -1;
-        }
+		Pattern regex;
+		try {
+			regex = Pattern.compile(pattern);
+		} catch (PatternSyntaxException e) {
+			statusError();
+			return -1;
+		}
 
-        Matcher matcher = null;
-        int lineCount = 0;
+		Matcher matcher = null;
+		int lineCount = 0;
 
-        Scanner scanner = new Scanner(input);
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (matcher == null) {
-                matcher = regex.matcher(line);
-            } else {
-                matcher.reset(line);
-            }
-            if (matcher.find()) {
-                lineCount++;
-            }
-        }
-        scanner.close();
+		Scanner scanner = new Scanner(input);
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine();
+			if (matcher == null) {
+				matcher = regex.matcher(line);
+			} else {
+				matcher.reset(line);
+			}
+			if (matcher.find()) {
+				lineCount++;
+			}
+		}
+		scanner.close();
 
-        statusSuccess();
-        return lineCount;
-    }
+		statusSuccess();
+		return lineCount;
+	}
 
-    /**
-     * Get only matching lines
-     *
-     * @param pattern
-     * @param input
-     * @return matching lines
-     */
-    @Override
-    public String getOnlyMatchingLines(String pattern, String input) {
-        reset();
-        return grep(pattern, input);
-    }
+	/**
+	 * Get only matching lines
+	 *
+	 * @param pattern
+	 * @param input
+	 * @return matching lines
+	 */
+	@Override
+	public String getOnlyMatchingLines(String pattern, String input) {
+		reset();
+		return grep(pattern, input);
+	}
 
-    /**
-     * Get matching lines with trailing context
-     *
-     * @param option_A NUM lines of trailing context after matching lines
-     * @param pattern
-     * @param input
-     * @return matching lines with trailing context
-     */
-    @Override
-    public String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input) {
-        reset();
-        afterContext = optionA;
-        return grep(pattern, input);
-    }
+	/**
+	 * Get matching lines with trailing context
+	 *
+	 * @param option_A NUM lines of trailing context after matching lines
+	 * @param pattern
+	 * @param input
+	 * @return matching lines with trailing context
+	 */
+	@Override
+	public String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input) {
+		reset();
+		afterContext = optionA;
+		return grep(pattern, input);
+	}
 
-    /**
-     * Get matching lines with leading context
-     * @param option_B NUM lines of leading context before matching lines
-     * @param pattern
-     * @param input
-     * @return matching lines with leading context
-     */
-    @Override
-    public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
-        reset();
-        beforeContext = optionB;
-        return grep(pattern, input);
-    }
+	/**
+	 * Get matching lines with leading context
+	 * @param option_B NUM lines of leading context before matching lines
+	 * @param pattern
+	 * @param input
+	 * @return matching lines with leading context
+	 */
+	@Override
+	public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
+		reset();
+		beforeContext = optionB;
+		return grep(pattern, input);
+	}
 
-    /**
-     * Get matching lines with output context
-     * @param option_C NUM lines of output context
-     * @param pattern
-     * @param input
-     * @return matching lines with output context
-     */
-    @Override
-    public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
-        reset();
-        beforeContext = afterContext = optionC;
-        return grep(pattern, input);
-    }
+	/**
+	 * Get matching lines with output context
+	 * @param option_C NUM lines of output context
+	 * @param pattern
+	 * @param input
+	 * @return matching lines with output context
+	 */
+	@Override
+	public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
+		reset();
+		beforeContext = afterContext = optionC;
+		return grep(pattern, input);
+	}
 
-    /**
-     * Get only matching parts of matching lines
-     * @param pattern
-     * @param input
-     * @return matching parts of matching lines
-     */
-    @Override
-    public String getMatchingLinesOnlyMatchingPart(String pattern, String input) {
-        reset();
-        onlyMatching = true;
-        return grep(pattern, input);
-    }
+	/**
+	 * Get only matching parts of matching lines
+	 * @param pattern
+	 * @param input
+	 * @return matching parts of matching lines
+	 */
+	@Override
+	public String getMatchingLinesOnlyMatchingPart(String pattern, String input) {
+		reset();
+		onlyMatching = true;
+		return grep(pattern, input);
+	}
 
-    /**
-     * Get only non matching lines
-     * @param pattern
-     * @param input
-     * @return non matching lines
-     */
-    @Override
-    public String getNonMatchingLines(String pattern, String input) {
-        reset();
-        invertMatch = true;
-        return grep(pattern, input);
-    }
+	/**
+	 * Get only non matching lines
+	 * @param pattern
+	 * @param input
+	 * @return non matching lines
+	 */
+	@Override
+	public String getNonMatchingLines(String pattern, String input) {
+		reset();
+		invertMatch = true;
+		return grep(pattern, input);
+	}
 
-    /**
-     * Get help text
-     * @return help text
-     */
-    @Override
-    public String getHelp() {
-        statusSuccess();
-        return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]" + System.lineSeparator();
-    }
+	/**
+	 * Get help text
+	 * @return help text
+	 */
+	@Override
+	public String getHelp() {
+		statusSuccess();
+		return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]" + System.lineSeparator();
+	}
 
-    /**
-     * Executes the tool with args provided in the constructor
-     *
-     * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that point
-     *
-     * @param workingDir
-     * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
-     * @return Output on stdout
-     */
-    @Override
-    public String execute(File workingDir, String stdin) {
-        int i = 0;
+	/**
+	 * Executes the tool with args provided in the constructor
+	 *
+	 * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that point
+	 *
+	 * @param workingDir
+	 * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+	 * @return Output on stdout
+	 */
+	@Override
+	public String execute(File workingDir, String stdin) {
+		int i = 0;
 
-        while (i < args.length && args[i].startsWith("-")) {
-            String arg = args[i++];
+		while (i < args.length && args[i].startsWith("-")) {
+			String arg = args[i++];
 
-            switch (arg) {
-            	case "-help":
-            		return getHelp();
-                case "-A":
-                case "-B":
-                case "-C":
-                    try {
-                        if (i >= args.length) {
-                            throw new NumberFormatException();
-                        }
-                        int contextNum = Integer.parseInt(args[i++]);
-                        if (contextNum < 0) {
-                            throw new NumberFormatException();
-                        }
-                        if (arg.equals("-B") || arg.equals("-C")) {
-                            beforeContext = contextNum;
-                        }
-                        if (arg.equals("-A") || arg.equals("-C")) {
-                            afterContext = contextNum;
-                        }
-                    } catch (NumberFormatException e) {
-                        statusError();
-                        return String.format("%s requires a positive number%n", arg);
-                    }
-                    break;
-                default:
-                    for (int j = 1; j < arg.length(); j++) {
-                        char flag = arg.charAt(j);
-                        switch (flag) {
-                            case 'c':
-                                count = true;
-                                break;
-                            case 'o':
-                                onlyMatching = true;
-                                break;
-                            case 'v':
-                                invertMatch = true;
-                                break;
-                            default:
-                                statusError();
-                                return "Illegal argument -" + flag + System.lineSeparator();
-                        }
-                    }
-            }
-        }
-        
-        if (i + 1 == args.length && stdin != null) {
-        	String pattern = args[i++];
-        	return grep(pattern, stdin);
-        }
+			switch (arg) {
+			case "-help":
+				return getHelp();
+			case "-A":
+			case "-B":
+			case "-C":
+				try {
+					if (i >= args.length) {
+						throw new NumberFormatException();
+					}
+					int contextNum = Integer.parseInt(args[i++]);
+					if (contextNum < 0) {
+						throw new NumberFormatException();
+					}
+					if (arg.equals("-B") || arg.equals("-C")) {
+						beforeContext = contextNum;
+					}
+					if (arg.equals("-A") || arg.equals("-C")) {
+						afterContext = contextNum;
+					}
+				} catch (NumberFormatException e) {
+					statusError();
+					return String.format("%s requires a positive number%n", arg);
+				}
+				break;
+			default:
+				for (int j = 1; j < arg.length(); j++) {
+					char flag = arg.charAt(j);
+					switch (flag) {
+					case 'c':
+						count = true;
+						break;
+					case 'o':
+						onlyMatching = true;
+						break;
+					case 'v':
+						invertMatch = true;
+						break;
+					default:
+						statusError();
+						return "Illegal argument -" + flag + System.lineSeparator();
+					}
+				}
+			}
+		}
 
-        if (i + 2 > args.length) {
-            statusError();
-            return getHelp();
-        }
+		if (i + 1 == args.length && stdin != null) {
+			String pattern = args[i++];
+			return grep(pattern, stdin);
+		}
 
-        String pattern = args[i++];
+		if (i + 2 > args.length) {
+			statusError();
+			return getHelp();
+		}
 
-        boolean isFirstStdin = true;
-        StringBuilder output = new StringBuilder();
+		String pattern = args[i++];
 
-        while (i < args.length) {
-            String arg = args[i++];
-            if(arg.equals("-")){
-                // Process only first stdin argument
-                if (isFirstStdin) {
-                    isFirstStdin = false;
-                    output.append(grep(pattern, stdin));
-                }
-            } else {
-                output.append(grepPath(pattern, arg, workingDir));
-            }
-        }
+		boolean isFirstStdin = true;
+		StringBuilder output = new StringBuilder();
 
-        return output.toString();
-    }
+		while (i < args.length) {
+			String arg = args[i++];
+			if (arg.equals("-")) {
+				// Process only first stdin argument
+				if (isFirstStdin) {
+					isFirstStdin = false;
+					output.append(grep(pattern, stdin));
+				}
+			} else {
+				output.append(grepPath(pattern, arg, workingDir));
+			}
+		}
 
-    /**
-     * Reset instance variables
-     */
-    private void reset() {
-        setStatusCode(0);
-        count = onlyMatching = invertMatch = false;
-        afterContext = beforeContext = 0;
-    }
+		return output.toString();
+	}
 
-    /**
-     * Grep given path from working directory with pattern
-     * @param pattern
-     * @param pathname
-     * @param workingDir
-     * @return matches
-     */
-    private String grepPath(String pattern, String pathname, File workingDir) {
-        try {
-            byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));
-            return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
-        } catch (NoSuchFileException e) {
-        	statusError();
-            return String.format("grep: %s: No such file or directory%n", pathname);
-        } catch (IOException e) {
-        	statusError();
-            return String.format("grep: %s: %s%n", pathname, e);
-        }
-    }
+	/**
+	 * Reset instance variables
+	 */
+	private void reset() {
+		setStatusCode(0);
+		count = onlyMatching = invertMatch = false;
+		afterContext = beforeContext = 0;
+	}
 
-    /**
-     * Circular queue with fixed limit
-     * @param <E>
-     */
-    public class CircularQueue<E> extends LinkedList<E> {
-        /**
+	/**
+	 * Grep given path from working directory with pattern
+	 * @param pattern
+	 * @param pathname
+	 * @param workingDir
+	 * @return matches
+	 */
+	private String grepPath(String pattern, String pathname, File workingDir) {
+		try {
+			byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));
+			return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());
+		} catch (NoSuchFileException e) {
+			statusError();
+			return String.format("grep: %s: No such file or directory%n", pathname);
+		} catch (IOException e) {
+			statusError();
+			return String.format("grep: %s: %s%n", pathname, e);
+		}
+	}
+
+	/**
+	 * Circular queue with fixed limit
+	 * @param <E>
+	 */
+	public class CircularQueue<E> extends LinkedList<E> {
+		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 8443436540607701637L;
 		private int limit;
 
-        public CircularQueue(int limit) {
-            this.limit = limit;
-        }
+		public CircularQueue(int limit) {
+			this.limit = limit;
+		}
 
-        @Override
-        public boolean add(E element) {
-            super.add(element);
-            while (size() > limit) {
-                super.remove();
-            }
-            return true;
-        }
-    }
+		@Override
+		public boolean add(E element) {
+			super.add(element);
+			while (size() > limit) {
+				super.remove();
+			}
+			return true;
+		}
+	}
 
-    /**
-     * Grep for pattern in given input
-     * @param pattern
-     * @param input
-     * @return matches
-     */
-    private String grep(String pattern, String input) {
-        if (pattern == null || input == null) {
-            statusError();
-            return "";
-        }
+	/**
+	 * Grep for pattern in given input
+	 * @param pattern
+	 * @param input
+	 * @return matches
+	 */
+	private String grep(String pattern, String input) {
+		if (pattern == null || input == null) {
+			statusError();
+			return "";
+		}
 
-        if (count) {
-            int matchingLinesCount = getCountOfMatchingLines(pattern, input);
-            return matchingLinesCount == -1 ? "" : String.format("%d%n", matchingLinesCount);
-        }
+		if (count) {
+			int matchingLinesCount = getCountOfMatchingLines(pattern, input);
+			return matchingLinesCount == -1 ? "" : String.format("%d%n", matchingLinesCount);
+		}
 
-        Pattern regex;
-        try {
-            regex = Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
-            statusError();
-            return e.toString() + System.lineSeparator();
-        }
+		Pattern regex;
+		try {
+			regex = Pattern.compile(pattern);
+		} catch (PatternSyntaxException e) {
+			statusError();
+			return e.toString() + System.lineSeparator();
+		}
 
-        Matcher matcher = null;
-        StringBuilder output = new StringBuilder();
-        CircularQueue<String> previousLines = new CircularQueue<>(beforeContext);
-        boolean printAfterContext = false;
-        int afterContextCount = 0;
+		Matcher matcher = null;
+		StringBuilder output = new StringBuilder();
+		CircularQueue<String> previousLines = new CircularQueue<>(beforeContext);
+		boolean printAfterContext = false;
+		int afterContextCount = 0;
 
-        Scanner scanner = new Scanner(input);
-        while (scanner.hasNextLine()) {
-            if (Thread.interrupted()) {
-                statusSuccess();
-                scanner.close();
-                return output.toString();
-            }
+		Scanner scanner = new Scanner(input);
+		while (scanner.hasNextLine()) {
+			if (Thread.interrupted()) {
+				statusSuccess();
+				scanner.close();
+				return output.toString();
+			}
 
-            String line = scanner.nextLine();
+			String line = scanner.nextLine();
 
-            if (matcher == null) {
-                matcher = regex.matcher(line);
-            } else {
-                matcher.reset(line);
-            }
+			if (matcher == null) {
+				matcher = regex.matcher(line);
+			} else {
+				matcher.reset(line);
+			}
 
-            boolean matched = false;
-            while (matcher.find()) {
-                if (!matched) {
-                    matched = true;
-                    if (!previousLines.isEmpty()) {
-                        ListIterator<String> listIterator = previousLines.listIterator(afterContextCount);
-                        while (listIterator.hasNext()) {
-                            output.append(listIterator.next());
-                            output.append(System.lineSeparator());
-                        }
-                    }
-                    if (afterContext > 0) {
-                        printAfterContext = true;
-                        afterContextCount = 0;
-                    }
-                }
+			boolean matched = false;
+			while (matcher.find()) {
+				if (!matched) {
+					matched = true;
+					if (!previousLines.isEmpty()) {
+						ListIterator<String> listIterator = previousLines.listIterator(afterContextCount);
+						while (listIterator.hasNext()) {
+							output.append(listIterator.next());
+							output.append(System.lineSeparator());
+						}
+					}
+					if (afterContext > 0) {
+						printAfterContext = true;
+						afterContextCount = 0;
+					}
+				}
 
-                if (onlyMatching) {
-                    output.append(matcher.group());
-                    output.append(System.lineSeparator());
-                } else {
-                    break;
-                }
-            }
-            if (!onlyMatching && matched != invertMatch) {
-                output.append(line);
-                output.append(System.lineSeparator());
-            }
-            if (printAfterContext && (matched == invertMatch)) {
-                if (afterContextCount++ < afterContext) {
-                    output.append(line);
-                    output.append(System.lineSeparator());
-                } else {
-                    printAfterContext = false;
-                    afterContextCount = 0;
-                }
-            }
-            previousLines.add(line);
-        }
-        scanner.close();
+				if (onlyMatching) {
+					output.append(matcher.group());
+					output.append(System.lineSeparator());
+				} else {
+					break;
+				}
+			}
+			if (!onlyMatching && matched != invertMatch) {
+				output.append(line);
+				output.append(System.lineSeparator());
+			}
+			if (printAfterContext && (matched == invertMatch)) {
+				if (afterContextCount++ < afterContext) {
+					output.append(line);
+					output.append(System.lineSeparator());
+				} else {
+					printAfterContext = false;
+					afterContextCount = 0;
+				}
+			}
+			previousLines.add(line);
+		}
+		scanner.close();
 
-        return output.toString();
-    }
+		return output.toString();
+	}
 }

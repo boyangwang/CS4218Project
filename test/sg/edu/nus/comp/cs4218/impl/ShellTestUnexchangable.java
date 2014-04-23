@@ -16,6 +16,7 @@ import sg.edu.nus.comp.cs4218.ITool;
 
 public class ShellTestUnexchangable {
 	IShell sh;
+
 	@Before
 	public void setUp() throws Exception {
 		sh = new Shell(System.in, System.out);
@@ -26,7 +27,7 @@ public class ShellTestUnexchangable {
 	}
 
 	@Test
-	public void stopThreadTest(){
+	public void stopThreadTest() {
 		sh = new Shell(System.in, System.out);
 		String[] args = {};
 		ITool tool = (ITool) new TestInterruptTool(args);
@@ -35,21 +36,22 @@ public class ShellTestUnexchangable {
 		sh.stop(executor);
 		try {
 			//allow the other thread to end
-			Thread.sleep(500); 
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		assertEquals(1,tool.getStatusCode());
+		assertEquals(1, tool.getStatusCode());
 	}
-	
-	private class TestInterruptTool extends ATool implements ITool{
+
+	private class TestInterruptTool extends ATool implements ITool {
 		public TestInterruptTool(String[] arguments) {
 			super(arguments);
 		}
+
 		@Override
 		public String execute(File workingDir, String stdin) {
 			setStatusCode(0);
-			while(!Thread.currentThread().isInterrupted()){
+			while (!Thread.currentThread().isInterrupted()) {
 			}
 			setStatusCode(1);
 			return null;

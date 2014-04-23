@@ -25,67 +25,67 @@ public class WcTool extends ATool implements IWcTool {
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-        int i = 0;
+		int i = 0;
 
-        while (i < args.length && args[i].startsWith("-")) {
-            String arg = args[i++];
-            
-            if (arg.equals("-help")) {
-            	return getHelp();
-            } else {
-                for (int j = 1; j < arg.length(); j++) {
-                    char flag = arg.charAt(j);
-                    switch (flag) {
-                        case 'm':
-                        	printCharacterCount = true;
-                            break;
-                        case 'w':
-                        	printWordCount = true;
-                            break;
-                        case 'l':
-                        	printNewLineCount = true;
-                            break;
-                        default:
-                            statusError();
-                            return String.format("wc: illegal option -- %s%n", flag);
-                    }
-                }
-            }
-        }
-        
-        StringBuilder output = new StringBuilder();
+		while (i < args.length && args[i].startsWith("-")) {
+			String arg = args[i++];
 
-        if (!printCharacterCount && !printWordCount && !printNewLineCount) {
-        	printCharacterCount = printWordCount = printNewLineCount = true;
-        }
-        
-        if (i == args.length) {
-        	if (stdin == null) {
-	            statusError();
-	            return getHelp();
-        	} else {
-        		output.append(wc(stdin));
-        		output.append(String.format("%n"));
-        	}
-        }
+			if (arg.equals("-help")) {
+				return getHelp();
+			} else {
+				for (int j = 1; j < arg.length(); j++) {
+					char flag = arg.charAt(j);
+					switch (flag) {
+					case 'm':
+						printCharacterCount = true;
+						break;
+					case 'w':
+						printWordCount = true;
+						break;
+					case 'l':
+						printNewLineCount = true;
+						break;
+					default:
+						statusError();
+						return String.format("wc: illegal option -- %s%n", flag);
+					}
+				}
+			}
+		}
 
-        boolean isFirstStdin = true;
+		StringBuilder output = new StringBuilder();
 
-        while (i < args.length) {
-            String arg = args[i++];
-            if(arg.equals("-")){
-                // Process only first stdin argument
-                if (isFirstStdin) {
-                    isFirstStdin = false;
-                    output.append(wc(stdin));
-            		output.append(String.format("%n"));
-                }
-            } else {
-                output.append(wc(arg, workingDir));
-            }
-        }
+		if (!printCharacterCount && !printWordCount && !printNewLineCount) {
+			printCharacterCount = printWordCount = printNewLineCount = true;
+		}
 
-        return output.toString();
+		if (i == args.length) {
+			if (stdin == null) {
+				statusError();
+				return getHelp();
+			} else {
+				output.append(wc(stdin));
+				output.append(String.format("%n"));
+			}
+		}
+
+		boolean isFirstStdin = true;
+
+		while (i < args.length) {
+			String arg = args[i++];
+			if (arg.equals("-")) {
+				// Process only first stdin argument
+				if (isFirstStdin) {
+					isFirstStdin = false;
+					output.append(wc(stdin));
+					output.append(String.format("%n"));
+				}
+			} else {
+				output.append(wc(arg, workingDir));
+			}
+		}
+
+		return output.toString();
 	}
 
 	@Override
@@ -132,18 +132,18 @@ public class WcTool extends ATool implements IWcTool {
 		}
 		return output.toString();
 	}
-	
+
 	private String wc(String pathname, File workingDir) {
-        try {
-        	Path path = workingDir.toPath().resolve(pathname);
-            byte[] encoded = Files.readAllBytes(path);
-            return String.format("%s%s%n", wc(UTF_8.decode(ByteBuffer.wrap(encoded)).toString()), path.getFileName());
-        } catch (NoSuchFileException e) {
-        	statusError();
-            return String.format("Error: SOURCE file not found%n");
-        } catch (IOException e) {
-        	statusError();
-            return String.format("wc: %s: %s%n", pathname, e);
-        }
+		try {
+			Path path = workingDir.toPath().resolve(pathname);
+			byte[] encoded = Files.readAllBytes(path);
+			return String.format("%s%s%n", wc(UTF_8.decode(ByteBuffer.wrap(encoded)).toString()), path.getFileName());
+		} catch (NoSuchFileException e) {
+			statusError();
+			return String.format("Error: SOURCE file not found%n");
+		} catch (IOException e) {
+			statusError();
+			return String.format("wc: %s: %s%n", pathname, e);
+		}
 	}
 }

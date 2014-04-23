@@ -20,8 +20,9 @@ public class PasteTool extends ATool implements IPasteTool {
 	static final String ERROR_NO_FILE = "Error: no file is specified" + LINE_SEPARATOR;
 
 	public PasteTool(String[] arguments) {
-        super(arguments);
+		super(arguments);
 	}
+
 	@Override
 	public String execute(File workingDir, String stdin) {
 		ArrayList<String> tmpFilesContent = new ArrayList<String>();
@@ -29,37 +30,37 @@ public class PasteTool extends ATool implements IPasteTool {
 		String strDelimiters = "\t";
 		boolean isFirstStdin = true;
 
-
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].startsWith("-") && args[i].length()>1){
-				if(args[i].compareTo("-s")==0){
-					serialDisplay=true;
-				}else if(args[i].startsWith("-d")){
-					if (args[i].length()>2){
+			if (args[i].startsWith("-") && args[i].length() > 1) {
+				if (args[i].compareTo("-s") == 0) {
+					serialDisplay = true;
+				} else if (args[i].startsWith("-d")) {
+					if (args[i].length() > 2) {
 						strDelimiters = args[i].substring(2);
 						//
-					}else if (args.length>i+1){
-						strDelimiters = args[i+1];
+					} else if (args.length > i + 1) {
+						strDelimiters = args[i + 1];
 						i++;
-					}else{
+					} else {
 						statusError();
 						return ERROR_NO_DELIMITER;
-					};
+					}
+					;
 
-				}else if (args[i].compareTo("-help")==0){
+				} else if (args[i].compareTo("-help") == 0) {
 					return getHelp();
 
-				}else{
+				} else {
 					statusError();
 					return String.format(ERROR_INVALID_OPTION, args[i]);
 				}
-			}else{
-				if (args[i].compareTo("-")==0){
-					if (isFirstStdin){
-						isFirstStdin=false;
+			} else {
+				if (args[i].compareTo("-") == 0) {
+					if (isFirstStdin) {
+						isFirstStdin = false;
 						tmpFilesContent.add(stdin);
 					}
-				}else{
+				} else {
 
 					File target = workingDir.toPath().resolve(args[i]).toFile();
 					try {
@@ -72,22 +73,22 @@ public class PasteTool extends ATool implements IPasteTool {
 			}
 		}
 
-		if (tmpFilesContent.size() == 0){
-			if (stdin!=null){
+		if (tmpFilesContent.size() == 0) {
+			if (stdin != null) {
 				tmpFilesContent.add(stdin);
 			}
 		}
-		if (tmpFilesContent.size()==0){
+		if (tmpFilesContent.size() == 0) {
 			statusError();
 			return ERROR_NO_FILE;
 		}
 		String[] filesContent = new String[tmpFilesContent.size()];
 		filesContent = tmpFilesContent.toArray(filesContent);
 		String out = "";
-		if (!serialDisplay){
+		if (!serialDisplay) {
 			out = pasteUseDelimiter(strDelimiters, filesContent);
 
-		}else {
+		} else {
 			out = pasteSerial(filesContent);
 		}
 
@@ -98,10 +99,10 @@ public class PasteTool extends ATool implements IPasteTool {
 	public String pasteSerial(String[] filesContent) {
 		String out = "";
 		for (int i = 0; i < filesContent.length; i++) {
-			String[] fileContent = filesContent[i].split(LINE_SEPARATOR,-1);
+			String[] fileContent = filesContent[i].split(LINE_SEPARATOR, -1);
 			for (int j = 0; j < fileContent.length; j++) {
 				out += fileContent[j];
-				if(j<fileContent.length-1){
+				if (j < fileContent.length - 1) {
 					out += "\t";
 				}
 			}
@@ -113,47 +114,47 @@ public class PasteTool extends ATool implements IPasteTool {
 	@Override
 	public String pasteUseDelimiter(String delimiter, String[] filesContent) {
 		String strDelimiters = delimiter;
-		
-		if (strDelimiters == null || strDelimiters.length()==0){
+
+		if (strDelimiters == null || strDelimiters.length() == 0) {
 			strDelimiters = "\t";
 		}
-		if (filesContent ==null){
+		if (filesContent == null) {
 			return "";
 		}
-		String out ="";
+		String out = "";
 		int numFilesLeft = filesContent.length;
 		int lineNumber = 0;
 		int currDelimiter = 0;
 
 		String[] delimiters = new String[strDelimiters.length()];
 		for (int j = 0; j < strDelimiters.length(); j++) {
-			delimiters[j] = strDelimiters.substring(j, j+1);
+			delimiters[j] = strDelimiters.substring(j, j + 1);
 		}
-		while(true){
+		while (true) {
 
 			for (int i = 0; i < filesContent.length; i++) {
-				String[] fileContent = filesContent[i].split(LINE_SEPARATOR,-1);
-				if(fileContent.length>lineNumber){
-					out+=fileContent[lineNumber];
-					if (fileContent.length==lineNumber+1){
+				String[] fileContent = filesContent[i].split(LINE_SEPARATOR, -1);
+				if (fileContent.length > lineNumber) {
+					out += fileContent[lineNumber];
+					if (fileContent.length == lineNumber + 1) {
 						numFilesLeft--;
 					}
 				}
 
-				if(i<filesContent.length-1){
-					out+=delimiters[currDelimiter];
+				if (i < filesContent.length - 1) {
+					out += delimiters[currDelimiter];
 				}
-				if(currDelimiter<delimiters.length-1){
+				if (currDelimiter < delimiters.length - 1) {
 					currDelimiter++;
 				}
 			}
-			out+=LINE_SEPARATOR;
-			currDelimiter=0;
+			out += LINE_SEPARATOR;
+			currDelimiter = 0;
 			lineNumber++;
-			if(numFilesLeft==0){
+			if (numFilesLeft == 0) {
 				break;
 			}
-		}		
+		}
 		return out;
 	}
 
@@ -162,28 +163,29 @@ public class PasteTool extends ATool implements IPasteTool {
 		// TODO Auto-generated method stub
 		return "Paste - merge lines of files" + LINE_SEPARATOR +
 				"-d DELIM:\tUser custom delimiter instead of the default tab" + LINE_SEPARATOR +
-				"-s\t\tpaste one file at a time instead of in parallel"   + LINE_SEPARATOR +
-				"-help\t\tBrief information about supported options." + LINE_SEPARATOR ;
+				"-s\t\tpaste one file at a time instead of in parallel" + LINE_SEPARATOR +
+				"-help\t\tBrief information about supported options." + LINE_SEPARATOR;
 	}
-    private String readContentsOfFile(File file) throws IOException {
-    	ArrayList<String> outTmp = new ArrayList<String>();
-    	String strLine;
-    	String out = "";
-        FileInputStream is;
-        is = new FileInputStream(file);
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        while((strLine = br.readLine())!= null){
-        	out += strLine + LINE_SEPARATOR;
-        }
-        
-        if (!out.equals("")) {
-        	out = out.substring(0, out.length() - LINE_SEPARATOR.length());
-        }
+	private String readContentsOfFile(File file) throws IOException {
+		ArrayList<String> outTmp = new ArrayList<String>();
+		String strLine;
+		String out = "";
+		FileInputStream is;
+		is = new FileInputStream(file);
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
-        is.close();
+		while ((strLine = br.readLine()) != null) {
+			out += strLine + LINE_SEPARATOR;
+		}
 
-        return out;
-    }
+		if (!out.equals("")) {
+			out = out.substring(0, out.length() - LINE_SEPARATOR.length());
+		}
+
+		is.close();
+
+		return out;
+	}
 
 }

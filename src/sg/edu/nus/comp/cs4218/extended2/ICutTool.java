@@ -22,7 +22,9 @@ import sg.edu.nus.comp.cs4218.ITool;
 public interface ICutTool extends ITool {
 
 	String cutSpecfiedCharacters(String list, String input);
+
 	String cutSpecifiedCharactersUseDelimiter(String list, String delim, String input);
+
 	String getHelp();
 
 }

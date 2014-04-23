@@ -25,11 +25,18 @@ import sg.edu.nus.comp.cs4218.ITool;
  */
 public interface IGrepTool extends ITool {
 	int getCountOfMatchingLines(String pattern, String input);
+
 	String getOnlyMatchingLines(String pattern, String input);
+
 	String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input);
+
 	String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input);
+
 	String getMatchingLinesWithOutputContext(int optionC, String pattern, String input);
+
 	String getMatchingLinesOnlyMatchingPart(String pattern, String input);
+
 	String getNonMatchingLines(String pattern, String input);
+
 	String getHelp();
 }

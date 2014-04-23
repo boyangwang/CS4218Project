@@ -29,17 +29,17 @@ public class EchoIntegrationTest {
 	private String getStringFromOutput() {
 		String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);
 		out = out.substring(out.indexOf("> ") + 2).trim();
-		if (out.lastIndexOf("\n")>-1){
+		if (out.lastIndexOf("\n") > -1) {
 			out = out.substring(0, out.lastIndexOf("\n"));
-		}else{
+		} else {
 			out = "";
 		}
 		return out;
 	}
 
 	private void setupShellWithInput(String in) {
-    	String input = in;
-    	
+		String input = in;
+
 		// Terminate at the end of this command.
 		input += "\r\nctrl-c\r\n";
 
@@ -65,7 +65,6 @@ public class EchoIntegrationTest {
 	@After
 	public void tearDown() throws Exception {
 
-
 		if (fin.exists()) {
 			fin.delete();
 		}
@@ -88,6 +87,7 @@ public class EchoIntegrationTest {
 		String expected = "12345 \n";
 		assertEquals(expected, result);
 	}
+
 	/**
 	 * echo | cut
 	 */

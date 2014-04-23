@@ -18,12 +18,14 @@ import sg.edu.nus.comp.cs4218.ITool;
  *		-help : Brief information about supported options
 */
 
-
 public interface IWcTool extends ITool {
 
 	String getCharacterCount(String input);
+
 	String getWordCount(String input);
+
 	String getNewLineCount(String input);
+
 	String getHelp();
-	
+
 }

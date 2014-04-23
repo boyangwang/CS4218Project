@@ -13,5 +13,6 @@ import sg.edu.nus.comp.cs4218.ITool;
  */
 public interface ILsTool extends ITool {
 	List<File> getFiles(File directory);
+
 	String getStringForFiles(List<File> files);
 }

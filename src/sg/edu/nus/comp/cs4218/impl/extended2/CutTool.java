@@ -12,15 +12,17 @@ import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class CutTool extends ATool implements ICutTool {
-	private class Range{
+	private class Range {
 		//inclusive range
-		public Range(int start, int end){
+		public Range(int start, int end) {
 			this.start = start;
 			this.end = end;
 		}
+
 		int start;
 		int end;
 	}
+
 	static final String LINE_SEPARATOR = System.lineSeparator();
 
 	static final String ERROR_CUT_AND_DELIM_MODE = "Error: only one type of list may be specified\n";
@@ -38,15 +40,14 @@ public class CutTool extends ATool implements ICutTool {
 	static final String ERROR_NO_FILE = "Error: you must specify a file name\n";
 	static final String ERROR_DECREASING_RANGE = "Error: you must specify a file name\n";
 
-
 	public CutTool(String[] args) {
 		super(args);
 	}
 
 	@Override
 	public String execute(File workingDir, String stdin) {
-		boolean isDelimMode	= false;
-		boolean isCutMode	= false;
+		boolean isDelimMode = false;
+		boolean isCutMode = false;
 		boolean isFirstStdin = true;
 		String delimChar = "\t";
 		String cutList = null;
@@ -55,75 +56,75 @@ public class CutTool extends ATool implements ICutTool {
 		String out = "";
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			if(arg.startsWith("-")){
-				if (isFirstStdin && arg.compareTo("-")==0){
+			if (arg.startsWith("-")) {
+				if (isFirstStdin && arg.compareTo("-") == 0) {
 					isFirstStdin = false;
 					filesContent.add(stdin);
-				} else if (arg.compareTo("-help")==0){
+				} else if (arg.compareTo("-help") == 0) {
 					return getHelp();
-				}else if(arg.startsWith("-c")){
-					if (isDelimMode){
+				} else if (arg.startsWith("-c")) {
+					if (isDelimMode) {
 						statusError();
 						return ERROR_CUT_AND_DELIM_MODE;
-					}else if(cutList!=null){
+					} else if (cutList != null) {
 						statusError();
 						return ERROR_MORE_THAN_ONE_CUT_LIST;
-					}else{
-						isCutMode=true;
-						if(arg.length()>2){
+					} else {
+						isCutMode = true;
+						if (arg.length() > 2) {
 							cutList = arg.substring(2);
-						}else if (args.length>i+1){
+						} else if (args.length > i + 1) {
 							cutList = args[++i];
-						}else{
+						} else {
 							statusError();
 							return ERROR_NO_CUT_LIST;
 						}
 					}
-				}else if (arg.startsWith("-f")){
-					
-					if (isCutMode){
+				} else if (arg.startsWith("-f")) {
+
+					if (isCutMode) {
 						statusError();
 						return ERROR_CUT_AND_DELIM_MODE;
-					}else if(fieldList!=null){
+					} else if (fieldList != null) {
 						statusError();
 						return ERROR_MORE_THAN_ONE_FIELD_LIST;
-					}else{
+					} else {
 						isDelimMode = true;
-						if(arg.length()>2){
+						if (arg.length() > 2) {
 							fieldList = arg.substring(2);
-						}else if (args.length>i+1){
+						} else if (args.length > i + 1) {
 							fieldList = args[++i];
-						}else{
+						} else {
 							statusError();
 							return ERROR_NO_FIELD_LIST;
 						}
 					}
-				}else if (arg.startsWith("-d")){
+				} else if (arg.startsWith("-d")) {
 					isDelimMode = true;
-					if (isCutMode){
+					if (isCutMode) {
 						statusError();
 						return ERROR_DELIM_WITHOUT_FIELD;
-					}else{
+					} else {
 						isDelimMode = true;
-						if(arg.length()==3){
+						if (arg.length() == 3) {
 							delimChar = arg.substring(2);
-						}else if(arg.length()>=3){
+						} else if (arg.length() >= 3) {
 							statusError();
 							return ERROR_DELIM_MORE_THAN_ONE_CHAR;
-						} else if (args.length>i+1){
+						} else if (args.length > i + 1) {
 							//arg.length == 2, expect delimiter char
 							delimChar = args[++i];
-							if(delimChar.length()>1){
+							if (delimChar.length() > 1) {
 								statusError();
 								return ERROR_DELIM_MORE_THAN_ONE_CHAR;
 							}
-						}else{
+						} else {
 							statusError();
 							return ERROR_NO_FIELD_LIST;
 						}
 					}
 				}
-			}else{
+			} else {
 				File target = workingDir.toPath().resolve(arg).toFile();
 				try {
 					filesContent.add(readContentsOfFile(target));
@@ -132,41 +133,41 @@ public class CutTool extends ATool implements ICutTool {
 				}
 			}
 		}
-		if (filesContent.size() == 0){
-			if (stdin!=null){
+		if (filesContent.size() == 0) {
+			if (stdin != null) {
 				filesContent.add(stdin);
 			}
 		}
-		if (isDelimMode && (fieldList==null || fieldList=="")){
+		if (isDelimMode && (fieldList == null || fieldList == "")) {
 			return ERROR_NO_MODE_SPECIFIED;
 		}
-		if (filesContent.size() == 0){
+		if (filesContent.size() == 0) {
 			statusError();
 			return ERROR_NO_FILE;
 		}
 		boolean isFirstFile = true;
-		if (isCutMode){
+		if (isCutMode) {
 			for (int j = 0; j < filesContent.size(); j++) {
-				if(isFirstFile){
-					isFirstFile=false;
-				}else{
+				if (isFirstFile) {
+					isFirstFile = false;
+				} else {
 					out += LINE_SEPARATOR;
 				}
 				out += cutSpecfiedCharacters(cutList, filesContent.get(j));
 			}
-		}else if (isDelimMode){
-			if (fieldList==null || fieldList==""){
+		} else if (isDelimMode) {
+			if (fieldList == null || fieldList == "") {
 				return ERROR_NO_MODE_SPECIFIED;
 			}
 			for (int j = 0; j < filesContent.size(); j++) {
-				if(isFirstFile){
-					isFirstFile=false;
-				}else{
+				if (isFirstFile) {
+					isFirstFile = false;
+				} else {
 					out += LINE_SEPARATOR;
 				}
 				out += cutSpecifiedCharactersUseDelimiter(fieldList, delimChar, filesContent.get(j));
 			}
-		}else {
+		} else {
 			statusError();
 			return ERROR_NO_MODE_SPECIFIED;
 		}
@@ -180,51 +181,51 @@ public class CutTool extends ATool implements ICutTool {
 	 * @return 			array of inclusive range, null if there is error in the string list
 	 */
 	private Range[] convertListToRange(String list) {
-		String[] ranges = list.split(",",-1);
+		String[] ranges = list.split(",", -1);
 		ArrayList<Range> out = new ArrayList<Range>();
 
 		for (int i = 0; i < ranges.length; i++) {
 			String strRange = ranges[i];
-			if(strRange.indexOf("-")>=0){
-				String[] tokens = strRange.split("-",-1);
+			if (strRange.indexOf("-") >= 0) {
+				String[] tokens = strRange.split("-", -1);
 
-				if(tokens.length==2){
+				if (tokens.length == 2) {
 					try {
 						int num1;
-						if (tokens[0].length()==0){
+						if (tokens[0].length() == 0) {
 							num1 = 1;
-						}else{
+						} else {
 							num1 = Integer.parseInt(tokens[0]);
 						}
 
 						int num2;
-						if (tokens[1].length()==0){
+						if (tokens[1].length() == 0) {
 							num2 = Integer.MAX_VALUE;
-						}else{
+						} else {
 							num2 = Integer.parseInt(tokens[1]);
 						}
 
-						if (num1>0 && num2>0 && num2>=num1){
-							out.add(new Range(num1-1,num2-1));
-						}else{
+						if (num1 > 0 && num2 > 0 && num2 >= num1) {
+							out.add(new Range(num1 - 1, num2 - 1));
+						} else {
 							return null;
 						}
 
 					} catch (Exception e) {
 						return null;
 					}
-				}else{
+				} else {
 					return null;
 				}
-			}else{
+			} else {
 				try {
 					int num = Integer.parseInt(strRange);
-					if (num>0){
-						out.add(new Range(num-1,num-1));
-					}else{
+					if (num > 0) {
+						out.add(new Range(num - 1, num - 1));
+					} else {
 						return null;
 					}
-				}catch(Exception e){
+				} catch (Exception e) {
 					return null;
 				}
 			}
@@ -236,9 +237,9 @@ public class CutTool extends ATool implements ICutTool {
 
 	@Override
 	public String cutSpecfiedCharacters(String list, String input) {
-		String[] inputTokens = input.split(LINE_SEPARATOR,-1);
+		String[] inputTokens = input.split(LINE_SEPARATOR, -1);
 		Range[] ranges = convertListToRange(list);
-		if(ranges==null){
+		if (ranges == null) {
 			statusError();
 			return ERROR_INVALID_CUT_LIST;
 		}
@@ -246,23 +247,23 @@ public class CutTool extends ATool implements ICutTool {
 		boolean isFirstLine = true;
 		for (int i = 0; i < inputTokens.length; i++) {
 
-			if (isFirstLine){
-				isFirstLine=false;
-			}else{
-				out+= LINE_SEPARATOR;
+			if (isFirstLine) {
+				isFirstLine = false;
+			} else {
+				out += LINE_SEPARATOR;
 			}
 
 			String line = inputTokens[i];
 			StringBuilder outLine = new StringBuilder();
 			for (int j = 0; j < line.length(); j++) {
 				for (int k = 0; k < ranges.length; k++) {
-					if (ranges[k].start<=j && j<=ranges[k].end){
+					if (ranges[k].start <= j && j <= ranges[k].end) {
 						outLine.append(line.charAt(j));
 						break;
 					}
 				}
 			}
-			out+= outLine.toString();
+			out += outLine.toString();
 		}
 		return out;
 	}
@@ -272,18 +273,18 @@ public class CutTool extends ATool implements ICutTool {
 			String input) {
 		String delim = delimiter;
 
-		if (delim==null || delim.length()!=1){
+		if (delim == null || delim.length() != 1) {
 			delim = "\t";
 		}
-		if (list==null){
+		if (list == null) {
 			return "";
 		}
-		if (input==null){
+		if (input == null) {
 			return "";
 		}
-		String[] inputTokens = input.split(LINE_SEPARATOR,-1);
+		String[] inputTokens = input.split(LINE_SEPARATOR, -1);
 		Range[] ranges = convertListToRange(list);
-		if(ranges==null){
+		if (ranges == null) {
 			statusError();
 			return ERROR_INVALID_FIELD_LIST;
 		}
@@ -291,26 +292,26 @@ public class CutTool extends ATool implements ICutTool {
 		boolean isFirstLine = true;
 		for (int i = 0; i < inputTokens.length; i++) {
 
-			if(isFirstLine){
+			if (isFirstLine) {
 				isFirstLine = false;
-			}else{
-				out+= LINE_SEPARATOR;
+			} else {
+				out += LINE_SEPARATOR;
 			}
 			String line = inputTokens[i];
-			if (line.indexOf(delim)==-1){
+			if (line.indexOf(delim) == -1) {
 				//don't touch this line
 				out += inputTokens[i];
-			}else{
-				String[] lineTokens = line.split(delim,-1);
+			} else {
+				String[] lineTokens = line.split(delim, -1);
 				StringBuilder outLine = new StringBuilder();
-				boolean isFirstTokenInLine=true;
+				boolean isFirstTokenInLine = true;
 				for (int j = 0; j < lineTokens.length; j++) {
 
 					for (int k = 0; k < ranges.length; k++) {
-						if (ranges[k].start<=j && j<=ranges[k].end){
-							if(isFirstTokenInLine){
-								isFirstTokenInLine=false;
-							}else{
+						if (ranges[k].start <= j && j <= ranges[k].end) {
+							if (isFirstTokenInLine) {
+								isFirstTokenInLine = false;
+							} else {
 								outLine.append(delim);
 							}
 							outLine.append(lineTokens[j]);
@@ -319,9 +320,9 @@ public class CutTool extends ATool implements ICutTool {
 						}
 					}
 				}
-				out+= outLine.toString();
+				out += outLine.toString();
 			}
-			
+
 		}
 		return out;
 	}
@@ -330,24 +331,25 @@ public class CutTool extends ATool implements ICutTool {
 	public String getHelp() {
 		return "help cut tool";
 	}
-    private String readContentsOfFile(File file) throws IOException {
-    	String out = "";
-    	boolean isFirstLine = true;
-    	String strLine;
-        FileInputStream is;
-        is = new FileInputStream(file);
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        while((strLine = br.readLine())!= null){
-        	if (isFirstLine){
-        		isFirstLine = false;
-        		out += strLine;
-        	}else{
-        		out += LINE_SEPARATOR + strLine;
-        	}
-        }
-        is.close();
 
-        return out;
-    }
+	private String readContentsOfFile(File file) throws IOException {
+		String out = "";
+		boolean isFirstLine = true;
+		String strLine;
+		FileInputStream is;
+		is = new FileInputStream(file);
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		while ((strLine = br.readLine()) != null) {
+			if (isFirstLine) {
+				isFirstLine = false;
+				out += strLine;
+			} else {
+				out += LINE_SEPARATOR + strLine;
+			}
+		}
+		is.close();
+
+		return out;
+	}
 
 }

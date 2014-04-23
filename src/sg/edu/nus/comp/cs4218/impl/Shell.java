@@ -28,17 +28,17 @@ import java.util.Scanner;
 public class Shell implements IShell {
 	static final String LINE_SEPARATOR = System.lineSeparator();
 	CommandParser cmdParser = new CommandParser();
-    InputStream is;
-    OutputStream os;
-    PrintStream ps;
+	InputStream is;
+	OutputStream os;
+	PrintStream ps;
 
 	/**
 	 * TaskExecution Thread
 	 */
-	private static class TaskExecution implements Runnable{
+	private static class TaskExecution implements Runnable {
 		ITool tool;
 		Shell shell;
-        String stdin;
+		String stdin;
 		OutputStream stdout;
 
 		/**
@@ -48,7 +48,7 @@ public class Shell implements IShell {
 		 * @param stdin 
 		 * @param stdout
 		 */
-		public TaskExecution(Shell shell, ITool tool, String stdin, OutputStream stdout){
+		public TaskExecution(Shell shell, ITool tool, String stdin, OutputStream stdout) {
 			this.shell = shell;
 			this.tool = tool;
 			this.stdin = stdin;
@@ -58,13 +58,14 @@ public class Shell implements IShell {
 		@Override
 		public void run() {
 			handleOutput(tool.execute(shell.getWorkingDirectory(), stdin));
-            try {
-                Shell.printPrompt(shell.getWorkingDirectory().getCanonicalPath(), (new PrintStream(stdout)));
-            } catch (IOException e) {
-                // TODO:
-            }
+			try {
+				Shell.printPrompt(shell.getWorkingDirectory().getCanonicalPath(), (new PrintStream(stdout)));
+			} catch (IOException e) {
+				// TODO:
+			}
 
-        }
+		}
+
 		/**
 		 * print output stream to console
 		 * @param output the text to print out to users
@@ -76,102 +77,104 @@ public class Shell implements IShell {
 			else {
 				try {
 					stdout.write(output.getBytes());
-				}
-				catch(IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 	}
-	
-    /**
-     * Code for instance stuff.
-     */
-    private File cwd = null;    
-    public Shell(InputStream in, OutputStream out) {
-        this.is = in;
-        this.os = out;
 
-        ps = new PrintStream(this.os);
+	/**
+	 * Code for instance stuff.
+	 */
+	private File cwd = null;
 
-    	String userDir = System.getProperty("user.dir");
-    	cwd = new File(userDir);
-    }
+	public Shell(InputStream in, OutputStream out) {
+		this.is = in;
+		this.os = out;
 
-    /**
-     * Do Forever
-     * 1. Wait for a user input
-     * 2. Parse the user input. Separate the command and its arguments
-     * 3. Create a new thread to execute the command
-     * 4. Execute the command and its arguments on the newly created thread. Exit with the status code of the executed command
-     * 5. In the instance, wait for the thread to complete execution
-     * 6. Report the exit status of the command to the user
-     */
+		ps = new PrintStream(this.os);
+
+		String userDir = System.getProperty("user.dir");
+		cwd = new File(userDir);
+	}
+
+	/**
+	 * Do Forever
+	 * 1. Wait for a user input
+	 * 2. Parse the user input. Separate the command and its arguments
+	 * 3. Create a new thread to execute the command
+	 * 4. Execute the command and its arguments on the newly created thread. Exit with the status code of the executed command
+	 * 5. In the instance, wait for the thread to complete execution
+	 * 6. Report the exit status of the command to the user
+	 */
 	public void run() {
-        Scanner sc = new Scanner(is);
+		Scanner sc = new Scanner(is);
 		Thread runningThread = null;
 
-        printPrompt();
-        while (true) {
-            String cmd;
-            try {
-                cmd = sc.nextLine().trim();
-            } catch (NoSuchElementException ex) {
-                // Terminate gracefully.
-                break;
-            }
+		printPrompt();
+		while (true) {
+			String cmd;
+			try {
+				cmd = sc.nextLine().trim();
+			} catch (NoSuchElementException ex) {
+				// Terminate gracefully.
+				break;
+			}
 
-            if (cmd.equalsIgnoreCase("ctrl-z")) {
-                if (runningThread != null && runningThread.isAlive()) {
-                    stop(runningThread);
-                    try {
+			if (cmd.equalsIgnoreCase("ctrl-z")) {
+				if (runningThread != null && runningThread.isAlive()) {
+					stop(runningThread);
+					try {
 						runningThread.join();
 					} catch (InterruptedException e) {
-                        // Nothing here.
+						// Nothing here.
 					}
-                }
-                printPrompt();
-            } else if(cmd.equalsIgnoreCase("ctrl-c")) {
-                while (runningThread != null && runningThread.isAlive());
-                break;
-            } else {
-                ITool tool = parse(cmd);
+				}
+				printPrompt();
+			} else if (cmd.equalsIgnoreCase("ctrl-c")) {
+				while (runningThread != null && runningThread.isAlive())
+					;
+				break;
+			} else {
+				ITool tool = parse(cmd);
 
-                // Report an invalid command immediately.
-                if (tool == null) {
-                    ps.println("Invalid command.");
-                    printPrompt();
-                    continue;
-                }
+				// Report an invalid command immediately.
+				if (tool == null) {
+					ps.println("Invalid command.");
+					printPrompt();
+					continue;
+				}
 
-                // Block until previous command has finished execution.
-                while (runningThread != null && runningThread.isAlive());
-                runningThread = (Thread)execute(tool);
+				// Block until previous command has finished execution.
+				while (runningThread != null && runningThread.isAlive())
+					;
+				runningThread = (Thread) execute(tool);
 
-            }
-        }
-        sc.close();
-    }
+			}
+		}
+		sc.close();
+	}
 
 	/**
 	 * print the command prompt containing current working dir
 	 */
-    private void printPrompt() {
-        try {
-            Shell.printPrompt(cwd.getCanonicalPath(), this.ps);
-        } catch (IOException e) {
-            // TODO:
-        }
-    }
+	private void printPrompt() {
+		try {
+			Shell.printPrompt(cwd.getCanonicalPath(), this.ps);
+		} catch (IOException e) {
+			// TODO:
+		}
+	}
 
 	/**
 	 * print the command prompt to users
 	 * @param cwd current working directory string
 	 */
-    private static void printPrompt(String cwd, PrintStream ps) {
-        assert ps != null;
-        ps.print(cwd + "> ");
-    }
+	private static void printPrompt(String cwd, PrintStream ps) {
+		assert ps != null;
+		ps.print(cwd + "> ");
+	}
 
 	@Override
 	public ITool parse(String commandline) {
@@ -180,20 +183,21 @@ public class Shell implements IShell {
 
 	@Override
 	public Runnable execute(ITool tool) {
-		if (!(tool instanceof ATool)){
+		if (!(tool instanceof ATool)) {
 			return null;
 		}
 		String stdin = "";
-		if(tool instanceof IGrepTool || tool instanceof ICatTool 
-				|| tool instanceof IPasteTool || tool instanceof ICutTool 
-				|| tool instanceof ISortTool || tool instanceof UniqTool 
-				|| tool instanceof WcTool){
+		if (tool instanceof IGrepTool || tool instanceof ICatTool
+				|| tool instanceof IPasteTool || tool instanceof ICutTool
+				|| tool instanceof ISortTool || tool instanceof UniqTool
+				|| tool instanceof WcTool) {
 
 			ATool aTool = (ATool) tool;
 			int argLength = aTool.args.length;
-			boolean alreadyReadFromStdin = false;;
-			for(int i=0;i<argLength;i++){
-				if (aTool.args[i].equals("-") && !alreadyReadFromStdin){
+			boolean alreadyReadFromStdin = false;
+			;
+			for (int i = 0; i < argLength; i++) {
+				if (aTool.args[i].equals("-") && !alreadyReadFromStdin) {
 					stdin = readFromUserInput();
 					alreadyReadFromStdin = true;
 				}
@@ -201,63 +205,63 @@ public class Shell implements IShell {
 		}
 
 		Thread t;
-        t = new Thread(new TaskExecution(this, tool, stdin, this.os));
+		t = new Thread(new TaskExecution(this, tool, stdin, this.os));
 		t.start();
 		return t;
 	}
 
 	@Override
 	public void stop(Runnable toolExecution) {
-		if (toolExecution instanceof Thread){
+		if (toolExecution instanceof Thread) {
 			Thread t = (Thread) toolExecution;
 			t.interrupt();
 		}
 	}
 
-    /**
-     * Direct access to working directory for cd tool.
-     *
-     * Pre-condition: newDirectory has been validated.
-     *
-     * @param newDirectory The new working directory.
-     */
-    public void changeWorkingDirectory(File newDirectory) {
-        this.cwd = newDirectory;
-    }
-    
-    public File getWorkingDirectory() {
-    	return this.cwd;
-    }
-
-    /**
-     * Code for static stuff.
-     */
-	public static void main(String[] args){
-        Logging.logger(System.out).setLevel(Logging.ALL);
-		Shell sh = new Shell(System.in, System.out);
-        sh.run();
+	/**
+	 * Direct access to working directory for cd tool.
+	 *
+	 * Pre-condition: newDirectory has been validated.
+	 *
+	 * @param newDirectory The new working directory.
+	 */
+	public void changeWorkingDirectory(File newDirectory) {
+		this.cwd = newDirectory;
 	}
 
-    /**
-     * To read from user input system.in
-     * until ctrl-d<newlinechar> is encountered
+	public File getWorkingDirectory() {
+		return this.cwd;
+	}
+
+	/**
+	 * Code for static stuff.
+	 */
+	public static void main(String[] args) {
+		Logging.logger(System.out).setLevel(Logging.ALL);
+		Shell sh = new Shell(System.in, System.out);
+		sh.run();
+	}
+
+	/**
+	 * To read from user input system.in
+	 * until ctrl-d<newlinechar> is encountered
 	 * @return string containing the text user inputs, excluding ctrl-d
-     */
+	 */
 	private String readFromUserInput() {
-    	@SuppressWarnings("resource")
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(this.is);
-    	StringBuilder sb = new StringBuilder();
-    	String str= sc.nextLine();
-    	while (true){
-    		if (str.toLowerCase().endsWith("ctrl-d")){
-    			String realArg = str.substring(0,str.length()-"ctrl-d".length());
-    			sb.append(realArg);
-    			break;
-    		}else{
-    			sb.append(str + LINE_SEPARATOR );
-    		}
-    		str= sc.nextLine();
-    	}
-    	return sb.toString();
+		StringBuilder sb = new StringBuilder();
+		String str = sc.nextLine();
+		while (true) {
+			if (str.toLowerCase().endsWith("ctrl-d")) {
+				String realArg = str.substring(0, str.length() - "ctrl-d".length());
+				sb.append(realArg);
+				break;
+			} else {
+				sb.append(str + LINE_SEPARATOR);
+			}
+			str = sc.nextLine();
+		}
+		return sb.toString();
 	}
 }

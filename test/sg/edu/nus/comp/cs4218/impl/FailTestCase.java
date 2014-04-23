@@ -21,9 +21,9 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
-
 public class FailTestCase {
 	Shell sh;
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -32,6 +32,7 @@ public class FailTestCase {
 	public void tearDown() throws Exception {
 		sh = null;
 	}
+
 	@BeforeClass
 	public static void initialize() throws IOException {
 
@@ -41,7 +42,7 @@ public class FailTestCase {
 		File myFile2 = new File("fileName has space");
 		myFile2.createNewFile();
 		writeFile("fileName has space", "content1\nconten2");
-		
+
 		File myFile3 = new File("normalFile");
 		myFile3.createNewFile();
 		writeFile("normalFile", "content1\ncontent2");
@@ -50,6 +51,7 @@ public class FailTestCase {
 		myFile4.createNewFile();
 		writeFile("copyFile", "content1\ncontent2");
 	}
+
 	@AfterClass
 	public static void method() {
 
@@ -62,25 +64,26 @@ public class FailTestCase {
 		if (file2.exists()) {
 			file2.delete();
 		}
-		
+
 		File file3 = new File("normalFile");
 		if (file3.exists()) {
 			file3.delete();
 		}
-		
+
 		File file4 = new File("copyFile");
 		if (file4.exists()) {
 			file4.delete();
 		}
 	}
+
 	public static void writeFile(String fileName, String s) throws IOException {
 		BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
 		out.write(s);
 		out.close();
 
 	}
-	
-	public static void hold(){
+
+	public static void hold() {
 
 		try {
 			TimeUnit.MILLISECONDS.sleep(50);
@@ -88,7 +91,7 @@ public class FailTestCase {
 			//do nth
 		}
 	}
-	
+
 	/**
 	 * BUG_ID #16
 	 * 
@@ -98,7 +101,7 @@ public class FailTestCase {
 	 *  PasteTool.java:178
 	 */
 	@Test
-	public void testPasteEmptyFile(){
+	public void testPasteEmptyFile() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		sh = new Shell(System.in, os);
 		String cmd = "paste emptyFile";
@@ -116,7 +119,7 @@ public class FailTestCase {
 	 * BUG_ID #13
 	 */
 	@Test
-	public void testCtrlZWhenNoToolRunning(){
+	public void testCtrlZWhenNoToolRunning() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		sh = new Shell(System.in, os);
 		String cmd = "ctrl-z";
@@ -125,7 +128,7 @@ public class FailTestCase {
 		hold();
 		try {
 			String out = new String(os.toByteArray(), "UTF-8");
-			assertTrue(out.length()>0); // shd have prompt user for next command but nothing in the output
+			assertTrue(out.length() > 0); // shd have prompt user for next command but nothing in the output
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -135,9 +138,9 @@ public class FailTestCase {
 	 * BUG_ID #3
 	 */
 	@Test
-	public void testUniqWithStdin(){
-		String ctrlz="line \nline\nctrl-d";
-		byte[]b = ctrlz.getBytes();
+	public void testUniqWithStdin() {
+		String ctrlz = "line \nline\nctrl-d";
+		byte[] b = ctrlz.getBytes();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		ByteArrayInputStream is = new ByteArrayInputStream(b);
 		sh = new Shell(is, os);
@@ -157,9 +160,9 @@ public class FailTestCase {
 	 * BUG_ID #18
 	 */
 	@Test
-	public void testPipeWithStdin(){
-		String ctrlz="line \nline\nctrl-d";
-		byte[]b = ctrlz.getBytes();
+	public void testPipeWithStdin() {
+		String ctrlz = "line \nline\nctrl-d";
+		byte[] b = ctrlz.getBytes();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		ByteArrayInputStream is = new ByteArrayInputStream(b);
 		sh = new Shell(is, os);
@@ -179,7 +182,7 @@ public class FailTestCase {
 	 * BUG_ID #21
 	 */
 	@Test
-	public void testCopyToSameFile() throws IOException{
+	public void testCopyToSameFile() throws IOException {
 		File file = new File("copyFile");
 		String contentBefore = new String(Files.readAllBytes(file.toPath()));
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -188,20 +191,20 @@ public class FailTestCase {
 		ITool result = sh.parse(cmd);
 		sh.execute(result);
 		hold();
-		try{
+		try {
 			file = new File("copyFile");
 			String contentAfter = new String(Files.readAllBytes(file.toPath()));
 			assertEquals(contentBefore, contentAfter);
-		}catch(UnsupportedEncodingException e){
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * BUG_ID #7
 	 */
 	@Test
-	public void testGrepWithDouble(){
+	public void testGrepWithDouble() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		sh = new Shell(System.in, os);
 		String cmd = "grep -A 1.2 normalFile";
@@ -209,41 +212,41 @@ public class FailTestCase {
 		sh.execute(result);
 		hold();
 	}
-	
+
 	/*
 	 * BUG_ID #15
 	 */
 	@Test
-	public void testGrepHelp(){
+	public void testGrepHelp() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		sh = new Shell(System.in, os);
 		String cmd = "grep -help";
 		ITool result = sh.parse(cmd);
 		sh.execute(result);
 		hold();
-		try{
+		try {
 			String output = new String(os.toByteArray(), "UTF-8");
 			assertFalse(output.contains("Illegal argument"));
-		}catch(UnsupportedEncodingException e){
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * BUG_ID #11
 	 */
 	@Test
-	public void testCommMissingFile(){
+	public void testCommMissingFile() {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		sh = new Shell(System.in, os);
 		String cmd = "comm -c normalFile";
 		ITool result = sh.parse(cmd);
 		sh.execute(result);
 		hold();
-		try{
+		try {
 			String output = new String(os.toByteArray(), "UTF-8");
 			assertFalse(output.contains("java.lang.NullPointerException"));
-		}catch(UnsupportedEncodingException e){
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}

@@ -29,17 +29,17 @@ public class LsIntegrationTest {
 	private String getStringFromOutput() {
 		String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);
 		out = out.substring(out.indexOf("> ") + 2).trim();
-		if (out.lastIndexOf("\n")>-1){
+		if (out.lastIndexOf("\n") > -1) {
 			out = out.substring(0, out.lastIndexOf("\n"));
-		}else{
+		} else {
 			out = "";
 		}
 		return out;
 	}
 
 	private void setupShellWithInput(String in) {
-    	String input = in;
-    	
+		String input = in;
+
 		// Terminate at the end of this command.
 		input += "\r\nctrl-c\r\n";
 
@@ -56,7 +56,6 @@ public class LsIntegrationTest {
 
 		fin = new File(TEST_INPUT_FILE);
 		fout = new File(TEST_OUTPUT_FILE);
-
 
 		testDir = new File("inteTestLsFold");
 		testDir.mkdir();
@@ -85,7 +84,6 @@ public class LsIntegrationTest {
 		bw.write(sb.toString());
 		bw.close();
 
-
 		// create new file with text
 		testFile3 = new File(testDir, "ls3");
 		testFile3.createNewFile();
@@ -105,13 +103,13 @@ public class LsIntegrationTest {
 	@After
 	public void tearDown() throws Exception {
 
-        File[] fileList = testDir.listFiles();
-        for (int i=0; i<fileList.length; i++){
-            File file = fileList[i];
-            file.delete();
-        }
-        // delete directory
-        testDir.delete();
+		File[] fileList = testDir.listFiles();
+		for (int i = 0; i < fileList.length; i++) {
+			File file = fileList[i];
+			file.delete();
+		}
+		// delete directory
+		testDir.delete();
 
 		if (fin.exists()) {
 			fin.delete();

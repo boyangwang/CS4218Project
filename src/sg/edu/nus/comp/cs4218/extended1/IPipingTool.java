@@ -17,12 +17,13 @@ import sg.edu.nus.comp.cs4218.ITool;
  * program 1 and PROGRAM-2-STANDARD_INPUT is the standard input of program 2.
  *
  */
-public interface IPipingTool extends ITool{
-	
+public interface IPipingTool extends ITool {
+
 	/**
 	 * Pipe the stdout of *from* to stdin of *to*
 	 * @return The stdout of *to*
 	 */
 	String pipe(ITool from, ITool to);
+
 	String pipe(String stdout, ITool to);
 }

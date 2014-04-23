@@ -12,7 +12,7 @@ import org.junit.Test;
 public class LoggerTest {
 	Logging logger;
 	ByteArrayOutputStream baos;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		baos = new ByteArrayOutputStream();
@@ -22,16 +22,16 @@ public class LoggerTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
+
 	@Test
 	public void setLogLevel() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		int expected = 100;
-		
+
 		logger.setLevel(expected);
 		Field intLevel = logger.getClass().getDeclaredField("level");
 		intLevel.setAccessible(true);
 		int result = (int) intLevel.get(logger);
-		
+
 		assertEquals(expected, result);
 	}
 }

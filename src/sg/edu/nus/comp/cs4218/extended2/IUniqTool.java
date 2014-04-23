@@ -20,10 +20,12 @@ import sg.edu.nus.comp.cs4218.ITool;
  *      -help : Brief information about supported options
  */
 
-public interface IUniqTool extends ITool{
-	
+public interface IUniqTool extends ITool {
+
 	String getUnique(boolean checkCase, String input);
+
 	String getUniqueSkipNum(int num, boolean checkCase, String input);
+
 	String getHelp();
 
 }
