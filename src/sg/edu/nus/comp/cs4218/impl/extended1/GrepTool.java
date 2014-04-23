@@ -196,6 +196,8 @@ public class GrepTool extends ATool implements IGrepTool {
             String arg = args[i++];
 
             switch (arg) {
+            	case "-help":
+            		return getHelp();
                 case "-A":
                 case "-B":
                 case "-C":
