@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sg.edu.nus.comp.cs4218.IShell;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
@@ -91,6 +90,8 @@ public class FailTestCase {
 	}
 	
 	/**
+	 * BUG_ID #16
+	 * 
 	 * Throw exception on tool thread, unable to catch here as the thread is create 
 	 * and execute inside method execute() in shell 
 	 */
@@ -108,28 +109,10 @@ public class FailTestCase {
 			e.printStackTrace();
 		}
 	}
-	
-	@Test
-	public void testPasteFileWithSpaceInName(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "paste fileName has space";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try {
-			File file = new File("fileName has space");
-			String content = new String(Files.readAllBytes(file.toPath()));
-			String out = new String(os.toByteArray(), "UTF-8");
-			//assertEquals(content,out);
-			assertTrue(out.contains(content));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
+	/*
+	 * BUG_ID #13
+	 */
 	@Test
 	public void testCtrlZWhenNoToolRunning(){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -145,50 +128,10 @@ public class FailTestCase {
 			e.printStackTrace();
 		}
 	}
-	
-	@Test
-	public void testCtrlZToStopRunningTool(){
-		String ctrlz="ctrl-z \nctrl-z\nctrl-d";
-		byte[]b = ctrlz.getBytes();
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		ByteArrayInputStream is = new ByteArrayInputStream(b);
-		sh = new Shell(is, os);
-		String cmd = "paste - ";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		String out;
-		try {
-			out = new String(os.toByteArray(), "UTF-8");
-			assertEquals("",out); // ctrl-z doesn't terminate the program, instead it is treated as part of the input
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testCutHelp(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "cut -help ";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try {
-			String out = new String(os.toByteArray(), "UTF-8");
-			assertEquals("Command Format - cut [OPTIONS] [FILE]\n"
-					+ "*		FILE - Name of the file, when no file is present (denoted by \"-\") use standard input OPTIONS\n"
-					+ "*			-c LIST: Use LIST as the list of characters to cut out. Items within the list may be\n"
-					+ "*					separated by commas, and ranges of characters can be separated with dashes.\n"
-					+ "*					For example, list <-5,10,12,18-30> 1 through 5, 10,12 and\n"
-					+ "*					18 through 30.\n"
-					+ "*			-d DELIM: Use DELIM as the field-separator character instead of the TAB character\n"
-					+ "*			-help : Brief information about supported options;\n",out); //no meaningful help message
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
 
+	/*
+	 * BUG_ID #3
+	 */
 	@Test
 	public void testUniqWithStdin(){
 		String ctrlz="line \nline\nctrl-d";
@@ -208,6 +151,9 @@ public class FailTestCase {
 		}
 	}
 
+	/*
+	 * BUG_ID #18
+	 */
 	@Test
 	public void testPipeWithStdin(){
 		String ctrlz="line \nline\nctrl-d";
@@ -226,42 +172,10 @@ public class FailTestCase {
 			e.printStackTrace();
 		}
 	}
-	
-	@Test
-	public void testPasteWithDelim(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "paste -d \"\\t\" normalFile normalFile normalFile ";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try {
-			String out = new String(os.toByteArray(), "UTF-8");
-			String expected = "content1\tcontetn1\tcontent1\ncontent2\tcontetn2\tcontent2";
-			assertEquals(expected,out.substring(0,expected.length()));// no user input was taken in
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testCutWithDelim(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		// cut 
-		sh = new Shell(System.in, os);
-		String cmd = "cut -d \"\\t\" -f 1-4 normalFile ";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try {
-			String out = new String(os.toByteArray(), "UTF-8");
-			String expected = "content1\ncontent2";
-			assertEquals(expected,out.substring(0,expected.length()));// no user input was taken in
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
+	/*
+	 * BUG_ID #21
+	 */
 	@Test
 	public void testCopyToSameFile() throws IOException{
 		File file = new File("copyFile");
@@ -281,6 +195,9 @@ public class FailTestCase {
 		}
 	}
 	
+	/*
+	 * BUG_ID #7
+	 */
 	@Test
 	public void testGrepWithDouble(){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -291,38 +208,9 @@ public class FailTestCase {
 		hold();
 	}
 	
-	@Test
-	public void testGrepWithWiredPattern(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "grep -1 normalFile";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try{
-			String output = new String(os.toByteArray(), "UTF-8");
-			assertEquals("", output);
-		}catch(UnsupportedEncodingException e){
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testCommInvalidOption(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "comm -e normalFile emptyFile";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try{
-			String output = new String(os.toByteArray(), "UTF-8");
-			assertTrue(output.contains("-e")); // wrong option should be -e instead
-		}catch(UnsupportedEncodingException e){
-			e.printStackTrace();
-		}
-	}
-	
+	/*
+	 * BUG_ID #15
+	 */
 	@Test
 	public void testGrepHelp(){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -339,6 +227,9 @@ public class FailTestCase {
 		}
 	}
 	
+	/*
+	 * BUG_ID #11
+	 */
 	@Test
 	public void testCommMissingFile(){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -350,53 +241,6 @@ public class FailTestCase {
 		try{
 			String output = new String(os.toByteArray(), "UTF-8");
 			assertFalse(output.contains("java.lang.NullPointerException"));
-		}catch(UnsupportedEncodingException e){
-			e.printStackTrace();
-		}
-	}
-	
-	
-	@Test
-	public void testCDPipeOtherTool(){
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "cd testDir | pwd";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try{
-			String output = new String(os.toByteArray(), "UTF-8");
-			output = output.split("\n")[0];
-			assertTrue(output.contains("testDir"));
-		}catch(UnsupportedEncodingException e){
-			e.printStackTrace();
-		}
-	}
-	
-	@Test
-	public void testCDWithInvalidArgument() throws IOException{
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "ls";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
-		hold();
-		try{
-			String lsBefore = new String(os.toByteArray(), "UTF-8");
-			os.reset();
-			cmd = "cd ...";
-			result = sh.parse(cmd);
-			sh.execute(result);
-			hold();
-			
-			cmd = "ls";
-			result = sh.parse(cmd);
-			sh.execute(result);
-			hold();
-			
-			String lsAfter = new String(os.toByteArray(), "UTF-8");
-			
-			assertEquals(lsBefore, lsAfter);
 		}catch(UnsupportedEncodingException e){
 			e.printStackTrace();
 		}
