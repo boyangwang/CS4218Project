@@ -14,29 +14,29 @@ import sg.edu.nus.comp.cs4218.impl.ATool;
 public class CutTool extends ATool implements ICutTool {
 	private class Range{
 		//inclusive range
-		public Range(int _start, int _end){
-			start = _start;
-			end = _end;
+		public Range(int start, int end){
+			this.start = start;
+			this.end = end;
 		}
 		int start;
 		int end;
 	}
-	String LINE_SEPARATOR = System.lineSeparator();
+	static final String LINE_SEPARATOR = System.lineSeparator();
 
-	String ERROR_CUT_AND_DELIM_MODE = "Error: only one type of list may be specified\n";
-	String ERROR_MORE_THAN_ONE_CUT_LIST = "Error: only one type of list may be specified\n";
-	String ERROR_MORE_THAN_ONE_FIELD_LIST = "Error: only one type of list may be specified\n";
-	String ERROR_NO_CUT_LIST = "Error: no cut list specified\n";
-	String ERROR_NO_FIELD_LIST = "Error: no field list specified\n";
-	String ERROR_INVALID_CUT_LIST = "Error: invalid list argument for -c";
-	String ERROR_INVALID_FIELD_LIST = "Error: invalid list argument for -f";
-	String ERROR_DELIM_MORE_THAN_ONE_CHAR = "Error: delimter must be one char\n";
-	String ERROR_INVALID_DELIM = "Error: delimter is invalid\n";
-	String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s" + LINE_SEPARATOR;
-	String ERROR_NO_MODE_SPECIFIED = "Error: you must specify a list of bytes, characters, or fields\n";
-	String ERROR_DELIM_WITHOUT_FIELD = "Error: an input delimiter may be specified only when operating on fields\n";
-	String ERROR_NO_FILE = "Error: you must specify a file name\n";
-	String ERROR_DECREASING_RANGE = "Error: you must specify a file name\n";
+	static final String ERROR_CUT_AND_DELIM_MODE = "Error: only one type of list may be specified\n";
+	static final String ERROR_MORE_THAN_ONE_CUT_LIST = "Error: only one type of list may be specified\n";
+	static final String ERROR_MORE_THAN_ONE_FIELD_LIST = "Error: only one type of list may be specified\n";
+	static final String ERROR_NO_CUT_LIST = "Error: no cut list specified\n";
+	static final String ERROR_NO_FIELD_LIST = "Error: no field list specified\n";
+	static final String ERROR_INVALID_CUT_LIST = "Error: invalid list argument for -c";
+	static final String ERROR_INVALID_FIELD_LIST = "Error: invalid list argument for -f";
+	static final String ERROR_DELIM_MORE_THAN_ONE_CHAR = "Error: delimter must be one char\n";
+	static final String ERROR_INVALID_DELIM = "Error: delimter is invalid\n";
+	static final String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s" + LINE_SEPARATOR;
+	static final String ERROR_NO_MODE_SPECIFIED = "Error: you must specify a list of bytes, characters, or fields\n";
+	static final String ERROR_DELIM_WITHOUT_FIELD = "Error: an input delimiter may be specified only when operating on fields\n";
+	static final String ERROR_NO_FILE = "Error: you must specify a file name\n";
+	static final String ERROR_DECREASING_RANGE = "Error: you must specify a file name\n";
 
 
 	public CutTool(String[] args) {
@@ -268,8 +268,9 @@ public class CutTool extends ATool implements ICutTool {
 	}
 
 	@Override
-	public String cutSpecifiedCharactersUseDelimiter(String list, String delim,
+	public String cutSpecifiedCharactersUseDelimiter(String list, String delimiter,
 			String input) {
+		String delim = delimiter;
 
 		if (delim==null || delim.length()!=1){
 			delim = "\t";

@@ -109,9 +109,9 @@ public class GrepTool extends ATool implements IGrepTool {
      * @return matching lines with trailing context
      */
     @Override
-    public String getMatchingLinesWithTrailingContext(int option_A, String pattern, String input) {
+    public String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input) {
         reset();
-        afterContext = option_A;
+        afterContext = optionA;
         return grep(pattern, input);
     }
 
@@ -123,9 +123,9 @@ public class GrepTool extends ATool implements IGrepTool {
      * @return matching lines with leading context
      */
     @Override
-    public String getMatchingLinesWithLeadingContext(int option_B, String pattern, String input) {
+    public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
         reset();
-        beforeContext = option_B;
+        beforeContext = optionB;
         return grep(pattern, input);
     }
 
@@ -137,9 +137,9 @@ public class GrepTool extends ATool implements IGrepTool {
      * @return matching lines with output context
      */
     @Override
-    public String getMatchingLinesWithOutputContext(int option_C, String pattern, String input) {
+    public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
         reset();
-        beforeContext = afterContext = option_C;
+        beforeContext = afterContext = optionC;
         return grep(pattern, input);
     }
 

@@ -58,7 +58,9 @@ public class ShellIntegrationTest {
     }
 
     // You need this method.
-    private void setupShellWithInput(String input) {
+    private void setupShellWithInput(String in) {
+    	String input = in;
+    	
         // Terminate at the end of this command.
         input += "\r\nctrl-c\r\n";
 

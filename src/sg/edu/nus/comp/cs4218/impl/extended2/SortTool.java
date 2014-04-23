@@ -37,13 +37,11 @@ public class SortTool extends ATool implements ISortTool {
             } else {
                 for (int j = 1; j < arg.length(); j++) {
                     char flag = arg.charAt(j);
-                    switch (flag) {
-                        case 'c':
-                        	checkIfSorted = true;
-                            break;
-                        default:
-                            statusError();
-                            return String.format("Error: sort: unrecognized option '-%s'%nTry 'sort -help' for more information.%n", flag);
+                    if (flag == 'c') {
+                    	checkIfSorted = true;
+                    } else {
+                        statusError();
+                        return String.format("Error: sort: unrecognized option '-%s'%nTry 'sort -help' for more information.%n", flag);
                     }
                 }
             }
