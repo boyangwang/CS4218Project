@@ -273,4 +273,29 @@ public class CopyToolTest {
         dest.delete();
         f.delete();
     }
+
+    /**
+     * MUT: copy()
+     * Source file should not be blank.
+     * @throws IOException
+     */
+    @Test
+    public void sameSrcAndDest() throws IOException {
+    	File f = new File("testSrc");
+        f.createNewFile();
+
+        PrintWriter pw = new PrintWriter(new FileOutputStream(f));
+        pw.write("test string.");
+        pw.close();
+
+        File dest = new File("testSrc");
+
+        boolean result = copyTool.copy(f, dest);
+        String contents = fileGetString(dest);
+        assertEquals("test string.", contents);
+        assertTrue(result);
+        assertEquals(0, copyTool.getStatusCode());
+
+        f.delete();
+    }
 }

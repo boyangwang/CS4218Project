@@ -32,6 +32,13 @@ public class CopyTool extends ATool implements ICopyTool {
         if (!canCopy) {
             return false;
         }
+        
+        // If the source and destination are the same, no action needs to be
+        // taken.
+        if (to.equals(from)) {
+        	statusSuccess();
+        	return true;
+        }
 
         try {
             FileInputStream fis = new FileInputStream(from);
