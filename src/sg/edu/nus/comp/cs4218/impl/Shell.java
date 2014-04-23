@@ -130,7 +130,8 @@ public class Shell implements IShell {
                         // Nothing here.
 					}
                 }
-            } else if(cmd.equals("ctrl-c")) {
+                printPrompt();
+            } else if(cmd.equalsIgnoreCase("ctrl-c")) {
                 while (runningThread != null && runningThread.isAlive());
                 break;
             } else {
