@@ -93,7 +93,9 @@ public class FailTestCase {
 	 * BUG_ID #16
 	 * 
 	 * Throw exception on tool thread, unable to catch here as the thread is create 
-	 * and execute inside method execute() in shell 
+	 * and execute inside method execute() in shell
+	 * 
+	 *  PasteTool.java:178
 	 */
 	@Test
 	public void testPasteEmptyFile(){

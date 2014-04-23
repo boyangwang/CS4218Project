@@ -24,7 +24,6 @@ public class PasteTool extends ATool implements IPasteTool {
 	}
 	@Override
 	public String execute(File workingDir, String stdin) {
-		// TODO Auto-generated method stub
 		ArrayList<String> tmpFilesContent = new ArrayList<String>();
 		boolean serialDisplay = false;
 		String strDelimiters = "\t";
@@ -175,7 +174,10 @@ public class PasteTool extends ATool implements IPasteTool {
         while((strLine = br.readLine())!= null){
         	out += strLine + LINE_SEPARATOR;
         }
-        out = out.substring(0,out.length()-LINE_SEPARATOR.length());
+        
+        if (!out.equals("")) {
+        	out = out.substring(0, out.length() - LINE_SEPARATOR.length());
+        }
 
         is.close();
 
