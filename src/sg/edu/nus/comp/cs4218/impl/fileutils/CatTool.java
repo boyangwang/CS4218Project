@@ -30,7 +30,11 @@ public class CatTool extends ATool implements ICatTool {
                 
                 int ch;
                 while ((ch = fis.read()) != -1) {
-                    baos.write(ch);
+                	baos.write(ch);
+                	
+                	if (Thread.interrupted()) {
+                		break;
+                	}
                 }
                 fis.close();
                 byte[] file = baos.toByteArray();
