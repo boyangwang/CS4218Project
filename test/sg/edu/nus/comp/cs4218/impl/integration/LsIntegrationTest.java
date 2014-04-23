@@ -3,6 +3,7 @@ package sg.edu.nus.comp.cs4218.impl.integration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
 import java.io.*;
@@ -36,7 +37,9 @@ public class LsIntegrationTest {
 		return out;
 	}
 
-	private void setupShellWithInput(String input) {
+	private void setupShellWithInput(String in) {
+    	String input = in;
+    	
 		// Terminate at the end of this command.
 		input += "\r\nctrl-c\r\n";
 

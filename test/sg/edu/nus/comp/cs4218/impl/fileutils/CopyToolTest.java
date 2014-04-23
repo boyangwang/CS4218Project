@@ -32,10 +32,10 @@ public class CopyToolTest {
                 is.close();
                 return baos.toByteArray();
             } catch (FileNotFoundException e) {
-                System.err.println("unit test error: " + e.toString());
+            	e.printStackTrace();
                 return null;
             } catch (IOException e) {
-                System.err.println("unit test error: " + e.toString());
+            	e.printStackTrace();
                 return null;
             }
         } else {

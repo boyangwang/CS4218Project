@@ -26,7 +26,7 @@ import java.util.Scanner;
  * 
  */
 public class Shell implements IShell {
-	String LINE_SEPARATOR = System.lineSeparator();
+	static final String LINE_SEPARATOR = System.lineSeparator();
 	CommandParser cmdParser = new CommandParser();
     InputStream is;
     OutputStream os;

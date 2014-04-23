@@ -11,13 +11,13 @@ import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.impl.ATool;
 
 public class PasteTool extends ATool implements IPasteTool {
-	String LINE_SEPARATOR = System.lineSeparator();
-	//String LINE_SEPARATOR = "\n";
+	static final String LINE_SEPARATOR = System.lineSeparator();
+	//static final String LINE_SEPARATOR = "\n";
 
-	String ERROR_NO_DELIMITER = "Error: please specify delimiter" + LINE_SEPARATOR;
-	String ERROR_INVALID_OPTION = "Error: unknown option %s" + LINE_SEPARATOR;
-	String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s" + LINE_SEPARATOR;
-	String ERROR_NO_FILE = "Error: no file is specified" + LINE_SEPARATOR;
+	static final String ERROR_NO_DELIMITER = "Error: please specify delimiter" + LINE_SEPARATOR;
+	static final String ERROR_INVALID_OPTION = "Error: unknown option %s" + LINE_SEPARATOR;
+	static final String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s" + LINE_SEPARATOR;
+	static final String ERROR_NO_FILE = "Error: no file is specified" + LINE_SEPARATOR;
 
 	public PasteTool(String[] arguments) {
         super(arguments);
@@ -111,7 +111,9 @@ public class PasteTool extends ATool implements IPasteTool {
 	}
 
 	@Override
-	public String pasteUseDelimiter(String strDelimiters, String[] filesContent) {
+	public String pasteUseDelimiter(String delimiters, String[] filesContent) {
+		String strDelimiters = delimiters;
+		
 		if (strDelimiters == null || strDelimiters.length()==0){
 			strDelimiters = "\t";
 		}
