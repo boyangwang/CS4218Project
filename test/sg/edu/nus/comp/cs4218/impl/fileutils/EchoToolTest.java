@@ -32,6 +32,19 @@ public class EchoToolTest {
 		assertEquals(result, expected);
 		assertEquals(echoTool.getStatusCode(), 0);
 	}
+	
+	/**
+	 * MUT: echo()
+	 * Should return parameter passed.
+	 */
+	@Test
+	public void echoTest2() {
+		IEchoTool tool = new EchoTool(new String[0]);
+		String expected = "\n";
+		String result = tool.execute(null, null);
+		assertEquals(expected, result);
+		assertEquals(echoTool.getStatusCode(), 0);
+	}
 
 	/**
 	 * MUT: echo()

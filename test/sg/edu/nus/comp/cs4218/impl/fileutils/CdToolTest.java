@@ -153,6 +153,22 @@ public class CdToolTest {
 		CdTool tool = new CdTool(new String[] { "." }, new Shell(System.in, System.out));
 		String result = tool.execute(new File(System.getProperty("user.dir")), "");
 		assertEquals("", result);
-		assertEquals(0, cdTool.getStatusCode());
+		assertEquals(0, tool.getStatusCode());
+	}
+	
+	@Test
+	public void toolExecuteNoArgs() throws IOException {
+		CdTool tool = new CdTool(new String[0], new Shell(System.in, System.out));
+		String result = tool.execute(new File(System.getProperty("user.dir")), "");
+		assertEquals("", result);
+		assertNotEquals(0, tool.getStatusCode());
+	}
+	
+	@Test
+	public void toolExecuteBadArgs() throws IOException {
+		CdTool tool = new CdTool(new String[]{null}, new Shell(System.in, System.out));
+		String result = tool.execute(new File(System.getProperty("user.dir")), "");
+		assertEquals("", result);
+		assertNotEquals(0, tool.getStatusCode());
 	}
 }

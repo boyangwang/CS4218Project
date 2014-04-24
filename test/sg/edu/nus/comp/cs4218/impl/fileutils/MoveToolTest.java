@@ -80,6 +80,14 @@ public class MoveToolTest {
 
 		f.delete();
 	}
+	
+	@Test
+	public void toolBadArgs() {
+		IMoveTool tool = new MoveTool(new String[0]);
+		String result = tool.execute(null, null);
+		assertEquals("", result);
+		assertEquals(0, moveTool.getStatusCode());
+	}
 
 	@Test
 	public void nonExistentSource() {
