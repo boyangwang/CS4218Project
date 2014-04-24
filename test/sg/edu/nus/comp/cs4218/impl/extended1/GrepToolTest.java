@@ -37,19 +37,23 @@ public class GrepToolTest {
 	public void getCountOfMatchingLinesTest() {
 		// Test null
 		assertEquals(grepTool.getCountOfMatchingLines(null, null), -1);
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getCountOfMatchingLines("", ""), 0);
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getCountOfMatchingLines("", System.lineSeparator()), 1);
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getCountOfMatchingLines("a[bc]", String.format("ab%nbc%nac%n")), 2);
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
+		
+		// Test null input
+		assertEquals(grepTool.getCountOfMatchingLines("12345", null), -1);
+		assertEquals(1, grepTool.getStatusCode());
 	}
 
 	/**
@@ -59,19 +63,23 @@ public class GrepToolTest {
 	public void getOnlyMatchingLinesTest() {
 		// Test null
 		assertEquals(grepTool.getOnlyMatchingLines(null, null), "");
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getOnlyMatchingLines("", ""), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getOnlyMatchingLines("", System.lineSeparator()), System.lineSeparator());
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getOnlyMatchingLines("a[bc]", String.format("ab%nbc%nac%n")), String.format("ab%nac%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
+		
+		// Test null input
+		assertEquals(grepTool.getOnlyMatchingLines("12345", null), "");
+		assertEquals(1, grepTool.getStatusCode());
 	}
 
 	/**
@@ -81,19 +89,19 @@ public class GrepToolTest {
 	public void getMatchingLinesWithTrailingContextTest() {
 		// Test null
 		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, null, null), "");
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, "", ""), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, "", System.lineSeparator()), System.lineSeparator());
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, "a[bc]", String.format("ab%nbc%nac%n")), String.format("ab%nbc%nac%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 	}
 
 	/**
@@ -103,19 +111,19 @@ public class GrepToolTest {
 	public void getMatchingLinesWithLeadingContextTest() {
 		// Test null
 		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, null, null), "");
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, "", ""), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, "", System.lineSeparator()), System.lineSeparator());
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, "a[bc]", String.format("ab%nbc%nac%n")), String.format("ab%nbc%nac%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 	}
 
 	/**
@@ -125,19 +133,19 @@ public class GrepToolTest {
 	public void getMatchingLinesWithOutputContextTest() {
 		// Test null
 		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, null, null), "");
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, "", ""), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, "", System.lineSeparator()), System.lineSeparator());
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, "a[bc]", String.format("ab%nbc%nac%n")), String.format("ab%nbc%nac%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 	}
 
 	/**
@@ -147,19 +155,19 @@ public class GrepToolTest {
 	public void getMatchingLinesOnlyMatchingPartTest() {
 		// Test null
 		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart(null, null), "");
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart("", ""), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart("", System.lineSeparator()), System.lineSeparator());
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart("a[bc]", String.format("ab%nbc%nac%n")), String.format("ab%nac%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 	}
 
 	/**
@@ -169,19 +177,19 @@ public class GrepToolTest {
 	public void getNonMatchingLinesTest() {
 		// Test null
 		assertEquals(grepTool.getNonMatchingLines(null, null), "");
-		assertEquals(grepTool.getStatusCode(), 1);
+		assertEquals(1, grepTool.getStatusCode());
 
 		// Test empty file
 		assertEquals(grepTool.getNonMatchingLines("", ""), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test file with one line separator
 		assertEquals(grepTool.getNonMatchingLines("", System.lineSeparator()), "");
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 
 		// Test regex
 		assertEquals(grepTool.getNonMatchingLines("a[bc]", String.format("ab%nbc%nac%n")), String.format("bc%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 	}
 
 	/**
@@ -190,7 +198,7 @@ public class GrepToolTest {
 	@Test
 	public void getHelpTest() {
 		assertEquals(grepTool.getHelp(), String.format("grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]%n"));
-		assertEquals(grepTool.getStatusCode(), 0);
+		assertEquals(0, grepTool.getStatusCode());
 	}
 
 	/**
@@ -202,5 +210,124 @@ public class GrepToolTest {
 		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
 		grepTool = new GrepTool(new String[] { "-A", "2", "-B", "1", "2", file.getName() });
 		assertEquals("1\n2\n3\n4\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(0, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void allOptionsExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "-A", "2", "-B", "1", "-C", "1", "-cov", "2", file.getName() });
+		assertEquals("1\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(0, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void noNumberArgExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "-A" });
+		assertEquals("-A requires a positive number\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(1, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void negativeNumberArgExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "-A", "-1" });
+		assertEquals("-A requires a positive number\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(1, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void insufficientArgExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] {});
+		assertEquals("grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(1, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void illegalArgExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "-D" });
+		assertEquals("Illegal argument -D\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(1, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void stdinExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "1" });
+		assertEquals("1\n", grepTool.execute(folder.getRoot(), "1\n2\n3\n4\n\5\n"));
+		assertEquals(0, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void stdinNullExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "1" });
+		assertEquals("grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]\n", grepTool.execute(folder.getRoot(), null));
+		assertEquals(1, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void stdinDashExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "1", "-" });
+		assertEquals("1\n", grepTool.execute(folder.getRoot(), "1\n2\n3\n4\n\5\n"));
+		assertEquals(0, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void twoStdinDashExecuteTest() throws IOException {
+		File file = folder.newFile();
+		Files.write(file.toPath(), "1\n2\n3\n4\n\5\n".getBytes());
+		grepTool = new GrepTool(new String[] { "1", "-", "-" });
+		assertEquals("1\n", grepTool.execute(folder.getRoot(), "1\n2\n3\n4\n\5\n"));
+		assertEquals(0, grepTool.getStatusCode());
+	}
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void helpExecuteTest() throws IOException {
+		grepTool = new GrepTool(new String[] { "-help" });
+		assertEquals(String.format("grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]%n"), grepTool.execute(null, null));
+		assertEquals(0, grepTool.getStatusCode());
 	}
 }

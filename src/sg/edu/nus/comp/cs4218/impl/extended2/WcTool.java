@@ -27,7 +27,7 @@ public class WcTool extends ATool implements IWcTool {
 	public String execute(File workingDir, String stdin) {
 		int i = 0;
 
-		while (i < args.length && args[i].startsWith("-")) {
+		while (i < args.length && args[i].startsWith("-") && !args[i].equals("-")) {
 			String arg = args[i++];
 
 			if (arg.equals("-help")) {

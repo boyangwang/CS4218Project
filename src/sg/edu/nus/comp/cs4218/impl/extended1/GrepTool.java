@@ -175,7 +175,6 @@ public class GrepTool extends ATool implements IGrepTool {
 	 */
 	@Override
 	public String getHelp() {
-		statusSuccess();
 		return "grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]" + System.lineSeparator();
 	}
 

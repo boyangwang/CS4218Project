@@ -170,4 +170,32 @@ public class WCToolTest {
 		assertTrue(wctool.getStatusCode() != 0);
 	}
 
+	@Test
+	public void executeNoStdinTest() throws IOException {
+		wctool = new WcTool(new String[] {});
+		String msg = wctool.execute(null, null);
+		assertEquals(String.format("usage: wc [-lmw] [file ...]%n"), msg);
+		assertTrue(wctool.getStatusCode() == 0);
+	}
+	
+	@Test
+	public void executeStdinTest() throws IOException {
+		wctool = new WcTool(new String[] {});
+		String msg = wctool.execute(null, testString);
+		assertEquals("1\t9\t45\t" + System.lineSeparator(), msg);
+	}
+	
+	@Test
+	public void executeStdinDashTest() throws IOException {
+		wctool = new WcTool(new String[] { "-" });
+		String msg = wctool.execute(null, testString);
+		assertEquals("1\t9\t45\t" + System.lineSeparator(), msg);
+	}
+	
+	@Test
+	public void executeTwoStdinDashTest() throws IOException {
+		wctool = new WcTool(new String[] { "-", "-" });
+		String msg = wctool.execute(null, testString);
+		assertEquals("1\t9\t45\t" + System.lineSeparator(), msg);
+	}
 }
