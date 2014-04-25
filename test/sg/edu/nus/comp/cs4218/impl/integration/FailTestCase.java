@@ -93,6 +93,36 @@ public class FailTestCase {
 	}
 
 	/**
+	 * BUG_ID #4
+	 * 
+	 * reading from user input does not work in pipe tool
+	 * 
+	 *  Shell.java:201
+	 */
+	@Test
+	public void testStdinInPipe() {
+
+		String ctrld = "123456789\n987654321\nctrl-d";
+		byte[] b = ctrld.getBytes();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		ByteArrayInputStream is = new ByteArrayInputStream(b);
+		sh = new Shell(is, os);
+		String cmd = "paste - | cut -c1-5 -";
+		ITool result = sh.parse(cmd);
+		sh.execute(result);
+		hold();
+		try {
+			String out = new String(os.toByteArray(), "UTF-8");
+			assertTrue(out.contains("12345\n98765\n"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+
+
+	}
+
+	/**
 	 * BUG_ID #16
 	 * 
 	 * Throw exception on tool thread, unable to catch here as the thread is create 
