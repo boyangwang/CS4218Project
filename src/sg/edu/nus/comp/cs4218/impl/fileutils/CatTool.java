@@ -23,30 +23,26 @@ public class CatTool extends ATool implements ICatTool {
 		if (toRead == null) {
 			return null;
 		}
-		if (toRead.exists() && toRead.isFile() && toRead.canRead()) {
-			try {
-				FileInputStream fis = new FileInputStream(toRead);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			FileInputStream fis = new FileInputStream(toRead);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-				int ch;
-				while ((ch = fis.read()) != -1) {
-					baos.write(ch);
+			int ch;
+			while ((ch = fis.read()) != -1) {
+				baos.write(ch);
 
-					if (Thread.interrupted()) {
-						break;
-					}
+				if (Thread.interrupted()) {
+					break;
 				}
-				fis.close();
-				byte[] file = baos.toByteArray();
-
-				statusSuccess();
-				return new String(file, StandardCharsets.UTF_8);
-			} catch (FileNotFoundException e) {
-				return null;
-			} catch (IOException e) {
-				return null;
 			}
-		} else {
+			fis.close();
+			byte[] file = baos.toByteArray();
+
+			statusSuccess();
+			return new String(file, StandardCharsets.UTF_8);
+		} catch (FileNotFoundException e) {
+			return null;
+		} catch (IOException e) {
 			return null;
 		}
 	}
@@ -70,11 +66,6 @@ public class CatTool extends ATool implements ICatTool {
 
 		StringBuilder sb = new StringBuilder();
 		for (String arg : this.args) {
-			if (Thread.interrupted()) {
-				statusSuccess();
-				return sb.toString();
-			}
-
 			if (arg.equals("-")) {
 				// Process only first stdin argument
 				if (isFirstStdin) {

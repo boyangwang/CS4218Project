@@ -26,6 +26,10 @@ public class DeleteTool extends ATool implements IDeleteTool {
 	 *
 	 * @param toDelete The file to delete.
 	 * @return `true' iff the file was deleted successfully.
+	 * 
+	 * If recursive deletion fails, all other files except failing files will
+	 * be removed. The tool will still return success.
+	 * 
 	 */
 	@Override
 	public boolean delete(File toDelete) {
@@ -34,15 +38,9 @@ public class DeleteTool extends ATool implements IDeleteTool {
 		if (canDeleteFile(toDelete)) {
 			if (toDelete.isDirectory()) {
 				File[] files = toDelete.listFiles();
-				if (files == null) {
-					return false;
-				}
 
 				for (File f : files) {
-					boolean result = f.delete();
-					if (!result) {
-						return false;
-					}
+					delete(f);
 				}
 			}
 

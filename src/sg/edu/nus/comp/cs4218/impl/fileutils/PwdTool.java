@@ -19,21 +19,20 @@ public class PwdTool extends ATool implements IPwdTool {
 	@Override
 	public String getStringForDirectory(File directory) {
 		//Error Handling
-		if (directory == null || !directory.exists() || !directory.isDirectory()) {
+		if (directory == null || !directory.isDirectory()) {
 			statusError();
 			return null;
 		}
 
-		String canonicalPath;
+		String canonicalPath = null;
 		try {
 			canonicalPath = directory.getCanonicalPath();
+			statusSuccess();
+			return canonicalPath;
 		} catch (IOException e) {
-			canonicalPath = null;
 			statusError();
+			return canonicalPath;
 		}
-
-		statusSuccess();
-		return canonicalPath;
 	}
 
 	/**

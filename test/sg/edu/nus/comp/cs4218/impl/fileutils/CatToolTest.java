@@ -103,6 +103,17 @@ public class CatToolTest {
 		assertEquals(expected, result);
 		assertEquals(0, catTool.getStatusCode());
 	}
+	
+	@Test
+	public void executeCatDoubleStdin() {
+		ICatTool tool = new CatTool(new String[]{"-", "-"});
+		String expected = "This is stdin!";
+
+		String result = tool.execute(null, expected);
+
+		assertEquals(expected, result);
+		assertEquals(0, catTool.getStatusCode());
+	}
 
 	@Test
 	public void executeCorrectString() throws IOException {

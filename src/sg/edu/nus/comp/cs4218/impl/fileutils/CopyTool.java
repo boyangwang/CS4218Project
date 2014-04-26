@@ -28,8 +28,11 @@ public class CopyTool extends ATool implements ICopyTool {
 	public boolean copy(File from, File to) {
 		statusError();
 
-		boolean canCopy = (isValidSource(from) && isValidDestination(to));
-		if (!canCopy) {
+//		boolean canCopy = (isValidSource(from) && isValidDestination(to));
+//		if (!canCopy) {
+//			return false;
+//		}
+		if (from == null || to == null) {
 			return false;
 		}
 
@@ -66,56 +69,6 @@ public class CopyTool extends ATool implements ICopyTool {
 			statusError();
 			return false;
 		}
-	}
-
-	/**
-	 * Checks if the specified File is a valid source.
-	 *
-	 * @param candidate The File to check.
-	 * @return `true' iff the File is a valid source.
-	 */
-	private boolean isValidSource(File candidate) {
-		try {
-			if (!candidate.exists()) {
-				return false;
-			}
-
-			if (!candidate.isFile()) {
-				return false;
-			}
-
-			if (!candidate.canRead()) {
-				return false;
-			}
-		} catch (Exception ex) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Checks if the specified File represents a valid destination.
-	 *
-	 * @param candidate The file to check.
-	 * @return `true' iff the File is a valid destination.
-	 */
-	private boolean isValidDestination(File candidate) {
-		try {
-			// Cannot overwrite a directory.
-			if (candidate.exists() && candidate.isDirectory()) {
-				return false;
-			}
-
-			// Cannot overwrite a readonly file.
-			if (candidate.exists() && !candidate.canWrite()) {
-				return false;
-			}
-		} catch (Exception ex) {
-			return false;
-		}
-
-		return true;
 	}
 
 	/**

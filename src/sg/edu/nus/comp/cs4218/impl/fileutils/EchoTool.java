@@ -46,7 +46,7 @@ public class EchoTool extends ATool implements IEchoTool {
 			sb.append(" ");
 		}
 
-		if (sb.length() >= 1 && sb.charAt(sb.length() - 1) == ' ') {
+		if (sb.length() > 0) {
 			sb.deleteCharAt(sb.length() - 1);
 		}
 

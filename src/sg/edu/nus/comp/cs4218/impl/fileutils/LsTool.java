@@ -38,12 +38,8 @@ public class LsTool extends ATool implements ILsTool {
 		}
 
 		File[] files = directory.listFiles();
-		if (files == null) {
-			return null;
-		} else {
-			statusSuccess();
-			return Arrays.asList(files);
-		}
+		statusSuccess();
+		return Arrays.asList(files);
 	}
 
 	@Override
@@ -70,10 +66,6 @@ public class LsTool extends ATool implements ILsTool {
 
 	private String listDirectory(File wd) {
 		if (wd == null) {
-			return null;
-		}
-
-		if (!validDirectory(wd)) {
 			return null;
 		}
 
@@ -117,10 +109,9 @@ public class LsTool extends ATool implements ILsTool {
 	 */
 	@Override
 	public String execute(File workingDir, String stdin) {
-		String result;
+		String result = null;
 		if (this.args.length < 1) {
 			result = listDirectory(workingDir);
-			return ((result != null) ? result : "");
 		} else {
 			File specified = workingDir.toPath().resolve(this.args[0]).toFile();
 			result = listDirectory(specified);

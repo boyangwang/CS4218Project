@@ -7,6 +7,7 @@ import sg.edu.nus.comp.cs4218.extended2.ICutTool;
 import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
 import sg.edu.nus.comp.cs4218.extended2.ISortTool;
 import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.PipingTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
 import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
 
@@ -190,16 +191,32 @@ public class Shell implements IShell {
 		if (tool instanceof IGrepTool || tool instanceof ICatTool
 				|| tool instanceof IPasteTool || tool instanceof ICutTool
 				|| tool instanceof ISortTool || tool instanceof UniqTool
-				|| tool instanceof WcTool) {
+				|| tool instanceof WcTool || tool instanceof PipingTool) {
 
 			ATool aTool = (ATool) tool;
 			int argLength = aTool.args.length;
 			boolean alreadyReadFromStdin = false;
-			;
-			for (int i = 0; i < argLength; i++) {
-				if (aTool.args[i].equals("-") && !alreadyReadFromStdin) {
-					stdin = readFromUserInput();
-					alreadyReadFromStdin = true;
+
+			if (tool instanceof PipingTool){
+				ATool firstTool = (ATool) CommandParser.parse(aTool.args[0], this);
+				if (firstTool != null){
+					for (int i = 0; i < argLength; i++) {
+						if (firstTool.args[i].equals("-") && !alreadyReadFromStdin) {
+							stdin = readFromUserInput();
+							alreadyReadFromStdin = true;
+							break;
+						}
+					}
+				}
+				
+			}else{
+
+				for (int i = 0; i < argLength; i++) {
+					if (aTool.args[i].equals("-") && !alreadyReadFromStdin) {
+						stdin = readFromUserInput();
+						alreadyReadFromStdin = true;
+						break;
+					}
 				}
 			}
 		}
