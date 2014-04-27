@@ -122,6 +122,10 @@ public class LsToolTest {
 
 		File dir = new File("testDir");
 		dir.mkdir();
+		dir.setReadable(true);
+		dir.setExecutable(true);
+		dir.setWritable(true);
+
 		for (String name : files) {
 			File f = new File(String.format("%s%s%s", "testDir", File.separator, name));
 			f.createNewFile();
@@ -159,6 +163,11 @@ public class LsToolTest {
 
 		File dir = new File("testDir");
 		dir.mkdir();
+
+		dir.setReadable(true);
+		dir.setExecutable(true);
+		dir.setWritable(true);
+
 		for (String name : files) {
 			File f = new File(String.format("%s%s%s", "testDir", File.separator, name));
 			f.createNewFile();

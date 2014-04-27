@@ -19,17 +19,17 @@ public class PasteTool extends ATool implements IPasteTool {
 	static final String ERROR_FILE_INACCESSIBLE = "Error: cannot read from file %s" + LINE_SEPARATOR;
 	static final String ERROR_NO_FILE = "Error: no file is specified" + LINE_SEPARATOR;
 
-	public PasteTool(String[] arguments) {
-		super(arguments);
-	}
 
-	@Override
-	public String execute(File workingDir, String stdin) {
 		ArrayList<String> tmpFilesContent = new ArrayList<String>();
 		boolean serialDisplay = false;
 		String strDelimiters = "\t";
 		boolean isFirstStdin = true;
 
+	public PasteTool(String[] arguments) {
+		super(arguments);
+	}
+
+	public String extractArgs(File workingDir, String stdin){
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-") && args[i].length() > 1) {
 				if (args[i].compareTo("-s") == 0) {
@@ -72,6 +72,12 @@ public class PasteTool extends ATool implements IPasteTool {
 				}
 			}
 		}
+		return null;
+	}
+	@Override
+	public String execute(File workingDir, String stdin) {
+		String err = extractArgs(workingDir, stdin);
+		if (err!=null) return err;
 
 		if (tmpFilesContent.size() == 0) {
 			if (stdin != null) {
