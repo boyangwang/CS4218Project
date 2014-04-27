@@ -282,6 +282,8 @@ public class HackathonBugfixTest {
 
 	/*
 	 * BUG_ID #11
+	 * 
+	 * CommTool.java:42,59,63-70,107-108
 	 */
 	@Test
 	public void testCommMissingFile() {
