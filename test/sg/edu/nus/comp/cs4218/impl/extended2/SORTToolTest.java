@@ -221,47 +221,4 @@ public class SORTToolTest {
 		assertEquals(1, sorttool.getStatusCode());
 		Files.delete(dir.toPath());
 	}
-	
-	@Test
-	public void executeHelpTest() throws IOException {
-		sorttool = new SortTool(new String[] { "-help" });
-		String result = sorttool.execute(null, null);
-		assertTrue(result.startsWith("NAME\n\nsort - sort lines of text files\n\n"));
-		assertTrue(result.endsWith("-help\tBrief information about supported options\n"));
-		assertTrue(result.contains("DESCRIPTION\n\nWrite sorted concatenation of all FILE(s)"));
-		assertTrue(result.contains("-c\tCheck whether the given file is already sorted, if it"));
-		assertEquals(0, sorttool.getStatusCode());
-	}
-	
-	@Test
-	public void executeStdinTest() throws IOException {
-		sorttool = new SortTool(new String[] {});
-		String result = sorttool.execute(null, "");
-		assertEquals("", result);
-		assertEquals(0, sorttool.getStatusCode());
-	}
-	
-	@Test
-	public void executeTwoStdinDashTest() throws IOException {
-		sorttool = new SortTool(new String[] { "-",  "-" });
-		String result = sorttool.execute(null, "");
-		assertEquals("", result);
-		assertEquals(0, sorttool.getStatusCode());
-	}
-	
-	@Test
-	public void executeStdinDashTest() throws IOException {
-		sorttool = new SortTool(new String[] { "-" });
-		String result = sorttool.execute(null, "");
-		assertEquals("", result);
-		assertEquals(0, sorttool.getStatusCode());
-	}
-	
-	@Test
-	public void executeCheckIfSortedTest() throws IOException {
-		sorttool = new SortTool(new String[] { "-c", "a", "b" });
-		String result = sorttool.execute(null, "");
-		assertEquals(String.format("sort: extra operand `b' not allowed with -c%n"), result);
-		assertEquals(1, sorttool.getStatusCode());
-	}
 }
