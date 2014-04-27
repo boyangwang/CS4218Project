@@ -331,58 +331,6 @@ public class COMMToolTest {
 	}
 
 	@Test
-	public void executeInvalidOptionTest() throws IOException {
-		// Error-handling
-		File tempFolder = Files.createTempDirectory("tempFolder").toFile();
-		File file1 = Files.createFile(
-				new File(tempFolder, "tempFile1.txt").toPath()).toFile();
-		File file2 = Files.createFile(
-				new File(tempFolder, "tempFile2.txt").toPath()).toFile();
-		String temp = "hello world\nthis is a test\nfile";
-		Files.write(file1.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
-		temp = "baby\nhello world";
-		Files.write(file2.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
-		commtool = (ICommTool) CommandParser.parse("comm " + "-d -i -c " + file1.getName() + " " + file2.getName(), shell);
-		String result = commtool.execute(tempFolder,
-				"-d -i -c " + file1.getName() + " " + file2.getName());
-
-		temp = "Error: comm: unrecognized option '-i'\nTry 'comm -help' for more information.\n";
-		assertEquals(commtool.getStatusCode(), 1);
-
-		assertTrue(result.contains("Error: comm: unrecognized option "));
-		assertTrue(result.contains("Try 'comm -help' for more information."));
-		Files.delete(file1.toPath());
-		Files.delete(file2.toPath());
-		Files.delete(tempFolder.toPath());
-	}
-
-	@Test
-	public void executeInvalidFileNameTest() throws IOException {
-		// Error-handling
-		File tempFolder = Files.createTempDirectory("tempFolder").toFile();
-		File file1 = Files.createFile(
-				new File(tempFolder, "-r tempFile1.txt").toPath()).toFile();
-		File file2 = Files.createFile(
-				new File(tempFolder, "tempFile2.txt").toPath()).toFile();
-		String temp = "hello world\nthis is a test\nfile";
-		Files.write(file1.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
-		temp = "baby\nhello world";
-		Files.write(file2.toPath(), temp.getBytes(), StandardOpenOption.CREATE);
-
-		commtool = (ICommTool) CommandParser.parse("comm " + "-d -c " + file1.getName()
-				+ " " + file2.getName(), shell);
-
-		String result = commtool.execute(tempFolder, "-d -c " + file1.getName()
-				+ " " + file2.getName());
-		temp = "Error: FILE 1 is not found";
-		assertTrue(result.toUpperCase().contains("ERROR"));
-		assertEquals(commtool.getStatusCode(), 1);
-		Files.delete(file1.toPath());
-		Files.delete(file2.toPath());
-		Files.delete(tempFolder.toPath());
-	}
-
-	@Test
 	public void executeSameFileNoOptionTest() throws IOException {
 		File file = Files.createTempFile("temp File", ".tmp").toFile();
 		String temp = "hello world\nthis is a test\nfile";

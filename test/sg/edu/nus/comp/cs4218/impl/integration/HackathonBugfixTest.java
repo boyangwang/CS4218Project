@@ -21,7 +21,7 @@ import org.junit.Test;
 import sg.edu.nus.comp.cs4218.ITool;
 import sg.edu.nus.comp.cs4218.impl.Shell;
 
-public class FailTestCase {
+public class HackathonBugfixTest {
 	Shell sh;
 
 	@Before
