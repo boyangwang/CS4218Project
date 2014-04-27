@@ -109,9 +109,9 @@ public class UniqTool extends ATool implements IUniqTool {
 			statusSuccess();
 			return this.getUniqueSkipNum(skip, checkCase, stdin);
 		} else {
-			// This should not happen.
+			// This is an illegal state.
 			statusError();
-			return this.getHelp();
+			return "";
 		}
 	}
 

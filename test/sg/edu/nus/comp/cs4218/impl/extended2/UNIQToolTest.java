@@ -423,4 +423,39 @@ public class UNIQToolTest {
 		assertTrue(result.equals("i hello\ntest\nc world\n"));
 		assertEquals(uniqtool.getStatusCode(), 0);
 	}
+	
+	@Test
+	public void endToEndHelp() {
+		UniqTool tool = new UniqTool(new String[]{"-help"});
+		String result = tool.execute(null, null);
+		assertTrue(result.contains("uniq"));
+	}
+	
+	@Test
+	public void endToEndNullStdin() {
+		UniqTool tool = new UniqTool(new String[]{"-"});
+		String result = tool.execute(null, null);
+		assertTrue(result.equals(""));
+	}
+	
+	@Test
+	public void endToEndEmptyStdin() {
+		UniqTool tool = new UniqTool(new String[]{"-"});
+		String result = tool.execute(null, "");
+		assertTrue(result.equals(""));
+	}
+	
+	@Test
+	public void endToEndParamsIncludingHelp() {
+		UniqTool tool = new UniqTool(new String[]{"-i", "-help", "-f", "2"});
+		String result = tool.execute(null, "");
+		assertTrue(result.contains("uniq"));
+	}
+	
+	@Test
+	public void endToEndMissingParam() {
+		UniqTool tool = new UniqTool(new String[]{"-f"});
+		tool.execute(null, null);
+		assertNotEquals(0, tool.getStatusCode());
+	}
 }
