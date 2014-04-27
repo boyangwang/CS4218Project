@@ -14,9 +14,13 @@ public class UniqTool extends ATool implements IUniqTool {
 	private final static String ERR_NOT_FOUND = "Error: FILE is not found.";
 	private final static String ERR_MISSING_PARAM = "Error: Must supply a skip parameter with -f.";
 	private final static String ERR_IO = "Error: Generic IO Error.";
+	
+	private boolean useStdin;
 
 	public UniqTool(String[] arguments) {
 		super(arguments);
+		
+		useStdin = false;
 	}
 
 	private boolean isNonNegativeInteger(String str) {
@@ -65,6 +69,11 @@ public class UniqTool extends ATool implements IUniqTool {
 				case "-help":
 					help = true;
 					break;
+				
+				case "-":
+					// Do nothing. Set a case for "-" so stdin is not treated
+					// as error.
+					break;
 
 				default:
 					return ERR_INVALID_ARG;
@@ -75,8 +84,15 @@ public class UniqTool extends ATool implements IUniqTool {
 
 			i++;
 		}
+		
+		// If the help flag is present, return the help string and ignore
+		// all other parameters.
+		if (help) {
+			statusSuccess();
+			return this.getHelp();
+		}
 
-		if (file != null && !help) {
+		if (file != null) {
 			File target;
 			try {
 				target = workingDir.toPath().resolve(file).toFile();
@@ -93,7 +109,8 @@ public class UniqTool extends ATool implements IUniqTool {
 			statusSuccess();
 			return this.getUniqueSkipNum(skip, checkCase, stdin);
 		} else {
-			statusSuccess();
+			// This should not happen.
+			statusError();
 			return this.getHelp();
 		}
 	}
