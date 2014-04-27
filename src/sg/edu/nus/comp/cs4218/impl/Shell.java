@@ -200,7 +200,7 @@ public class Shell implements IShell {
 			if (tool instanceof PipingTool){
 				ATool firstTool = (ATool) CommandParser.parse(aTool.args[0], this);
 				if (firstTool != null){
-					for (int i = 0; i < argLength; i++) {
+					for (int i = 0; i < firstTool.args.length; i++) {
 						if (firstTool.args[i].equals("-") && !alreadyReadFromStdin) {
 							stdin = readFromUserInput();
 							alreadyReadFromStdin = true;
