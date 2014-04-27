@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DeleteTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">DeleteTool.java</span></div><h1>DeleteTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+
+import java.io.File;
+
+/**
+ * Deletes a specified file/directory, or list of files/directories.
+ *
+ * Note: Treats files and directories the same way. There is no need to specify -rf.
+ */
+public class DeleteTool extends ATool implements IDeleteTool {
+
+	/**
+	 * Constructor
+	 *
+	 * @param arguments Arguments the tool is going to be executed with.
+	 */
+	public DeleteTool(String[] arguments) {
+<span class="fc" id="L21">		super(arguments);</span>
+<span class="fc" id="L22">	}</span>
+
+	/**
+	 * Deletes the specified file.
+	 *
+	 * @param toDelete The file to delete.
+	 * @return `true' iff the file was deleted successfully.
+	 * 
+	 * If recursive deletion fails, all other files except failing files will
+	 * be removed. The tool will still return success.
+	 * 
+	 */
+	@Override
+	public boolean delete(File toDelete) {
+<span class="fc" id="L36">		statusError();</span>
+
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		if (canDeleteFile(toDelete)) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">			if (toDelete.isDirectory()) {</span>
+<span class="fc" id="L40">				File[] files = toDelete.listFiles();</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">				for (File f : files) {</span>
+<span class="fc" id="L43">					delete(f);</span>
+				}
+			}
+
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">			if (toDelete.delete()) {</span>
+<span class="fc" id="L48">				statusSuccess();</span>
+<span class="fc" id="L49">				return true;</span>
+			}
+		}
+
+<span class="fc" id="L53">		return false;</span>
+	}
+
+	/**
+	 * Checks if a file can be deleted.
+	 *
+	 * @param candidate The file to check.
+	 * @return `true' iff the file can be deleted without errors.
+	 */
+	private boolean canDeleteFile(File candidate) {
+		try {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">			if (!candidate.exists()) {</span>
+<span class="fc" id="L65">				return false;</span>
+			}
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">			if (!candidate.canWrite()) {</span>
+<span class="fc" id="L69">				return false;</span>
+			}
+<span class="fc" id="L71">		} catch (Exception ex) {</span>
+<span class="fc" id="L72">			return false;</span>
+		}
+
+<span class="fc" id="L75">		return true;</span>
+	}
+
+	/**
+	 * Executes the tool with args provided in the constructor
+	 *
+	 * @param workingDir
+	 * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+	 * @return Output on stdout
+	 */
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if (this.args.length &lt; 1) {</span>
+<span class="fc" id="L88">			statusError();</span>
+<span class="fc" id="L89">			return &quot;Invalid arguments.&quot;;</span>
+		}
+
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		for (int i = 0; i &lt; this.args.length; i++) {</span>
+			// Check for program termination.
+			// Remaining files at this point are not deleted.
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">			if (Thread.interrupted()) {</span>
+<span class="nc" id="L96">				statusSuccess();</span>
+<span class="nc" id="L97">				return &quot;&quot;;</span>
+			}
+
+<span class="fc" id="L100">			File f = workingDir.toPath().resolve(this.args[i]).toFile();</span>
+<span class="fc" id="L101">			boolean result = delete(f);</span>
+
+			// Stop processing the list on an error.
+			// Remaining files in the list are not deleted.
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">			if (!result) {</span>
+<span class="nc" id="L106">				statusError();</span>
+<span class="nc" id="L107">				return String.format(&quot;Could not delete file: %s%n&quot;, this.args[i]);</span>
+			}
+		}
+
+<span class="fc" id="L111">		statusSuccess();</span>
+<span class="fc" id="L112">		return &quot;&quot;;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

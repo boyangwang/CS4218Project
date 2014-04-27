@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MoveToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">MoveToolTest.java</span></div><h1>MoveToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
+<span class="fc" id="L18">public class MoveToolTest {</span>
+	IMoveTool moveTool;
+
+	private byte[] fileGetContents(File f) {
+<span class="pc bpc" id="L22" title="2 of 4 branches missed.">		if (f.exists() &amp;&amp; f.canRead()) {</span>
+			try {
+				int read;
+<span class="fc" id="L25">				byte[] buf = new byte[4096];</span>
+<span class="fc" id="L26">				FileInputStream is = new FileInputStream(f);</span>
+<span class="fc" id="L27">				ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">				while ((read = is.read(buf)) != -1) {</span>
+<span class="fc" id="L29">					baos.write(buf, 0, read);</span>
+				}
+<span class="fc" id="L31">				is.close();</span>
+<span class="fc" id="L32">				return baos.toByteArray();</span>
+<span class="nc" id="L33">			} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L34">				e.printStackTrace();</span>
+<span class="nc" id="L35">				return null;</span>
+<span class="nc" id="L36">			} catch (IOException e) {</span>
+<span class="nc" id="L37">				e.printStackTrace();</span>
+<span class="nc" id="L38">				return null;</span>
+			}
+		} else {
+<span class="nc" id="L41">			return null;</span>
+		}
+	}
+
+	private String fileGetString(File f) {
+<span class="fc" id="L46">		byte[] result = fileGetContents(f);</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">		if (result == null) {</span>
+<span class="nc" id="L48">			return null;</span>
+		} else {
+<span class="fc" id="L50">			return new String(result, StandardCharsets.UTF_8);</span>
+		}
+	}
+
+	@Before
+	public void before() {
+<span class="fc" id="L56">		moveTool = new MoveTool(new String[0]);</span>
+<span class="fc" id="L57">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L61">		moveTool = null;</span>
+<span class="fc" id="L62">	}</span>
+
+	@Test
+	public void nullargs() {
+<span class="fc" id="L66">		File f = new File(&quot;testFile.txt&quot;);</span>
+
+<span class="fc" id="L68">		boolean result = moveTool.move(null, null);</span>
+<span class="fc" id="L69">		assertFalse(result);</span>
+<span class="fc" id="L70">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L72">		result = moveTool.move(f, null);</span>
+<span class="fc" id="L73">		assertFalse(result);</span>
+<span class="fc" id="L74">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L76">		result = moveTool.move(null, f);</span>
+<span class="fc" id="L77">		assertFalse(f.exists());</span>
+<span class="fc" id="L78">		assertFalse(result);</span>
+<span class="fc" id="L79">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L81">		f.delete();</span>
+<span class="fc" id="L82">	}</span>
+
+	@Test
+	public void nonExistentSource() {
+<span class="fc" id="L86">		File f = new File(&quot;nonExistent&quot;);</span>
+<span class="fc" id="L87">		File dest = new File(&quot;testOut&quot;);</span>
+
+<span class="fc" id="L89">		boolean result = moveTool.move(f, dest);</span>
+<span class="fc" id="L90">		assertFalse(dest.exists());</span>
+<span class="fc" id="L91">		assertFalse(result);</span>
+<span class="fc" id="L92">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L94">		dest.delete();</span>
+<span class="fc" id="L95">	}</span>
+
+	@Test
+	public void unreadableSource() throws IOException {
+<span class="fc" id="L99">		File f = new File(&quot;badSrc&quot;);</span>
+<span class="fc" id="L100">		f.createNewFile();</span>
+<span class="fc" id="L101">		f.setReadable(false);</span>
+
+<span class="fc" id="L103">		File dest = new File(&quot;testDest&quot;);</span>
+<span class="fc" id="L104">		boolean result = moveTool.move(f, dest);</span>
+<span class="fc" id="L105">		assertFalse(dest.exists());</span>
+<span class="fc" id="L106">		assertFalse(result);</span>
+<span class="fc" id="L107">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L109">		f.delete();</span>
+<span class="fc" id="L110">		dest.delete();</span>
+<span class="fc" id="L111">	}</span>
+
+	@Test
+	public void sourceIsDirectory() throws IOException {
+<span class="fc" id="L115">		File f = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L116">		f.mkdir();</span>
+
+<span class="fc" id="L118">		File dest = new File(&quot;testDest&quot;);</span>
+<span class="fc" id="L119">		boolean result = moveTool.move(f, dest);</span>
+<span class="fc" id="L120">		assertFalse(dest.exists());</span>
+<span class="fc" id="L121">		assertFalse(result);</span>
+<span class="fc" id="L122">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L124">		f.delete();</span>
+<span class="fc" id="L125">		dest.delete();</span>
+<span class="fc" id="L126">	}</span>
+
+	@Test
+	public void unwritableDest() throws IOException {
+<span class="fc" id="L130">		File f = new File(&quot;testSrc&quot;);</span>
+<span class="fc" id="L131">		f.createNewFile();</span>
+
+<span class="fc" id="L133">		PrintWriter pw = new PrintWriter(new FileOutputStream(f));</span>
+<span class="fc" id="L134">		pw.write(&quot;test string.&quot;);</span>
+<span class="fc" id="L135">		pw.close();</span>
+
+<span class="fc" id="L137">		File dest = new File(&quot;testDest&quot;);</span>
+<span class="fc" id="L138">		dest.createNewFile();</span>
+<span class="fc" id="L139">		dest.setWritable(false);</span>
+
+<span class="fc" id="L141">		boolean result = moveTool.move(f, dest);</span>
+<span class="fc" id="L142">		String contents = fileGetString(dest);</span>
+<span class="fc" id="L143">		assertEquals(&quot;&quot;, contents);</span>
+<span class="fc" id="L144">		assertFalse(result);</span>
+<span class="fc" id="L145">		assertNotEquals(moveTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L147">		dest.setWritable(true);</span>
+<span class="fc" id="L148">		dest.delete();</span>
+<span class="fc" id="L149">		f.delete();</span>
+<span class="fc" id="L150">	}</span>
+
+	@Test
+	public void toolExecuteMove() throws IOException {
+<span class="fc" id="L154">		Random rand = new Random();</span>
+
+<span class="fc" id="L156">		File source = new File(&quot;testSrc&quot;);</span>
+<span class="fc" id="L157">		source.createNewFile();</span>
+<span class="fc" id="L158">		byte[] ref = new byte[131072];</span>
+<span class="fc" id="L159">		FileOutputStream fos = new FileOutputStream(source);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		for (int i = 0; i &lt; 131072; i++) {</span>
+<span class="fc" id="L161">			byte b = (byte) rand.nextInt(255);</span>
+<span class="fc" id="L162">			fos.write(b);</span>
+<span class="fc" id="L163">			ref[i] = b;</span>
+		}
+<span class="fc" id="L165">		fos.close();</span>
+
+<span class="fc" id="L167">		File dir = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L168">		dir.mkdir();</span>
+
+<span class="fc" id="L170">		String destPath = String.format(&quot;testDir%stestDest&quot;, File.separator);</span>
+<span class="fc" id="L171">		File dest = new File(destPath);</span>
+
+<span class="fc" id="L173">		MoveTool tool = new MoveTool(new String[] { &quot;testSrc&quot;, destPath });</span>
+<span class="fc" id="L174">		tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+
+<span class="fc" id="L176">		assertFalse(source.exists());</span>
+<span class="fc" id="L177">		assertTrue(dest.exists());</span>
+<span class="fc" id="L178">		byte[] result = fileGetContents(dest);</span>
+<span class="fc" id="L179">		assertTrue(compareByteArrays(ref, result));</span>
+<span class="fc" id="L180">		assertEquals(0, tool.getStatusCode());</span>
+
+<span class="fc" id="L182">		dest.delete();</span>
+<span class="fc" id="L183">		dir.delete();</span>
+<span class="fc" id="L184">	}</span>
+
+	private boolean compareByteArrays(byte[] buf1, byte[] buf2) {
+<span class="pc bpc" id="L187" title="3 of 4 branches missed.">		if (buf1 == null &amp;&amp; buf2 == null) {</span>
+<span class="nc" id="L188">			return true;</span>
+<span class="pc bpc" id="L189" title="2 of 4 branches missed.">		} else if (buf1 == null || buf2 == null) {</span>
+<span class="nc" id="L190">			return false;</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">		} else if (buf1.length != buf2.length) {</span>
+<span class="nc" id="L192">			return false;</span>
+		} else {
+<span class="fc bfc" id="L194" title="All 2 branches covered.">			for (int i = 0; i &lt; buf1.length; i++) {</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">				if (buf1[i] != buf2[i]) {</span>
+<span class="nc" id="L196">					return false;</span>
+				}
+			}
+<span class="fc" id="L199">			return true;</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

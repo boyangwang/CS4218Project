@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CopyTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">CopyTool.java</span></div><h1>CopyTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+
+import java.io.*;
+
+public class CopyTool extends ATool implements ICopyTool {
+	private final static int BUF_SIZE = 16384;
+
+	/**
+	 * Constructor
+	 *
+	 * @param arguments Arguments the tool is going to be executed with.
+	 */
+	public CopyTool(String[] arguments) {
+<span class="fc" id="L17">		super(arguments);</span>
+<span class="fc" id="L18">	}</span>
+
+	/**
+	 * Copies a file.
+	 *
+	 * @param from The file to copy.
+	 * @param to The destination file.
+	 * @return `true' iff the file was successfully copied.
+	 */
+	@Override
+	public boolean copy(File from, File to) {
+<span class="fc" id="L29">		statusError();</span>
+
+//		boolean canCopy = (isValidSource(from) &amp;&amp; isValidDestination(to));
+//		if (!canCopy) {
+//			return false;
+//		}
+<span class="fc bfc" id="L35" title="All 4 branches covered.">		if (from == null || to == null) {</span>
+<span class="fc" id="L36">			return false;</span>
+		}
+
+		// If the source and destination are the same, no action needs to be
+		// taken.
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		if (to.equals(from)) {</span>
+<span class="fc" id="L42">			statusSuccess();</span>
+<span class="fc" id="L43">			return true;</span>
+		}
+
+		try {
+<span class="fc" id="L47">			FileInputStream fis = new FileInputStream(from);</span>
+<span class="fc" id="L48">			FileOutputStream fos = new FileOutputStream(to);</span>
+
+<span class="fc" id="L50">			byte[] buffer = new byte[BUF_SIZE];</span>
+			int read;
+<span class="fc bfc" id="L52" title="All 2 branches covered.">			while ((read = fis.read(buffer)) &gt; 0) {</span>
+<span class="fc" id="L53">				fos.write(buffer, 0, read);</span>
+			}
+
+<span class="fc" id="L56">			fis.close();</span>
+<span class="fc" id="L57">			fos.close();</span>
+
+<span class="fc" id="L59">			statusSuccess();</span>
+<span class="fc" id="L60">			return true;</span>
+<span class="fc" id="L61">		} catch (FileNotFoundException e) {</span>
+<span class="fc" id="L62">			cleanup(to);</span>
+
+<span class="fc" id="L64">			statusError();</span>
+<span class="fc" id="L65">			return false;</span>
+<span class="nc" id="L66">		} catch (IOException e) {</span>
+<span class="nc" id="L67">			cleanup(to);</span>
+
+<span class="nc" id="L69">			statusError();</span>
+<span class="nc" id="L70">			return false;</span>
+		}
+	}
+
+	/**
+	 * Tries to remove a partially copied file in case of failure.
+	 *
+	 * @param trash The file to remove.
+	 */
+	private void cleanup(File trash) {
+<span class="fc bfc" id="L80" title="All 4 branches covered.">		if (trash.exists() &amp;&amp; trash.canWrite()) {</span>
+<span class="fc" id="L81">			trash.delete();</span>
+		}
+<span class="fc" id="L83">	}</span>
+
+	/**
+	 * Executes the tool with args provided in the constructor
+	 *
+	 * @param workingDir
+	 * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+	 * @return Output on stdout
+	 */
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc bfc" id="L94" title="All 2 branches covered.">		if (this.args.length != 2) {</span>
+<span class="fc" id="L95">			statusError();</span>
+<span class="fc" id="L96">			return &quot;Invalid arguments.&quot;;</span>
+		}
+
+<span class="fc" id="L99">		File to = workingDir.toPath().resolve(this.args[0]).toFile();</span>
+<span class="fc" id="L100">		File from = workingDir.toPath().resolve(this.args[1]).toFile();</span>
+<span class="fc" id="L101">		boolean result = copy(to, from);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">		if (!result) {</span>
+<span class="nc" id="L103">			statusError();</span>
+<span class="nc" id="L104">			return String.format(&quot;Could not copy file: %s to: %s%n&quot;, this.args[0], this.args[1]);</span>
+		}
+
+<span class="fc" id="L107">		statusSuccess();</span>
+<span class="fc" id="L108">		return &quot;&quot;;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

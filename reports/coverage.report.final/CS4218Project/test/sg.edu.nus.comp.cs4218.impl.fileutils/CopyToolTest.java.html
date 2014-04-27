@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CopyToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">CopyToolTest.java</span></div><h1>CopyToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
+
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+import static org.junit.Assert.*;
+
+<span class="fc" id="L17">public class CopyToolTest {</span>
+	private final static String TEST_DEST = &quot;testDest&quot;;
+
+	ICopyTool copyTool;
+
+	private byte[] fileGetContents(File f) {
+<span class="pc bpc" id="L23" title="2 of 4 branches missed.">		if (f.exists() &amp;&amp; f.canRead()) {</span>
+			try {
+				int read;
+<span class="fc" id="L26">				byte[] buf = new byte[4096];</span>
+<span class="fc" id="L27">				FileInputStream is = new FileInputStream(f);</span>
+<span class="fc" id="L28">				ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">				while ((read = is.read(buf)) != -1) {</span>
+<span class="fc" id="L30">					baos.write(buf, 0, read);</span>
+				}
+<span class="fc" id="L32">				is.close();</span>
+<span class="fc" id="L33">				return baos.toByteArray();</span>
+<span class="nc" id="L34">			} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L35">				e.printStackTrace();</span>
+<span class="nc" id="L36">				return null;</span>
+<span class="nc" id="L37">			} catch (IOException e) {</span>
+<span class="nc" id="L38">				e.printStackTrace();</span>
+<span class="nc" id="L39">				return null;</span>
+			}
+		} else {
+<span class="nc" id="L42">			return null;</span>
+		}
+	}
+
+	private String fileGetString(File f) {
+<span class="fc" id="L47">		byte[] result = fileGetContents(f);</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">		if (result == null) {</span>
+<span class="nc" id="L49">			return null;</span>
+		} else {
+<span class="fc" id="L51">			return new String(result, StandardCharsets.UTF_8);</span>
+		}
+	}
+
+	private boolean compareByteArrays(byte[] buf1, byte[] buf2) {
+<span class="pc bpc" id="L56" title="3 of 4 branches missed.">		if (buf1 == null &amp;&amp; buf2 == null) {</span>
+<span class="nc" id="L57">			return true;</span>
+<span class="pc bpc" id="L58" title="2 of 4 branches missed.">		} else if (buf1 == null || buf2 == null) {</span>
+<span class="nc" id="L59">			return false;</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">		} else if (buf1.length != buf2.length) {</span>
+<span class="nc" id="L61">			return false;</span>
+		} else {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">			for (int i = 0; i &lt; buf1.length; i++) {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">				if (buf1[i] != buf2[i]) {</span>
+<span class="nc" id="L65">					return false;</span>
+				}
+			}
+<span class="fc" id="L68">			return true;</span>
+		}
+	}
+
+	@Before
+	public void before() {
+<span class="fc" id="L74">		copyTool = new CopyTool(new String[0]);</span>
+<span class="fc" id="L75">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L79">		copyTool = null;</span>
+<span class="fc" id="L80">	}</span>
+
+	/**
+	 * MUT: copy()
+	 * Program should not crash under any combination of null arguments.
+	 */
+	@Test
+	public void nullArgs() {
+<span class="fc" id="L88">		File f = new File(&quot;testFile.txt&quot;);</span>
+
+<span class="fc" id="L90">		boolean result = copyTool.copy(null, null);</span>
+<span class="fc" id="L91">		assertFalse(result);</span>
+<span class="fc" id="L92">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L94">		result = copyTool.copy(f, null);</span>
+<span class="fc" id="L95">		assertFalse(result);</span>
+<span class="fc" id="L96">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L98">		result = copyTool.copy(null, f);</span>
+<span class="fc" id="L99">		assertFalse(f.exists());</span>
+<span class="fc" id="L100">		assertFalse(result);</span>
+<span class="fc" id="L101">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L103">		f.delete();</span>
+<span class="fc" id="L104">	}</span>
+
+	/**
+	 * Program should not crash when non-existent source is specified.
+	 */
+	@Test
+	public void nonExistentSource() {
+<span class="fc" id="L111">		File f = new File(&quot;nonExistent&quot;);</span>
+<span class="fc" id="L112">		File dest = new File(&quot;testOut&quot;);</span>
+
+<span class="fc" id="L114">		boolean result = copyTool.copy(f, dest);</span>
+<span class="fc" id="L115">		assertFalse(dest.exists());</span>
+<span class="fc" id="L116">		assertFalse(result);</span>
+<span class="fc" id="L117">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L119">		dest.delete();</span>
+<span class="fc" id="L120">	}</span>
+
+	/**
+	 * Program should not crash for an unreadable source file.
+	 * @throws IOException
+	 */
+	@Test
+	public void unreadableSource() throws IOException {
+<span class="fc" id="L128">		File f = new File(&quot;badSrc&quot;);</span>
+<span class="fc" id="L129">		f.createNewFile();</span>
+<span class="fc" id="L130">		f.setReadable(false);</span>
+
+<span class="fc" id="L132">		File dest = new File(TEST_DEST);</span>
+<span class="fc" id="L133">		boolean result = copyTool.copy(f, dest);</span>
+<span class="fc" id="L134">		assertFalse(dest.exists());</span>
+<span class="fc" id="L135">		assertFalse(result);</span>
+<span class="fc" id="L136">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L138">		f.delete();</span>
+<span class="fc" id="L139">		dest.delete();</span>
+<span class="fc" id="L140">	}</span>
+
+	/**
+	 * Copy does not support directories.
+	 * Program should not crash, and directory should not be copied.
+	 * @throws IOException
+	 */
+	@Test
+	public void sourceIsDirectory() throws IOException {
+<span class="fc" id="L149">		File f = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L150">		f.mkdir();</span>
+
+<span class="fc" id="L152">		File dest = new File(TEST_DEST);</span>
+<span class="fc" id="L153">		boolean result = copyTool.copy(f, dest);</span>
+<span class="fc" id="L154">		assertFalse(dest.exists());</span>
+<span class="fc" id="L155">		assertFalse(result);</span>
+<span class="fc" id="L156">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L158">		f.delete();</span>
+<span class="fc" id="L159">		dest.delete();</span>
+<span class="fc" id="L160">	}</span>
+
+	/**
+	 * MUT: copy()
+	 * Copying empty file should result in destination being created.
+	 */
+	@Test
+	public void destCreated() throws IOException {
+<span class="fc" id="L168">		File f = new File(&quot;testFile&quot;);</span>
+<span class="fc" id="L169">		f.createNewFile();</span>
+
+<span class="fc" id="L171">		File dest = new File(&quot;nonExistent&quot;);</span>
+<span class="fc" id="L172">		copyTool.copy(f, dest);</span>
+
+<span class="fc" id="L174">		boolean result = dest.exists();</span>
+<span class="fc" id="L175">		assertTrue(result);</span>
+<span class="fc" id="L176">		assertEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L178">		f.delete();</span>
+<span class="fc" id="L179">		dest.delete();</span>
+<span class="fc" id="L180">	}</span>
+
+	@Test
+	public void testCleanup() throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
+<span class="fc" id="L185">		File f = new File(&quot;testFile&quot;);</span>
+<span class="fc" id="L186">		f.createNewFile();</span>
+
+<span class="fc" id="L188">		Method cleanup = copyTool.getClass().getDeclaredMethod(&quot;cleanup&quot;, new Class[] { File.class });</span>
+<span class="fc" id="L189">		cleanup.setAccessible(true);</span>
+<span class="fc" id="L190">		cleanup.invoke(copyTool, f);</span>
+
+<span class="fc" id="L192">		assertFalse(f.exists());</span>
+<span class="fc" id="L193">	}</span>
+
+	@Test
+	public void toolExecute() throws IOException {
+<span class="fc" id="L197">		File f = new File(&quot;testFile&quot;);</span>
+<span class="fc" id="L198">		f.createNewFile();</span>
+
+<span class="fc" id="L200">		CopyTool tool = new CopyTool(new String[] { &quot;testFile&quot;, &quot;nonExistent&quot; });</span>
+<span class="fc" id="L201">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+
+<span class="fc" id="L203">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L204">		assertEquals(0, tool.getStatusCode());</span>
+
+<span class="fc" id="L206">		File dest = new File(&quot;nonExistent&quot;);</span>
+<span class="fc" id="L207">		dest.delete();</span>
+<span class="fc" id="L208">	}</span>
+
+	@Test
+	public void toolExecuteInvalidArgs() {
+<span class="fc" id="L212">		CopyTool tool = new CopyTool(new String[] { &quot;testFile&quot; });</span>
+<span class="fc" id="L213">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+
+<span class="fc" id="L215">		assertEquals(&quot;Invalid arguments.&quot;, result);</span>
+<span class="fc" id="L216">		assertNotEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L217">	}</span>
+
+	/**
+	 * MUT: copy()
+	 * Copying a file should be lossless.
+	 * @throws IOException
+	 */
+	@Test
+	public void destContentsIdentical() throws IOException {
+<span class="fc" id="L226">		Random rand = new Random();</span>
+<span class="fc" id="L227">		File f = new File(&quot;testSrc&quot;);</span>
+<span class="fc" id="L228">		f.createNewFile();</span>
+
+<span class="fc" id="L230">		byte[] ref = new byte[131072];</span>
+<span class="fc" id="L231">		FileOutputStream fos = new FileOutputStream(f);</span>
+<span class="fc bfc" id="L232" title="All 2 branches covered.">		for (int i = 0; i &lt; 131072; i++) {</span>
+<span class="fc" id="L233">			byte b = (byte) rand.nextInt(255);</span>
+<span class="fc" id="L234">			fos.write(b);</span>
+<span class="fc" id="L235">			ref[i] = b;</span>
+		}
+<span class="fc" id="L237">		fos.close();</span>
+
+<span class="fc" id="L239">		File dest = new File(TEST_DEST);</span>
+<span class="fc" id="L240">		copyTool.copy(f, dest);</span>
+<span class="fc" id="L241">		byte[] contents = fileGetContents(dest);</span>
+<span class="fc" id="L242">		assertTrue(compareByteArrays(ref, contents));</span>
+<span class="fc" id="L243">		assertEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L245">		f.delete();</span>
+<span class="fc" id="L246">		dest.delete();</span>
+<span class="fc" id="L247">	}</span>
+
+	/**
+	 * MUT: copy()
+	 * Program should not crash if destination file is unwritable.
+	 * @throws IOException
+	 */
+	@Test
+	public void unwritableDest() throws IOException {
+<span class="fc" id="L256">		File f = new File(&quot;testSrc&quot;);</span>
+<span class="fc" id="L257">		f.createNewFile();</span>
+
+<span class="fc" id="L259">		PrintWriter pw = new PrintWriter(new FileOutputStream(f));</span>
+<span class="fc" id="L260">		pw.write(&quot;test string.&quot;);</span>
+<span class="fc" id="L261">		pw.close();</span>
+
+<span class="fc" id="L263">		File dest = new File(TEST_DEST);</span>
+<span class="fc" id="L264">		dest.createNewFile();</span>
+<span class="fc" id="L265">		dest.setWritable(false);</span>
+
+<span class="fc" id="L267">		boolean result = copyTool.copy(f, dest);</span>
+<span class="fc" id="L268">		String contents = fileGetString(dest);</span>
+<span class="fc" id="L269">		assertEquals(contents, &quot;&quot;);</span>
+<span class="fc" id="L270">		assertFalse(result);</span>
+<span class="fc" id="L271">		assertNotEquals(copyTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L273">		dest.setWritable(true);</span>
+<span class="fc" id="L274">		dest.delete();</span>
+<span class="fc" id="L275">		f.delete();</span>
+<span class="fc" id="L276">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

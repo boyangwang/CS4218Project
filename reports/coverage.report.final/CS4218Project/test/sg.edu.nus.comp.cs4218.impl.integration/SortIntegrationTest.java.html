@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SortIntegrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">SortIntegrationTest.java</span></div><h1>SortIntegrationTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.Assert.assertEquals;
+
+<span class="fc" id="L14">public class SortIntegrationTest {</span>
+	// Used to abstract Shell testing. You'll need these in a new suite.
+	private ByteArrayInputStream simIn;
+	private ByteArrayOutputStream simOut;
+	private Shell shell;
+
+	// Used only in this test suite.
+<span class="fc" id="L21">	private final String TEST_INPUT_FILE = &quot;sort-test-in.txt&quot;;</span>
+<span class="fc" id="L22">	private final String TEST_OUTPUT_FILE = &quot;sort-test-output.txt&quot;;</span>
+	private File fin;
+	private File fout;
+
+	// You need this method.
+	private String getStringFromOutput() {
+<span class="fc" id="L28">		String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L29">		String[] lines = out.split(&quot;\n&quot;);</span>
+<span class="fc" id="L30">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		for (int i = 0; i &lt; lines.length; i++) {</span>
+<span class="fc" id="L32">			String line = lines[i];</span>
+
+			// Ignore empty lines.
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">			if (line == &quot;&quot;) {</span>
+<span class="nc" id="L36">				continue;</span>
+			}
+
+			// Greedily strip prompts from beginning of line.
+			int promptIndex;
+<span class="fc bfc" id="L41" title="All 2 branches covered.">			if ((promptIndex = line.lastIndexOf(&quot;&gt; &quot;)) &gt;= 0) {</span>
+<span class="fc" id="L42">				line = line.substring(promptIndex + 2);</span>
+			}
+
+			// Pack line back into string.
+<span class="fc" id="L46">			sb.append(line).append(&quot;\n&quot;);</span>
+		}
+
+		// Should not contain trailing newline.
+<span class="fc" id="L50">		return sb.toString().trim();</span>
+	}
+
+	// You need this method.
+	private void setupShellWithInput(String in) {
+<span class="fc" id="L55">		String input = in;</span>
+
+		// Terminate at the end of this command.
+<span class="fc" id="L58">		input += &quot;\r\nctrl-c\r\n&quot;;</span>
+
+<span class="fc" id="L60">		simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L61">		shell = new Shell(simIn, simOut);</span>
+<span class="fc" id="L62">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		// You need this line.
+<span class="fc" id="L70">		simOut = new ByteArrayOutputStream();</span>
+
+		// Only for this test suite/
+<span class="fc" id="L73">		fin = new File(TEST_INPUT_FILE);</span>
+<span class="fc" id="L74">		fout = new File(TEST_OUTPUT_FILE);</span>
+<span class="fc" id="L75">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+		// Only for this test suite.
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">		if (fin.exists()) {</span>
+<span class="fc" id="L84">			fin.delete();</span>
+		}
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">		if (fout.exists()) {</span>
+<span class="nc" id="L87">			fout.delete();</span>
+		}
+<span class="fc" id="L89">	}</span>
+
+	/**
+	 * sort | cut
+	 * @throws IOException
+	 */
+	@Test
+	public void sortCut() throws IOException {
+<span class="fc" id="L97">		String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L98">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L99">		fw.write(input);</span>
+<span class="fc" id="L100">		fw.close();</span>
+
+<span class="fc" id="L102">		setupShellWithInput(String.format(&quot;sort %s | cut -c1-3&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L103">		shell.run();</span>
+<span class="fc" id="L104">		String result = getStringFromOutput();</span>
+
+<span class="fc" id="L106">		String expected = &quot;cat\ndog\nhel\nhel\nwor&quot;;</span>
+<span class="fc" id="L107">		assertEquals(expected, result);</span>
+<span class="fc" id="L108">	}</span>
+
+	/**
+	 * sort | uniq
+	 * @throws IOException
+	 */
+	@Test
+	public void sortUniq() throws IOException {
+<span class="fc" id="L116">		String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L117">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L118">		fw.write(input);</span>
+<span class="fc" id="L119">		fw.close();</span>
+
+<span class="fc" id="L121">		setupShellWithInput(String.format(&quot;sort %s | uniq&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L122">		shell.run();</span>
+<span class="fc" id="L123">		String result = getStringFromOutput();</span>
+
+<span class="fc" id="L125">		String expected = &quot;cat\ndog\nhello\nworld&quot;;</span>
+<span class="fc" id="L126">		assertEquals(expected, result);</span>
+<span class="fc" id="L127">	}</span>
+
+	/**
+	 * sort | wc
+	 * @throws IOException
+	 */
+	@Test
+	public void sortWc() throws IOException {
+<span class="fc" id="L135">		String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L136">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L137">		fw.write(input);</span>
+<span class="fc" id="L138">		fw.close();</span>
+
+<span class="fc" id="L140">		setupShellWithInput(String.format(&quot;sort %s | wc&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L141">		shell.run();</span>
+<span class="fc" id="L142">		String result = getStringFromOutput();</span>
+
+<span class="fc" id="L144">		String expected = &quot;5\t5\t26&quot;;</span>
+<span class="fc" id="L145">		assertEquals(expected, result);</span>
+<span class="fc" id="L146">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

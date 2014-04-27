@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ImproveBranchCoverageTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl</a> &gt; <span class="el_source">ImproveBranchCoverageTest.java</span></div><h1>ImproveBranchCoverageTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl;
+
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+import sg.edu.nus.comp.cs4218.extended2.ISortTool;
+import sg.edu.nus.comp.cs4218.extended2.IWcTool;
+import sg.edu.nus.comp.cs4218.fileutils.ICatTool;
+import sg.edu.nus.comp.cs4218.fileutils.ICopyTool;
+import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
+import sg.edu.nus.comp.cs4218.fileutils.IMoveTool;
+import sg.edu.nus.comp.cs4218.impl.extended1.GrepTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.SortTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.UniqTool;
+import sg.edu.nus.comp.cs4218.impl.extended2.WcTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.CatTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.CdTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.CopyTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.EchoTool;
+import sg.edu.nus.comp.cs4218.impl.fileutils.MoveTool;
+
+<span class="fc" id="L38">public class ImproveBranchCoverageTest {</span>
+	@Rule
+<span class="fc" id="L40">	public TemporaryFolder folder = new TemporaryFolder();</span>
+
+	private IGrepTool grepTool;
+	private ISortTool sorttool;
+	private IWcTool wctool;
+	
+<span class="fc" id="L46">	private String testString = &quot;The quick brown fox jumps over the lazy dog.\n&quot;;</span>
+
+	@Before
+	public void before() throws IOException {
+<span class="fc" id="L50">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L54">	}</span>
+	
+	/*
+	 * New grep tests
+	 */
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void allOptionsExecuteTest() throws IOException {
+<span class="fc" id="L65">		File file = folder.newFile();</span>
+<span class="fc" id="L66">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L67">		grepTool = new GrepTool(new String[] { &quot;-A&quot;, &quot;2&quot;, &quot;-B&quot;, &quot;1&quot;, &quot;-C&quot;, &quot;1&quot;, &quot;-cov&quot;, &quot;2&quot;, file.getName() });</span>
+<span class="fc" id="L68">		assertEquals(&quot;1\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L69">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L70">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void noNumberArgExecuteTest() throws IOException {
+<span class="fc" id="L77">		File file = folder.newFile();</span>
+<span class="fc" id="L78">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L79">		grepTool = new GrepTool(new String[] { &quot;-A&quot; });</span>
+<span class="fc" id="L80">		assertEquals(&quot;-A requires a positive number\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L81">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L82">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void negativeNumberArgExecuteTest() throws IOException {
+<span class="fc" id="L89">		File file = folder.newFile();</span>
+<span class="fc" id="L90">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L91">		grepTool = new GrepTool(new String[] { &quot;-A&quot;, &quot;-1&quot; });</span>
+<span class="fc" id="L92">		assertEquals(&quot;-A requires a positive number\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L93">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L94">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void insufficientArgExecuteTest() throws IOException {
+<span class="fc" id="L101">		File file = folder.newFile();</span>
+<span class="fc" id="L102">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L103">		grepTool = new GrepTool(new String[] {});</span>
+<span class="fc" id="L104">		assertEquals(&quot;grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L105">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L106">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void illegalArgExecuteTest() throws IOException {
+<span class="fc" id="L113">		File file = folder.newFile();</span>
+<span class="fc" id="L114">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L115">		grepTool = new GrepTool(new String[] { &quot;-D&quot; });</span>
+<span class="fc" id="L116">		assertEquals(&quot;Illegal argument -D\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L117">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L118">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void stdinExecuteTest() throws IOException {
+<span class="fc" id="L125">		File file = folder.newFile();</span>
+<span class="fc" id="L126">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L127">		grepTool = new GrepTool(new String[] { &quot;1&quot; });</span>
+<span class="fc" id="L128">		assertEquals(&quot;1\n&quot;, grepTool.execute(folder.getRoot(), &quot;1\n2\n3\n4\n\5\n&quot;));</span>
+<span class="fc" id="L129">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L130">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void stdinNullExecuteTest() throws IOException {
+<span class="fc" id="L137">		File file = folder.newFile();</span>
+<span class="fc" id="L138">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L139">		grepTool = new GrepTool(new String[] { &quot;1&quot; });</span>
+<span class="fc" id="L140">		assertEquals(&quot;grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L141">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L142">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void stdinDashExecuteTest() throws IOException {
+<span class="fc" id="L149">		File file = folder.newFile();</span>
+<span class="fc" id="L150">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L151">		grepTool = new GrepTool(new String[] { &quot;1&quot;, &quot;-&quot; });</span>
+<span class="fc" id="L152">		assertEquals(&quot;1\n&quot;, grepTool.execute(folder.getRoot(), &quot;1\n2\n3\n4\n\5\n&quot;));</span>
+<span class="fc" id="L153">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L154">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void twoStdinDashExecuteTest() throws IOException {
+<span class="fc" id="L161">		File file = folder.newFile();</span>
+<span class="fc" id="L162">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L163">		grepTool = new GrepTool(new String[] { &quot;1&quot;, &quot;-&quot;, &quot;-&quot; });</span>
+<span class="fc" id="L164">		assertEquals(&quot;1\n&quot;, grepTool.execute(folder.getRoot(), &quot;1\n2\n3\n4\n\5\n&quot;));</span>
+<span class="fc" id="L165">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L166">	}</span>
+	
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void helpExecuteTest() throws IOException {
+<span class="fc" id="L173">		grepTool = new GrepTool(new String[] { &quot;-help&quot; });</span>
+<span class="fc" id="L174">		assertEquals(String.format(&quot;grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]%n&quot;), grepTool.execute(null, null));</span>
+<span class="fc" id="L175">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L176">	}</span>
+	
+	/*
+	 * New sort tests
+	 */
+	
+	@Test
+	public void executeHelpTest() throws IOException {
+<span class="fc" id="L184">		sorttool = new SortTool(new String[] { &quot;-help&quot; });</span>
+<span class="fc" id="L185">		String result = sorttool.execute(null, null);</span>
+<span class="fc" id="L186">		assertTrue(result.startsWith(&quot;NAME\n\nsort - sort lines of text files\n\n&quot;));</span>
+<span class="fc" id="L187">		assertTrue(result.endsWith(&quot;-help\tBrief information about supported options\n&quot;));</span>
+<span class="fc" id="L188">		assertTrue(result.contains(&quot;DESCRIPTION\n\nWrite sorted concatenation of all FILE(s)&quot;));</span>
+<span class="fc" id="L189">		assertTrue(result.contains(&quot;-c\tCheck whether the given file is already sorted, if it&quot;));</span>
+<span class="fc" id="L190">		assertEquals(0, sorttool.getStatusCode());</span>
+<span class="fc" id="L191">	}</span>
+	
+	@Test
+	public void executeStdinTest() throws IOException {
+<span class="fc" id="L195">		sorttool = new SortTool(new String[] {});</span>
+<span class="fc" id="L196">		String result = sorttool.execute(null, &quot;&quot;);</span>
+<span class="fc" id="L197">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L198">		assertEquals(0, sorttool.getStatusCode());</span>
+<span class="fc" id="L199">	}</span>
+	
+	@Test
+	public void executeTwoStdinDashTest() throws IOException {
+<span class="fc" id="L203">		sorttool = new SortTool(new String[] { &quot;-&quot;,  &quot;-&quot; });</span>
+<span class="fc" id="L204">		String result = sorttool.execute(null, &quot;&quot;);</span>
+<span class="fc" id="L205">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L206">		assertEquals(0, sorttool.getStatusCode());</span>
+<span class="fc" id="L207">	}</span>
+	
+	@Test
+	public void executeStdinDashTest() throws IOException {
+<span class="fc" id="L211">		sorttool = new SortTool(new String[] { &quot;-&quot; });</span>
+<span class="fc" id="L212">		String result = sorttool.execute(null, &quot;&quot;);</span>
+<span class="fc" id="L213">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L214">		assertEquals(0, sorttool.getStatusCode());</span>
+<span class="fc" id="L215">	}</span>
+	
+	@Test
+	public void executeCheckIfSortedTest() throws IOException {
+<span class="fc" id="L219">		sorttool = new SortTool(new String[] { &quot;-c&quot;, &quot;a&quot;, &quot;b&quot; });</span>
+<span class="fc" id="L220">		String result = sorttool.execute(null, &quot;&quot;);</span>
+<span class="fc" id="L221">		assertEquals(String.format(&quot;sort: extra operand `b' not allowed with -c%n&quot;), result);</span>
+<span class="fc" id="L222">		assertEquals(1, sorttool.getStatusCode());</span>
+<span class="fc" id="L223">	}</span>
+	
+	/*
+	 * New uniq tests
+	 */
+	
+	@Test
+	public void endToEndHelp() {
+<span class="fc" id="L231">		UniqTool tool = new UniqTool(new String[]{&quot;-help&quot;});</span>
+<span class="fc" id="L232">		String result = tool.execute(null, null);</span>
+<span class="fc" id="L233">		assertTrue(result.contains(&quot;uniq&quot;));</span>
+<span class="fc" id="L234">	}</span>
+	
+	@Test
+	public void endToEndNullStdin() {
+<span class="fc" id="L238">		UniqTool tool = new UniqTool(new String[]{&quot;-&quot;});</span>
+<span class="fc" id="L239">		String result = tool.execute(null, null);</span>
+<span class="fc" id="L240">		assertTrue(result.equals(&quot;&quot;));</span>
+<span class="fc" id="L241">	}</span>
+	
+	@Test
+	public void endToEndEmptyStdin() {
+<span class="fc" id="L245">		UniqTool tool = new UniqTool(new String[]{&quot;-&quot;});</span>
+<span class="fc" id="L246">		String result = tool.execute(null, &quot;&quot;);</span>
+<span class="fc" id="L247">		assertTrue(result.equals(&quot;&quot;));</span>
+<span class="fc" id="L248">	}</span>
+	
+	@Test
+	public void endToEndParamsIncludingHelp() {
+<span class="fc" id="L252">		UniqTool tool = new UniqTool(new String[]{&quot;-i&quot;, &quot;-help&quot;, &quot;-f&quot;, &quot;2&quot;});</span>
+<span class="fc" id="L253">		String result = tool.execute(null, &quot;&quot;);</span>
+<span class="fc" id="L254">		assertTrue(result.contains(&quot;uniq&quot;));</span>
+<span class="fc" id="L255">	}</span>
+	
+	@Test
+	public void endToEndMissingParam() {
+<span class="fc" id="L259">		UniqTool tool = new UniqTool(new String[]{&quot;-f&quot;});</span>
+<span class="fc" id="L260">		tool.execute(null, null);</span>
+<span class="fc" id="L261">		assertNotEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L262">	}</span>
+	
+	/*
+	 * New wc tests
+	 */
+
+	@Test
+	public void executeNoStdinWcTest() throws IOException {
+<span class="fc" id="L270">		wctool = new WcTool(new String[] {});</span>
+<span class="fc" id="L271">		String msg = wctool.execute(null, null);</span>
+<span class="fc" id="L272">		assertEquals(String.format(&quot;usage: wc [-lmw] [file ...]%n&quot;), msg);</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">		assertTrue(wctool.getStatusCode() == 0);</span>
+<span class="fc" id="L274">	}</span>
+	
+	@Test
+	public void executeStdinWcTest() throws IOException {
+<span class="fc" id="L278">		wctool = new WcTool(new String[] {});</span>
+<span class="fc" id="L279">		String msg = wctool.execute(null, testString);</span>
+<span class="fc" id="L280">		assertEquals(&quot;1\t9\t45\t&quot; + System.lineSeparator(), msg);</span>
+<span class="fc" id="L281">	}</span>
+	
+	@Test
+	public void executeStdinDashWcTest() throws IOException {
+<span class="fc" id="L285">		wctool = new WcTool(new String[] { &quot;-&quot; });</span>
+<span class="fc" id="L286">		String msg = wctool.execute(null, testString);</span>
+<span class="fc" id="L287">		assertEquals(&quot;1\t9\t45\t&quot; + System.lineSeparator(), msg);</span>
+<span class="fc" id="L288">	}</span>
+	
+	@Test
+	public void executeTwoStdinDashWcTest() throws IOException {
+<span class="fc" id="L292">		wctool = new WcTool(new String[] { &quot;-&quot;, &quot;-&quot; });</span>
+<span class="fc" id="L293">		String msg = wctool.execute(null, testString);</span>
+<span class="fc" id="L294">		assertEquals(&quot;1\t9\t45\t&quot; + System.lineSeparator(), msg);</span>
+<span class="fc" id="L295">	}</span>
+	
+	/*
+	 * New cat tests
+	 */
+	
+	@Test
+	public void executeCatDoubleStdin() {
+<span class="fc" id="L303">		ICatTool tool = new CatTool(new String[]{&quot;-&quot;, &quot;-&quot;});</span>
+<span class="fc" id="L304">		String expected = &quot;This is stdin!&quot;;</span>
+
+<span class="fc" id="L306">		String result = tool.execute(null, expected);</span>
+
+<span class="fc" id="L308">		assertEquals(expected, result);</span>
+<span class="fc" id="L309">		assertEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L310">	}</span>
+
+	/*
+	 * New cd tests
+	 */
+
+	@Test
+	public void toolExecuteNoArgs() throws IOException {
+<span class="fc" id="L318">		CdTool tool = new CdTool(new String[0], new Shell(System.in, System.out));</span>
+<span class="fc" id="L319">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L320">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L321">		assertNotEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L322">	}</span>
+	
+	@Test
+	public void toolExecuteBadArgs() throws IOException {
+<span class="fc" id="L326">		CdTool tool = new CdTool(new String[]{null}, new Shell(System.in, System.out));</span>
+<span class="fc" id="L327">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L328">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L329">		assertNotEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L330">	}</span>
+	
+	/*
+	 * New echo tests
+	 */
+	
+	/**
+	 * MUT: echo()
+	 * Should return parameter passed.
+	 */
+	@Test
+	public void echoTest2() {
+<span class="fc" id="L342">		IEchoTool tool = new EchoTool(new String[0]);</span>
+<span class="fc" id="L343">		String expected = &quot;\n&quot;;</span>
+<span class="fc" id="L344">		String result = tool.execute(null, null);</span>
+<span class="fc" id="L345">		assertEquals(expected, result);</span>
+<span class="fc" id="L346">		assertEquals(tool.getStatusCode(), 0);</span>
+<span class="fc" id="L347">	}</span>
+	
+	/*
+	 * New move tests
+	 */
+	
+	@Test
+	public void moveToolBadArgs() {
+<span class="fc" id="L355">		IMoveTool tool = new MoveTool(new String[0]);</span>
+<span class="fc" id="L356">		String result = tool.execute(null, null);</span>
+<span class="fc" id="L357">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L358">		assertEquals(1, tool.getStatusCode());</span>
+<span class="fc" id="L359">	}</span>
+	
+	/*
+	 * New copy tests
+	 */
+	
+	private byte[] fileGetContents(File f) {
+<span class="pc bpc" id="L366" title="2 of 4 branches missed.">		if (f.exists() &amp;&amp; f.canRead()) {</span>
+			try {
+				int read;
+<span class="fc" id="L369">				byte[] buf = new byte[4096];</span>
+<span class="fc" id="L370">				FileInputStream is = new FileInputStream(f);</span>
+<span class="fc" id="L371">				ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">				while ((read = is.read(buf)) != -1) {</span>
+<span class="fc" id="L373">					baos.write(buf, 0, read);</span>
+				}
+<span class="fc" id="L375">				is.close();</span>
+<span class="fc" id="L376">				return baos.toByteArray();</span>
+<span class="nc" id="L377">			} catch (FileNotFoundException e) {</span>
+<span class="nc" id="L378">				e.printStackTrace();</span>
+<span class="nc" id="L379">				return null;</span>
+<span class="nc" id="L380">			} catch (IOException e) {</span>
+<span class="nc" id="L381">				e.printStackTrace();</span>
+<span class="nc" id="L382">				return null;</span>
+			}
+		} else {
+<span class="nc" id="L385">			return null;</span>
+		}
+	}
+	
+	private String fileGetString(File f) {
+<span class="fc" id="L390">		byte[] result = fileGetContents(f);</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">		if (result == null) {</span>
+<span class="nc" id="L392">			return null;</span>
+		} else {
+<span class="fc" id="L394">			return new String(result, StandardCharsets.UTF_8);</span>
+		}
+	}
+
+	/**
+	 * MUT: copy()
+	 * Source file should not be blank.
+	 * @throws IOException
+	 */
+	@Test
+	public void sameSrcAndDest() throws IOException {
+<span class="fc" id="L405">		File f = new File(&quot;testSrc&quot;);</span>
+<span class="fc" id="L406">		f.createNewFile();</span>
+
+<span class="fc" id="L408">		PrintWriter pw = new PrintWriter(new FileOutputStream(f));</span>
+<span class="fc" id="L409">		pw.write(&quot;test string.&quot;);</span>
+<span class="fc" id="L410">		pw.close();</span>
+
+<span class="fc" id="L412">		File dest = new File(&quot;testSrc&quot;);</span>
+
+<span class="fc" id="L414">		ICopyTool copyTool = new CopyTool(new String[0]);</span>
+<span class="fc" id="L415">		boolean result = copyTool.copy(f, dest);</span>
+<span class="fc" id="L416">		String contents = fileGetString(dest);</span>
+<span class="fc" id="L417">		assertEquals(&quot;test string.&quot;, contents);</span>
+<span class="fc" id="L418">		assertTrue(result);</span>
+<span class="fc" id="L419">		assertEquals(0, copyTool.getStatusCode());</span>
+
+<span class="fc" id="L421">		f.delete();</span>
+<span class="fc" id="L422">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

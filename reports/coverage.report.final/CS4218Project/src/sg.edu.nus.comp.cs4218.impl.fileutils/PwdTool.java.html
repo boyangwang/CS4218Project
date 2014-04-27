@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PwdTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">PwdTool.java</span></div><h1>PwdTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import java.io.File;
+import java.io.IOException;
+
+import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
+
+public class PwdTool extends ATool implements IPwdTool {
+	/**
+	 * Constructor
+	 *
+	 * @param arguments Arguments the tool is going to be executed with.
+	 */
+	public PwdTool(String[] arguments) {
+<span class="fc" id="L16">		super(arguments);</span>
+<span class="fc" id="L17">	}</span>
+
+	@Override
+	public String getStringForDirectory(File directory) {
+		//Error Handling
+<span class="fc bfc" id="L22" title="All 4 branches covered.">		if (directory == null || !directory.isDirectory()) {</span>
+<span class="fc" id="L23">			statusError();</span>
+<span class="fc" id="L24">			return null;</span>
+		}
+
+<span class="fc" id="L27">		String canonicalPath = null;</span>
+		try {
+<span class="fc" id="L29">			canonicalPath = directory.getCanonicalPath();</span>
+<span class="fc" id="L30">			statusSuccess();</span>
+<span class="fc" id="L31">			return canonicalPath;</span>
+<span class="nc" id="L32">		} catch (IOException e) {</span>
+<span class="nc" id="L33">			statusError();</span>
+<span class="nc" id="L34">			return canonicalPath;</span>
+		}
+	}
+
+	/**
+	 * Executes the tool with args provided in the constructor
+	 *
+	 * @param workingDir
+	 * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+	 * @return Output on stdout
+	 */
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc" id="L47">		String result = getStringForDirectory(workingDir);</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">		if (result == null) {</span>
+<span class="nc" id="L49">			statusError();</span>
+<span class="nc" id="L50">			return String.format(&quot;Unable to get working directory.%n&quot;);</span>
+		}
+
+<span class="fc" id="L53">		statusSuccess();</span>
+<span class="fc" id="L54">		return String.format(&quot;%s%n&quot;, result);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

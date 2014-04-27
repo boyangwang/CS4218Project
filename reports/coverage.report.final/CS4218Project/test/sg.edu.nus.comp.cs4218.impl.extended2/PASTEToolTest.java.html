@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PASTEToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">PASTEToolTest.java</span></div><h1>PASTEToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import static org.junit.Assert.*;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.extended2.IPasteTool;
+
+<span class="fc" id="L15">public class PASTEToolTest {</span>
+	private IPasteTool pastetool;
+	private File testDir;
+	private File testFile1;
+	private File testFile2;
+	private File testFile3;
+
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L24">		pastetool = new PasteTool(new String[0]);</span>
+<span class="fc" id="L25">		testDir = new File(&quot;testPasteFolder&quot;);</span>
+<span class="fc" id="L26">		testDir.mkdir();</span>
+
+		// create new file with text
+<span class="fc" id="L29">		testFile1 = new File(testDir, &quot;names.txt&quot;);</span>
+<span class="fc" id="L30">		testFile1.createNewFile();</span>
+<span class="fc" id="L31">		FileWriter fw = new FileWriter(testFile1.getAbsoluteFile());</span>
+<span class="fc" id="L32">		BufferedWriter bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L33">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L34">		sb.append(&quot;Mark Smith\n&quot;);</span>
+<span class="fc" id="L35">		sb.append(&quot;Bobby Brown\n&quot;);</span>
+<span class="fc" id="L36">		sb.append(&quot;Sue Miller\n&quot;);</span>
+<span class="fc" id="L37">		sb.append(&quot;Jenny Igotit&quot;);</span>
+<span class="fc" id="L38">		bw.write(sb.toString());</span>
+<span class="fc" id="L39">		bw.close();</span>
+
+<span class="fc" id="L41">		testFile2 = new File(testDir, &quot;numbers.txt&quot;);</span>
+<span class="fc" id="L42">		testFile2.createNewFile();</span>
+<span class="fc" id="L43">		fw = new FileWriter(testFile2.getAbsoluteFile());</span>
+<span class="fc" id="L44">		bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L45">		sb = new StringBuilder();</span>
+<span class="fc" id="L46">		sb.append(&quot;555-1234\n&quot;);</span>
+<span class="fc" id="L47">		sb.append(&quot;555-9876\n&quot;);</span>
+<span class="fc" id="L48">		sb.append(&quot;555-6743\n&quot;);</span>
+<span class="fc" id="L49">		sb.append(&quot;867-5309&quot;);</span>
+<span class="fc" id="L50">		bw.write(sb.toString());</span>
+<span class="fc" id="L51">		bw.close();</span>
+
+		// create new file with text
+<span class="fc" id="L54">		testFile3 = new File(testDir, &quot;names short.txt&quot;);</span>
+<span class="fc" id="L55">		testFile3.createNewFile();</span>
+<span class="fc" id="L56">		fw = new FileWriter(testFile3.getAbsoluteFile());</span>
+<span class="fc" id="L57">		bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L58">		sb = new StringBuilder();</span>
+<span class="fc" id="L59">		sb.append(&quot;Mark Smith\n&quot;);</span>
+<span class="fc" id="L60">		sb.append(&quot;Bobby Brown\n&quot;);</span>
+<span class="fc" id="L61">		sb.append(&quot;Sue Miller\n&quot;);</span>
+<span class="fc" id="L62">		bw.write(sb.toString());</span>
+<span class="fc" id="L63">		bw.close();</span>
+<span class="fc" id="L64">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+		// delete all files in directory
+<span class="fc" id="L69">		File[] fileList = testDir.listFiles();</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		for (int i = 0; i &lt; fileList.length; i++) {</span>
+<span class="fc" id="L71">			File file = fileList[i];</span>
+<span class="fc" id="L72">			file.delete();</span>
+		}
+		// delete directory
+<span class="fc" id="L75">		testDir.delete();</span>
+<span class="fc" id="L76">		pastetool = null;</span>
+<span class="fc" id="L77">	}</span>
+
+	@Test
+	public void pasteSerialTest() {
+<span class="fc" id="L81">		String expectedOutput = &quot;Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309\n&quot;;</span>
+<span class="fc" id="L82">		String[] inputArr = { &quot;Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit&quot;, &quot;555-1234\n555-9876\n555-6743\n867-5309&quot; };</span>
+<span class="fc" id="L83">		assertEquals(expectedOutput, pastetool.pasteSerial(inputArr));</span>
+<span class="fc" id="L84">	}</span>
+
+	@Test
+	public void pasteSerialNegativeTest() {
+<span class="fc" id="L88">		String expectedOutput = &quot;Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309&quot;;</span>
+<span class="fc" id="L89">		String[] inputArr = { &quot;Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit&quot;, &quot;555-1234\n555-9876\n555-6743867-5309&quot; };</span>
+<span class="fc" id="L90">		assertNotEquals(expectedOutput, pastetool.pasteSerial(inputArr));</span>
+<span class="fc" id="L91">	}</span>
+
+	@Test
+	public void pasteNoDelimEqualLinesTest() {
+<span class="fc" id="L95">		String[] inputArr = { &quot;Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit&quot;, &quot;555-1234\n555-9876\n555-6743\n867-5309&quot; };</span>
+<span class="fc" id="L96">		String expectedOutput = &quot;Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\nJenny Igotit\t867-5309\n&quot;;</span>
+<span class="fc" id="L97">		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(null, inputArr));</span>
+<span class="fc" id="L98">	}</span>
+
+	@Test
+	public void pasteNoDelimUnequalLinesTest() {
+<span class="fc" id="L102">		String[] inputArr = { &quot;Mark Smith\nBobby Brown\nSue Miller&quot;, &quot;555-1234\n555-9876\n555-6743\n867-5309&quot; };</span>
+<span class="fc" id="L103">		String expectedOutput = &quot;Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\n\t867-5309\n&quot;;</span>
+<span class="fc" id="L104">		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(null, inputArr));</span>
+<span class="fc" id="L105">		expectedOutput = &quot;Mark Smith\t555-1234\nBobby Brown\t555-9876\nSue Miller\t555-6743\n\t867-5309\n&quot;;</span>
+<span class="fc" id="L106">		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(null, inputArr));</span>
+<span class="fc" id="L107">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED wrong result compared to unix paste tool
+	 */
+	public void pasteUseDelimEqualLinesTest() {
+
+<span class="fc" id="L115">		pastetool = new PasteTool(new String[0]);</span>
+<span class="fc" id="L116">		String[] inputArr = { &quot;Mark Smith\nBobby Brown\nSue Miller\nJenny Igotit&quot;, &quot;555-1234\n555-9876\n555-6743\n867-5309&quot; };</span>
+<span class="fc" id="L117">		String delim = &quot;.,&quot;;</span>
+		//String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\nJenny Igotit,867-5309&quot;;
+<span class="fc" id="L119">		String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\nJenny Igotit.867-5309\n&quot;;</span>
+<span class="fc" id="L120">		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(delim, inputArr));</span>
+<span class="fc" id="L121">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED wrong result compared to unix paste tool
+	 */
+	public void pasteUseDelimUnequalLinesTest() {
+<span class="fc" id="L128">		String[] inputArr = { &quot;Mark Smith\nBobby Brown\nSue Miller&quot;, &quot;555-1234\n555-9876\n555-6743\n867-5309&quot; };</span>
+<span class="fc" id="L129">		String delim = &quot;.,&quot;;</span>
+
+		//String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\n,867-5309&quot;;
+<span class="fc" id="L132">		String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n&quot;;</span>
+<span class="fc" id="L133">		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(delim, inputArr));</span>
+<span class="fc" id="L134">		delim = &quot;.&quot;;</span>
+		//expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309&quot;;
+<span class="fc" id="L136">		expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n&quot;;</span>
+<span class="fc" id="L137">		assertEquals(expectedOutput, pastetool.pasteUseDelimiter(delim, inputArr));</span>
+<span class="fc" id="L138">	}</span>
+
+	@Test
+	public void executeBlankParamTest() {
+<span class="fc" id="L142">		pastetool = new PasteTool(new String[] {});</span>
+<span class="fc" id="L143">		assertEquals(&quot;Error: no file is specified\n&quot;, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L144">		assertEquals(1, pastetool.getStatusCode());</span>
+<span class="fc" id="L145">	}</span>
+
+	@Test
+	public void executeNullParamTest() {
+
+<span class="fc" id="L150">		pastetool = new PasteTool(new String[] {});</span>
+<span class="fc" id="L151">		assertEquals(&quot;Error: no file is specified\n&quot;, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L152">		assertEquals(1, pastetool.getStatusCode());</span>
+<span class="fc" id="L153">	}</span>
+
+	//@Test
+	/*
+	 * removed this false testcase
+	 * &quot;test is a valid file name on linux
+	 */
+	//public void executeInvalidFileNameTest(){
+	//assertEquals(&quot;Error: invalid file name&quot;, pastetool.execute(testDir, &quot;numbers.txt \&quot;test.txt&quot;));
+	//assertEquals(1, pastetool.getStatusCode());
+	//}
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeMissingFilesTest() {
+<span class="fc" id="L170">		pastetool = new PasteTool(new String[] { &quot;numbers.txt&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L171">		assertEquals(&quot;Error: cannot read from file test.txt\n&quot;, pastetool.execute(testDir, &quot;numbers.txt test.txt&quot;));</span>
+<span class="fc" id="L172">		pastetool = new PasteTool(new String[] { &quot;test.txt&quot;, &quot;numbers.txt&quot; });</span>
+<span class="fc" id="L173">		assertEquals(&quot;Error: cannot read from file test.txt\n&quot;, pastetool.execute(testDir, &quot;test.txt numbers.txt&quot;));</span>
+<span class="fc" id="L174">		pastetool = new PasteTool(new String[] { &quot;test.txt&quot;, &quot;test2.txt&quot; });</span>
+<span class="fc" id="L175">		assertEquals(&quot;Error: cannot read from file test.txt\n&quot;, pastetool.execute(testDir, &quot;test.txt test2.txt&quot;));</span>
+<span class="fc" id="L176">		assertEquals(1, pastetool.getStatusCode());</span>
+<span class="fc" id="L177">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeMissingFileNameTest() {
+
+<span class="fc" id="L185">		pastetool = new PasteTool(new String[] { &quot;-s&quot; });</span>
+		//assertEquals(&quot;Error: you must specify a file name&quot;, pastetool.execute(testDir, &quot;-s&quot;));
+<span class="fc" id="L187">		assertEquals(&quot;Error: no file is specified\n&quot;, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L188">		assertEquals(1, pastetool.getStatusCode());</span>
+<span class="fc" id="L189">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executePasteSerialTest() {
+<span class="fc" id="L196">		pastetool = new PasteTool(new String[] { &quot;-s&quot;, &quot;names.txt&quot;, &quot;numbers.txt&quot; });</span>
+<span class="fc" id="L197">		String expectedOutput = &quot;Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309\n&quot;;</span>
+		//assertEquals(expectedOutput, pastetool.execute(testDir, &quot;-s names.txt numbers.txt&quot;));
+<span class="fc" id="L199">		assertEquals(expectedOutput, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L200">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 * Wrong result compared to unix paste
+	 * Quotes should be handled by the shell itself
+	 * wrong place for testing quotes
+	 */
+	public void executePasteUseDelimiterEqualLines() {
+<span class="fc" id="L210">		pastetool = new PasteTool(new String[] { &quot;-d&quot;, &quot;.,&quot;, &quot;names.txt&quot;, &quot;numbers.txt&quot; });</span>
+		//String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\nJenny Igotit,867-5309\n&quot;;
+<span class="fc" id="L212">		String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\nJenny Igotit.867-5309\n&quot;;</span>
+		//assertEquals(expectedOutput, pastetool.execute(testDir, &quot;-d ., \&quot;names.txt\&quot; numbers.txt&quot;));
+<span class="fc" id="L214">		assertEquals(expectedOutput, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L215">	}</span>
+
+	@Test
+	/*
+	 * CORRECTED
+	 * wrong result compared to unix paste
+	 */
+	public void executePasteUseDelimiterUnequalLines() {
+<span class="fc" id="L223">		pastetool = new PasteTool(new String[] { &quot;-d&quot;, &quot;.,&quot;, &quot;names short.txt&quot;, &quot;numbers.txt&quot; });</span>
+		//String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown,555-9876\nSue Miller.555-6743\n,867-5309\n&quot;;
+<span class="fc" id="L225">		String expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n&quot;;</span>
+		//assertEquals(expectedOutput, pastetool.execute(testDir,&quot;-d ., \&quot;names short.txt\&quot; numbers.txt&quot;));
+<span class="fc" id="L227">		assertEquals(expectedOutput, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L228">		pastetool = new PasteTool(new String[] { &quot;-d&quot;, &quot;.&quot;, &quot;names short.txt&quot;, &quot;numbers.txt&quot; });</span>
+<span class="fc" id="L229">		expectedOutput = &quot;Mark Smith.555-1234\nBobby Brown.555-9876\nSue Miller.555-6743\n.867-5309\n&quot;;</span>
+<span class="fc" id="L230">		assertEquals(expectedOutput, pastetool.execute(testDir, &quot;-d . \&quot;names short.txt\&quot; numbers.txt&quot;));</span>
+<span class="fc" id="L231">	}</span>
+
+	/*
+	 * @CORRECTED wrong use of stdin
+	 */
+	// Note: as stated in forum, &quot;a priority scheme when multiple arguments/options are supplied.&quot;
+	// In this case, I choose -s to take precedent over -d as there is no interface method to handle both at the same time.
+	@Test
+	public void executeSerialDelim() {
+<span class="fc" id="L240">		pastetool = new PasteTool(new String[] { &quot;-s&quot;, &quot;-d&quot;, &quot;,&quot;, &quot;names.txt&quot;, &quot;numbers.txt&quot; });</span>
+<span class="fc" id="L241">		String expectedOutput = &quot;Mark Smith\tBobby Brown\tSue Miller\tJenny Igotit\n555-1234\t555-9876\t555-6743\t867-5309\n&quot;;</span>
+		//assertEquals(expectedOutput, pastetool.execute(testDir, &quot;-s -d , names.txt numbers.txt&quot;));
+<span class="fc" id="L243">		assertEquals(expectedOutput, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L244">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void getHelpTest() {
+<span class="fc" id="L251">		pastetool = new PasteTool(new String[] { &quot;-help&quot; });</span>
+<span class="fc" id="L252">		String helpText = pastetool.getHelp();</span>
+		//assertEquals(helpText, pastetool.execute(testDir, &quot;-help&quot;));
+<span class="fc" id="L254">		assertEquals(helpText, pastetool.execute(testDir, null));</span>
+		//assertEquals(helpText, pastetool.execute(testDir, &quot;-help abcde&quot;));
+<span class="fc" id="L256">		pastetool = new PasteTool(new String[] { &quot;-help&quot;, &quot;abcde&quot; });</span>
+<span class="fc" id="L257">		assertEquals(helpText, pastetool.execute(testDir, null));</span>
+		//assertEquals(helpText, pastetool.execute(testDir, &quot;-d ., -s -help abcde&quot;));
+<span class="fc" id="L259">		pastetool = new PasteTool(new String[] { &quot;-help&quot; });</span>
+<span class="fc" id="L260">		assertEquals(helpText, pastetool.execute(testDir, null));</span>
+<span class="fc" id="L261">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

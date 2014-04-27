@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GrepTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended1</a> &gt; <span class="el_source">GrepTool.java</span></div><h1>GrepTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended1;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import sg.edu.nus.comp.cs4218.impl.ATool;
+import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+
+/**
+ * The grep command searches one or more input files
+ * for lines containing a match to a specified pattern.
+ * The grep tool must work on all characters in UTF-8 encoding.
+ *
+ * Command Format - grep [OPTIONS] PATTERN [FILE]
+ * PATTERN - This specifies a regular expression pattern that describes a set of strings
+ * FILE - Name of the file, when no file is present (denoted by &quot;-&quot;) use standard input
+ * OPTIONS
+ *   -A NUM : Print NUM lines of trailing context after matching lines
+ *   -B NUM : Print NUM lines of leading context before matching lines
+ *   -C NUM : Print NUM lines of output context
+ *   -c : Suppress normal output. Instead print a count of matching lines for each input file
+ *   -o : Show only the part of a matching line that matches PATTERN
+ *   -v : Select non-matching (instead of matching) lines
+ *   -help : Brief information about supported options
+ */
+public class GrepTool extends ATool implements IGrepTool {
+<span class="fc" id="L38">	static final Charset UTF_8 = StandardCharsets.UTF_8;</span>
+
+	private boolean count, onlyMatching, invertMatch;
+	private int afterContext, beforeContext;
+
+	public GrepTool(String[] arguments) {
+<span class="fc" id="L44">		super(arguments);</span>
+<span class="fc" id="L45">	}</span>
+
+	/**
+	 * Get count of matching lines
+	 *
+	 * @param pattern
+	 * @param input
+	 * @return count of matching lines
+	 */
+	@Override
+	public int getCountOfMatchingLines(String pattern, String input) {
+<span class="fc bfc" id="L56" title="All 4 branches covered.">		if (pattern == null || input == null) {</span>
+<span class="fc" id="L57">			statusError();</span>
+<span class="fc" id="L58">			return -1;</span>
+		}
+
+		Pattern regex;
+		try {
+<span class="fc" id="L63">			regex = Pattern.compile(pattern);</span>
+<span class="pc" id="L64">		} catch (PatternSyntaxException e) {</span>
+<span class="nc" id="L65">			statusError();</span>
+<span class="nc" id="L66">			return -1;</span>
+		}
+
+<span class="fc" id="L69">		Matcher matcher = null;</span>
+<span class="fc" id="L70">		int lineCount = 0;</span>
+
+<span class="fc" id="L72">		Scanner scanner = new Scanner(input);</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">		while (scanner.hasNextLine()) {</span>
+<span class="fc" id="L74">			String line = scanner.nextLine();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">			if (matcher == null) {</span>
+<span class="fc" id="L76">				matcher = regex.matcher(line);</span>
+<span class="fc" id="L77">			} else {</span>
+<span class="fc" id="L78">				matcher.reset(line);</span>
+			}
+<span class="fc bfc" id="L80" title="All 2 branches covered.">			if (matcher.find()) {</span>
+<span class="fc" id="L81">				lineCount++;</span>
+			}
+		}
+<span class="fc" id="L84">		scanner.close();</span>
+
+<span class="fc" id="L86">		statusSuccess();</span>
+<span class="fc" id="L87">		return lineCount;</span>
+	}
+
+	/**
+	 * Get only matching lines
+	 *
+	 * @param pattern
+	 * @param input
+	 * @return matching lines
+	 */
+	@Override
+	public String getOnlyMatchingLines(String pattern, String input) {
+<span class="fc" id="L99">		reset();</span>
+<span class="fc" id="L100">		return grep(pattern, input);</span>
+	}
+
+	/**
+	 * Get matching lines with trailing context
+	 *
+	 * @param option_A NUM lines of trailing context after matching lines
+	 * @param pattern
+	 * @param input
+	 * @return matching lines with trailing context
+	 */
+	@Override
+	public String getMatchingLinesWithTrailingContext(int optionA, String pattern, String input) {
+<span class="fc" id="L113">		reset();</span>
+<span class="fc" id="L114">		afterContext = optionA;</span>
+<span class="fc" id="L115">		return grep(pattern, input);</span>
+	}
+
+	/**
+	 * Get matching lines with leading context
+	 * @param option_B NUM lines of leading context before matching lines
+	 * @param pattern
+	 * @param input
+	 * @return matching lines with leading context
+	 */
+	@Override
+	public String getMatchingLinesWithLeadingContext(int optionB, String pattern, String input) {
+<span class="fc" id="L127">		reset();</span>
+<span class="fc" id="L128">		beforeContext = optionB;</span>
+<span class="fc" id="L129">		return grep(pattern, input);</span>
+	}
+
+	/**
+	 * Get matching lines with output context
+	 * @param option_C NUM lines of output context
+	 * @param pattern
+	 * @param input
+	 * @return matching lines with output context
+	 */
+	@Override
+	public String getMatchingLinesWithOutputContext(int optionC, String pattern, String input) {
+<span class="fc" id="L141">		reset();</span>
+<span class="fc" id="L142">		beforeContext = afterContext = optionC;</span>
+<span class="fc" id="L143">		return grep(pattern, input);</span>
+	}
+
+	/**
+	 * Get only matching parts of matching lines
+	 * @param pattern
+	 * @param input
+	 * @return matching parts of matching lines
+	 */
+	@Override
+	public String getMatchingLinesOnlyMatchingPart(String pattern, String input) {
+<span class="fc" id="L154">		reset();</span>
+<span class="fc" id="L155">		onlyMatching = true;</span>
+<span class="fc" id="L156">		return grep(pattern, input);</span>
+	}
+
+	/**
+	 * Get only non matching lines
+	 * @param pattern
+	 * @param input
+	 * @return non matching lines
+	 */
+	@Override
+	public String getNonMatchingLines(String pattern, String input) {
+<span class="fc" id="L167">		reset();</span>
+<span class="fc" id="L168">		invertMatch = true;</span>
+<span class="fc" id="L169">		return grep(pattern, input);</span>
+	}
+
+	/**
+	 * Get help text
+	 * @return help text
+	 */
+	@Override
+	public String getHelp() {
+<span class="fc" id="L178">		return &quot;grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]&quot; + System.lineSeparator();</span>
+	}
+
+	/**
+	 * Executes the tool with args provided in the constructor
+	 *
+	 * On interrupt (CTRL-Z), exit with code 0 and print generated output up to that point
+	 *
+	 * @param workingDir
+	 * @param stdin      Input on stdin. NOT THE ARGUMENTS! Can be null.
+	 * @return Output on stdout
+	 */
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc" id="L192">		int i = 0;</span>
+
+<span class="fc bfc" id="L194" title="All 4 branches covered.">		while (i &lt; args.length &amp;&amp; args[i].startsWith(&quot;-&quot;)) {</span>
+<span class="fc" id="L195">			String arg = args[i++];</span>
+
+<span class="pc bpc" id="L197" title="4 of 13 branches missed.">			switch (arg) {</span>
+			case &quot;-help&quot;:
+<span class="fc" id="L199">				return getHelp();</span>
+			case &quot;-A&quot;:
+			case &quot;-B&quot;:
+			case &quot;-C&quot;:
+				try {
+<span class="fc bfc" id="L204" title="All 2 branches covered.">					if (i &gt;= args.length) {</span>
+<span class="fc" id="L205">						throw new NumberFormatException();</span>
+					}
+<span class="fc" id="L207">					int contextNum = Integer.parseInt(args[i++]);</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">					if (contextNum &lt; 0) {</span>
+<span class="fc" id="L209">						throw new NumberFormatException();</span>
+					}
+<span class="fc bfc" id="L211" title="All 4 branches covered.">					if (arg.equals(&quot;-B&quot;) || arg.equals(&quot;-C&quot;)) {</span>
+<span class="fc" id="L212">						beforeContext = contextNum;</span>
+					}
+<span class="fc bfc" id="L214" title="All 4 branches covered.">					if (arg.equals(&quot;-A&quot;) || arg.equals(&quot;-C&quot;)) {</span>
+<span class="fc" id="L215">						afterContext = contextNum;</span>
+					}
+<span class="fc" id="L217">				} catch (NumberFormatException e) {</span>
+<span class="fc" id="L218">					statusError();</span>
+<span class="fc" id="L219">					return String.format(&quot;%s requires a positive number%n&quot;, arg);</span>
+				}
+				break;
+			default:
+<span class="fc bfc" id="L223" title="All 2 branches covered.">				for (int j = 1; j &lt; arg.length(); j++) {</span>
+<span class="fc" id="L224">					char flag = arg.charAt(j);</span>
+<span class="fc bfc" id="L225" title="All 4 branches covered.">					switch (flag) {</span>
+					case 'c':
+<span class="fc" id="L227">						count = true;</span>
+<span class="fc" id="L228">						break;</span>
+					case 'o':
+<span class="fc" id="L230">						onlyMatching = true;</span>
+<span class="fc" id="L231">						break;</span>
+					case 'v':
+<span class="fc" id="L233">						invertMatch = true;</span>
+<span class="fc" id="L234">						break;</span>
+					default:
+<span class="fc" id="L236">						statusError();</span>
+<span class="fc" id="L237">						return &quot;Illegal argument -&quot; + flag + System.lineSeparator();</span>
+					}
+				}
+			}
+		}
+
+<span class="fc bfc" id="L243" title="All 4 branches covered.">		if (i + 1 == args.length &amp;&amp; stdin != null) {</span>
+<span class="fc" id="L244">			String pattern = args[i++];</span>
+<span class="fc" id="L245">			return grep(pattern, stdin);</span>
+		}
+
+<span class="fc bfc" id="L248" title="All 2 branches covered.">		if (i + 2 &gt; args.length) {</span>
+<span class="fc" id="L249">			statusError();</span>
+<span class="fc" id="L250">			return getHelp();</span>
+		}
+
+<span class="fc" id="L253">		String pattern = args[i++];</span>
+
+<span class="fc" id="L255">		boolean isFirstStdin = true;</span>
+<span class="fc" id="L256">		StringBuilder output = new StringBuilder();</span>
+
+<span class="fc bfc" id="L258" title="All 2 branches covered.">		while (i &lt; args.length) {</span>
+<span class="fc" id="L259">			String arg = args[i++];</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">			if (arg.equals(&quot;-&quot;)) {</span>
+				// Process only first stdin argument
+<span class="fc bfc" id="L262" title="All 2 branches covered.">				if (isFirstStdin) {</span>
+<span class="fc" id="L263">					isFirstStdin = false;</span>
+<span class="fc" id="L264">					output.append(grep(pattern, stdin));</span>
+				}
+<span class="fc" id="L266">			} else {</span>
+<span class="fc" id="L267">				output.append(grepPath(pattern, arg, workingDir));</span>
+			}
+		}
+
+<span class="fc" id="L271">		return output.toString();</span>
+	}
+
+	/**
+	 * Reset instance variables
+	 */
+	private void reset() {
+<span class="fc" id="L278">		setStatusCode(0);</span>
+<span class="fc" id="L279">		count = onlyMatching = invertMatch = false;</span>
+<span class="fc" id="L280">		afterContext = beforeContext = 0;</span>
+<span class="fc" id="L281">	}</span>
+
+	/**
+	 * Grep given path from working directory with pattern
+	 * @param pattern
+	 * @param pathname
+	 * @param workingDir
+	 * @return matches
+	 */
+	private String grepPath(String pattern, String pathname, File workingDir) {
+		try {
+<span class="fc" id="L292">			byte[] encoded = Files.readAllBytes(workingDir.toPath().resolve(pathname));</span>
+<span class="fc" id="L293">			return grep(pattern, UTF_8.decode(ByteBuffer.wrap(encoded)).toString());</span>
+<span class="nc" id="L294">		} catch (NoSuchFileException e) {</span>
+<span class="nc" id="L295">			statusError();</span>
+<span class="nc" id="L296">			return String.format(&quot;grep: %s: No such file or directory%n&quot;, pathname);</span>
+<span class="nc" id="L297">		} catch (IOException e) {</span>
+<span class="nc" id="L298">			statusError();</span>
+<span class="nc" id="L299">			return String.format(&quot;grep: %s: %s%n&quot;, pathname, e);</span>
+		}
+	}
+
+	/**
+	 * Circular queue with fixed limit
+	 * @param &lt;E&gt;
+	 */
+	public class CircularQueue&lt;E&gt; extends LinkedList&lt;E&gt; {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8443436540607701637L;
+		private int limit;
+
+<span class="fc" id="L314">		public CircularQueue(int limit) {</span>
+<span class="fc" id="L315">			this.limit = limit;</span>
+<span class="fc" id="L316">		}</span>
+
+		@Override
+		public boolean add(E element) {
+<span class="fc" id="L320">			super.add(element);</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">			while (size() &gt; limit) {</span>
+<span class="fc" id="L322">				super.remove();</span>
+			}
+<span class="fc" id="L324">			return true;</span>
+		}
+	}
+
+	/**
+	 * Grep for pattern in given input
+	 * @param pattern
+	 * @param input
+	 * @return matches
+	 */
+	private String grep(String pattern, String input) {
+<span class="fc bfc" id="L335" title="All 4 branches covered.">		if (pattern == null || input == null) {</span>
+<span class="fc" id="L336">			statusError();</span>
+<span class="fc" id="L337">			return &quot;&quot;;</span>
+		}
+
+<span class="fc bfc" id="L340" title="All 2 branches covered.">		if (count) {</span>
+<span class="fc" id="L341">			int matchingLinesCount = getCountOfMatchingLines(pattern, input);</span>
+<span class="pc bpc" id="L342" title="1 of 2 branches missed.">			return matchingLinesCount == -1 ? &quot;&quot; : String.format(&quot;%d%n&quot;, matchingLinesCount);</span>
+		}
+
+		Pattern regex;
+		try {
+<span class="fc" id="L347">			regex = Pattern.compile(pattern);</span>
+<span class="pc" id="L348">		} catch (PatternSyntaxException e) {</span>
+<span class="nc" id="L349">			statusError();</span>
+<span class="nc" id="L350">			return e.toString() + System.lineSeparator();</span>
+		}
+
+<span class="fc" id="L353">		Matcher matcher = null;</span>
+<span class="fc" id="L354">		StringBuilder output = new StringBuilder();</span>
+<span class="fc" id="L355">		CircularQueue&lt;String&gt; previousLines = new CircularQueue&lt;&gt;(beforeContext);</span>
+<span class="fc" id="L356">		boolean printAfterContext = false;</span>
+<span class="fc" id="L357">		int afterContextCount = 0;</span>
+
+<span class="fc" id="L359">		Scanner scanner = new Scanner(input);</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">		while (scanner.hasNextLine()) {</span>
+<span class="pc bpc" id="L361" title="1 of 2 branches missed.">			if (Thread.interrupted()) {</span>
+<span class="nc" id="L362">				statusSuccess();</span>
+<span class="nc" id="L363">				scanner.close();</span>
+<span class="nc" id="L364">				return output.toString();</span>
+			}
+
+<span class="fc" id="L367">			String line = scanner.nextLine();</span>
+
+<span class="fc bfc" id="L369" title="All 2 branches covered.">			if (matcher == null) {</span>
+<span class="fc" id="L370">				matcher = regex.matcher(line);</span>
+<span class="fc" id="L371">			} else {</span>
+<span class="fc" id="L372">				matcher.reset(line);</span>
+			}
+
+<span class="fc" id="L375">			boolean matched = false;</span>
+<span class="fc bfc" id="L376" title="All 2 branches covered.">			while (matcher.find()) {</span>
+<span class="pc bpc" id="L377" title="1 of 2 branches missed.">				if (!matched) {</span>
+<span class="fc" id="L378">					matched = true;</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">					if (!previousLines.isEmpty()) {</span>
+<span class="fc" id="L380">						ListIterator&lt;String&gt; listIterator = previousLines.listIterator(afterContextCount);</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">						while (listIterator.hasNext()) {</span>
+<span class="fc" id="L382">							output.append(listIterator.next());</span>
+<span class="fc" id="L383">							output.append(System.lineSeparator());</span>
+						}
+					}
+<span class="fc bfc" id="L386" title="All 2 branches covered.">					if (afterContext &gt; 0) {</span>
+<span class="fc" id="L387">						printAfterContext = true;</span>
+<span class="fc" id="L388">						afterContextCount = 0;</span>
+					}
+				}
+
+<span class="fc bfc" id="L392" title="All 2 branches covered.">				if (onlyMatching) {</span>
+<span class="fc" id="L393">					output.append(matcher.group());</span>
+<span class="fc" id="L394">					output.append(System.lineSeparator());</span>
+				} else {
+					break;
+				}
+			}
+<span class="fc bfc" id="L399" title="All 4 branches covered.">			if (!onlyMatching &amp;&amp; matched != invertMatch) {</span>
+<span class="fc" id="L400">				output.append(line);</span>
+<span class="fc" id="L401">				output.append(System.lineSeparator());</span>
+			}
+<span class="fc bfc" id="L403" title="All 4 branches covered.">			if (printAfterContext &amp;&amp; (matched == invertMatch)) {</span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">				if (afterContextCount++ &lt; afterContext) {</span>
+<span class="fc" id="L405">					output.append(line);</span>
+<span class="fc" id="L406">					output.append(System.lineSeparator());</span>
+<span class="fc" id="L407">				} else {</span>
+<span class="fc" id="L408">					printAfterContext = false;</span>
+<span class="fc" id="L409">					afterContextCount = 0;</span>
+				}
+			}
+<span class="fc" id="L412">			previousLines.add(line);</span>
+		}
+<span class="fc" id="L414">		scanner.close();</span>
+
+<span class="fc" id="L416">		return output.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

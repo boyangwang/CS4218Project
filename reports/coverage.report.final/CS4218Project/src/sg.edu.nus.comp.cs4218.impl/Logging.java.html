@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Logging.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl</a> &gt; <span class="el_source">Logging.java</span></div><h1>Logging.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
+/**
+ * A basic logger.
+ *
+ * ...because log4j also cannot =[
+ */
+public final class Logging {
+	/**
+	 * Code for instance stuff.
+	 */
+<span class="fc" id="L15">	private int level = 0;</span>
+	private PrintWriter out;
+
+<span class="fc" id="L18">	private Logging(OutputStream os) {</span>
+<span class="fc" id="L19">		this.out = new PrintWriter(os);</span>
+<span class="fc" id="L20">	}</span>
+
+	public void setLevel(int newLevel) {
+<span class="fc" id="L23">		this.level = newLevel;</span>
+<span class="fc" id="L24">	}</span>
+
+	public void writeLog(int level, String message) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		if (level &gt;= this.level) {</span>
+<span class="fc" id="L28">			out.println(message);</span>
+		}
+<span class="fc" id="L30">	}</span>
+
+	/**
+	 * Code for static stuff.
+	 */
+<span class="fc" id="L35">	private static Logging lg = null;</span>
+
+	public static Logging logger(OutputStream os) {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		while (lg == null) {</span>
+			try {
+<span class="fc" id="L40">				lg = new Logging(os);</span>
+<span class="pc" id="L41">			} catch (Exception ex) {</span>
+				// TODO: How now brown cow?
+			}
+		}
+<span class="fc" id="L45">		return lg;</span>
+	}
+
+	/**
+	 * Log levels.
+	 */
+	public final static int INFO = 0;
+	public final static int ALL = 0;
+	public final static int WARN = 1;
+	public final static int ERROR = 2;
+<span class="fc" id="L55">	public final static int FATAL = 3;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>
