@@ -176,6 +176,8 @@ public class HackathonBugfixTest {
 
 	/*
 	 * BUG_ID #3
+	 * 
+	 * UniqTool.java:18,23,73-76
 	 */
 	@Test
 	public void testUniqWithStdin() {
@@ -220,6 +222,8 @@ public class HackathonBugfixTest {
 
 	/*
 	 * BUG_ID #21
+	 * 
+	 * CopyTool.java:41-44
 	 */
 	@Test
 	public void testCopyToSameFile() throws IOException {
@@ -242,6 +246,8 @@ public class HackathonBugfixTest {
 
 	/*
 	 * BUG_ID #7
+	 * 
+	 * GrepTool.java:219
 	 */
 	@Test
 	public void testGrepWithDouble() {
@@ -255,6 +261,8 @@ public class HackathonBugfixTest {
 
 	/*
 	 * BUG_ID #15
+	 * 
+	 * GrepTool.java:198-199
 	 */
 	@Test
 	public void testGrepHelp() {
