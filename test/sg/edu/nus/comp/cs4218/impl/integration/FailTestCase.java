@@ -150,11 +150,21 @@ public class FailTestCase {
 	 */
 	@Test
 	public void testCtrlZWhenNoToolRunning() {
+
+		String ctrld = "ctrl-z\nctrl-c\n";
+		byte[] b = ctrld.getBytes();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		sh = new Shell(System.in, os);
-		String cmd = "ctrl-z";
-		ITool result = sh.parse(cmd);
-		sh.execute(result);
+		ByteArrayInputStream is = new ByteArrayInputStream(b);
+		sh = new Shell(is, os);
+		sh.run();
+		hold();
+		try {
+			String out = new String(os.toByteArray(), "UTF-8");
+			assertTrue(out.length()>0);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
 		hold();
 		try {
 			String out = new String(os.toByteArray(), "UTF-8");
