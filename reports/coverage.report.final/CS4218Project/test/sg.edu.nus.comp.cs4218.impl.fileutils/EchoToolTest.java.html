@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>EchoToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">EchoToolTest.java</span></div><h1>EchoToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.IEchoTool;
+
+<span class="fc" id="L11">public class EchoToolTest {</span>
+	private IEchoTool echoTool;
+
+	@Before
+	public void before() {
+<span class="fc" id="L16">		echoTool = new EchoTool(new String[0]);</span>
+<span class="fc" id="L17">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L21">		echoTool = null;</span>
+<span class="fc" id="L22">	}</span>
+
+	/**
+	 * MUT: echo()
+	 * Should return parameter passed.
+	 */
+	@Test
+	public void echoTest() {
+<span class="fc" id="L30">		String expected = &quot;foobar&quot;;</span>
+<span class="fc" id="L31">		String result = echoTool.echo(expected);</span>
+<span class="fc" id="L32">		assertEquals(result, expected);</span>
+<span class="fc" id="L33">		assertEquals(echoTool.getStatusCode(), 0);</span>
+<span class="fc" id="L34">	}</span>
+
+	/**
+	 * MUT: echo()
+	 * Should return parameter passed with non-success status code.
+	 */
+	@Test
+	public void echoNull() {
+<span class="fc" id="L42">		String result = echoTool.echo(null);</span>
+<span class="fc" id="L43">		assertNull(result);</span>
+<span class="fc" id="L44">		assertNotEquals(echoTool.getStatusCode(), 0);</span>
+<span class="fc" id="L45">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

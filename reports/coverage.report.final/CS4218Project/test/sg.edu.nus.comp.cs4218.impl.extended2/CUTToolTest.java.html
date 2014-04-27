@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CUTToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">CUTToolTest.java</span></div><h1>CUTToolTest.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import static org.junit.Assert.*;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.extended2.ICutTool;
+
+<span class="fc" id="L22">public class CUTToolTest {</span>
+
+	private ICutTool cuttool;
+	private File testDir;
+	private File testFile;
+
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L30">		cuttool = new CutTool(new String[0]);</span>
+
+<span class="fc" id="L32">		testDir = new File(&quot;testCutFolder&quot;);</span>
+<span class="fc" id="L33">		testDir.mkdir();</span>
+
+		// create new file with text
+<span class="fc" id="L36">		testFile = new File(testDir, &quot;test.txt&quot;);</span>
+<span class="fc" id="L37">		testFile.createNewFile();</span>
+<span class="fc" id="L38">		FileWriter fw = new FileWriter(testFile.getAbsoluteFile());</span>
+<span class="fc" id="L39">		BufferedWriter bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L40">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L41">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L42">		sb.append(&quot;one:two:three:four:five:six:seven\n&quot;);</span>
+<span class="fc" id="L43">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L44">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L45">		bw.write(sb.toString());</span>
+<span class="fc" id="L46">		bw.close();</span>
+<span class="fc" id="L47">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+		// delete all files in directory
+<span class="fc" id="L52">		File[] fileList = testDir.listFiles();</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">		for (int i = 0; i &lt; fileList.length; i++) {</span>
+<span class="fc" id="L54">			File file = fileList[i];</span>
+<span class="fc" id="L55">			file.delete();</span>
+		}
+		// delete directory
+<span class="fc" id="L58">		testDir.delete();</span>
+		// garbage collector swoop in right about here
+<span class="fc" id="L60">		cuttool = null;</span>
+<span class="fc" id="L61">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersSingleLineTest() throws IOException {
+<span class="fc" id="L65">		String expectedResult = &quot;:bar:ba&quot;;</span>
+<span class="fc" id="L66">		assertEquals(expectedResult, cuttool.cutSpecfiedCharacters(&quot;4-10&quot;, &quot;foo:bar:baz:qux:quux&quot;));</span>
+<span class="fc" id="L67">		expectedResult = &quot;:two:th&quot;;</span>
+<span class="fc" id="L68">		assertEquals(expectedResult, cuttool.cutSpecfiedCharacters(&quot;4-10&quot;, &quot;one:two:three:four:five:six:seven&quot;));</span>
+<span class="fc" id="L69">		expectedResult = &quot;ha:beta&quot;;</span>
+<span class="fc" id="L70">		assertEquals(expectedResult, cuttool.cutSpecfiedCharacters(&quot;4-10&quot;, &quot;alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu&quot;));</span>
+<span class="fc" id="L71">		expectedResult = &quot; quick &quot;;</span>
+<span class="fc" id="L72">		assertEquals(expectedResult, cuttool.cutSpecfiedCharacters(&quot;4-10&quot;, &quot;the quick brown fox jumps over the lazy dog&quot;));</span>
+<span class="fc" id="L73">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersMultipleLinesTest() throws IOException {
+<span class="fc" id="L77">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L78">		sb.append(&quot;:bar:ba\n&quot;);</span>
+<span class="fc" id="L79">		sb.append(&quot;:two:th\n&quot;);</span>
+<span class="fc" id="L80">		sb.append(&quot;ha:beta\n&quot;);</span>
+<span class="fc" id="L81">		sb.append(&quot; quick &quot;);</span>
+<span class="fc" id="L82">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L83">		assertEquals(expectedOutput, cuttool.cutSpecfiedCharacters(&quot;4-10&quot;, readFile(testFile)));</span>
+<span class="fc" id="L84">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersIndexTest() throws IOException {
+<span class="fc" id="L88">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L89">		sb.append(&quot;:\n&quot;);</span>
+<span class="fc" id="L90">		sb.append(&quot;:\n&quot;);</span>
+<span class="fc" id="L91">		sb.append(&quot;h\n&quot;);</span>
+<span class="fc" id="L92">		sb.append(&quot; &quot;);</span>
+<span class="fc" id="L93">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L94">		assertEquals(expectedOutput, cuttool.cutSpecfiedCharacters(&quot;4&quot;, readFile(testFile)));</span>
+<span class="fc" id="L95">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersStartToCharTest() throws IOException {
+<span class="fc" id="L99">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L100">		sb.append(&quot;foo:b\n&quot;);</span>
+<span class="fc" id="L101">		sb.append(&quot;one:t\n&quot;);</span>
+<span class="fc" id="L102">		sb.append(&quot;alpha\n&quot;);</span>
+<span class="fc" id="L103">		sb.append(&quot;the q&quot;);</span>
+<span class="fc" id="L104">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L105">		assertEquals(expectedOutput, cuttool.cutSpecfiedCharacters(&quot;-5&quot;, readFile(testFile)));</span>
+<span class="fc" id="L106">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersCharToEndTest() throws IOException {
+<span class="fc" id="L110">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L111">		sb.append(&quot;bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L112">		sb.append(&quot;two:three:four:five:six:seven\n&quot;);</span>
+<span class="fc" id="L113">		sb.append(&quot;a:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L114">		sb.append(&quot;quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L115">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L116">		assertEquals(expectedOutput, cuttool.cutSpecfiedCharacters(&quot;5-&quot;, readFile(testFile)));</span>
+
+<span class="fc" id="L118">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersManyRangesTest() throws IOException {
+<span class="fc" id="L122">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L123">		sb.append(&quot;:bar:bax\n&quot;);</span>
+<span class="fc" id="L124">		sb.append(&quot;:two:thfive:s\n&quot;);</span>
+<span class="fc" id="L125">		sb.append(&quot;ha:betalta:ep\n&quot;);</span>
+<span class="fc" id="L126">		sb.append(&quot; quick  jumps&quot;);</span>
+<span class="fc" id="L127">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L128">		assertEquals(expectedOutput, cuttool.cutSpecfiedCharacters(&quot;4-10,20-25&quot;, readFile(testFile)));</span>
+<span class="fc" id="L129">	}</span>
+
+	@Test
+	public void cutSpecfiedCharactersOverlappingRangesTest() throws IOException {
+<span class="fc" id="L133">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L134">		sb.append(&quot;:bar:baz:qux\n&quot;);</span>
+<span class="fc" id="L135">		sb.append(&quot;:two:three:f\n&quot;);</span>
+<span class="fc" id="L136">		sb.append(&quot;ha:beta:gamm\n&quot;);</span>
+<span class="fc" id="L137">		sb.append(&quot; quick brown&quot;);</span>
+<span class="fc" id="L138">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L139">		assertEquals(expectedOutput, cuttool.cutSpecfiedCharacters(&quot;4-10,8-15&quot;, readFile(testFile)));</span>
+<span class="fc" id="L140">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimSingleLineTest() throws IOException {
+<span class="fc" id="L144">		String expectedResult = &quot;&quot;;</span>
+<span class="fc" id="L145">		assertEquals(expectedResult, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6-8&quot;, &quot;:&quot;, &quot;foo:bar:baz:qux:quux&quot;));</span>
+<span class="fc" id="L146">		expectedResult = &quot;six:seven&quot;;</span>
+<span class="fc" id="L147">		assertEquals(expectedResult, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6-8&quot;, &quot;:&quot;, &quot;one:two:three:four:five:six:seven&quot;));</span>
+<span class="fc" id="L148">		expectedResult = &quot;zeta:eta:teta&quot;;</span>
+<span class="fc" id="L149">		assertEquals(expectedResult,</span>
+<span class="fc" id="L150">				cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6-8&quot;, &quot;:&quot;, &quot;alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu&quot;));</span>
+<span class="fc" id="L151">		expectedResult = &quot;the quick brown fox jumps over the lazy dog&quot;;</span>
+<span class="fc" id="L152">		assertEquals(expectedResult, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6-8&quot;, &quot;:&quot;, &quot;the quick brown fox jumps over the lazy dog&quot;));</span>
+<span class="fc" id="L153">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimMultiLinesTest() throws IOException {
+<span class="fc" id="L157">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L158">		sb.append(&quot;\n&quot;);</span>
+<span class="fc" id="L159">		sb.append(&quot;six:seven\n&quot;);</span>
+<span class="fc" id="L160">		sb.append(&quot;zeta:eta:teta\n&quot;);</span>
+<span class="fc" id="L161">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L162">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L163">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6-8&quot;, &quot;:&quot;, readFile(testFile)));</span>
+<span class="fc" id="L164">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void cutSpecfiedCharDelimEndWithDelimTest() throws IOException {
+<span class="fc" id="L171">		assertEquals(&quot;&quot;, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;3&quot;, &quot;:&quot;, &quot;foo:bar:&quot;));</span>
+<span class="fc" id="L172">		assertEquals(&quot;\n&quot;, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;3&quot;, &quot;:&quot;, &quot;\n&quot;));</span>
+<span class="fc" id="L173">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void cutSpecfiedCharDelimNewLineTest() throws IOException {
+<span class="fc" id="L180">		assertEquals(&quot;\n&quot;, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;3&quot;, &quot;:&quot;, &quot;\n&quot;));</span>
+<span class="fc" id="L181">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimIndexTest() throws IOException {
+<span class="fc" id="L185">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L186">		sb.append(&quot;\n&quot;);</span>
+<span class="fc" id="L187">		sb.append(&quot;six\n&quot;);</span>
+<span class="fc" id="L188">		sb.append(&quot;zeta\n&quot;);</span>
+<span class="fc" id="L189">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L190">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L191">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6&quot;, &quot;:&quot;, readFile(testFile)));</span>
+<span class="fc" id="L192">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimNoDelimInInputTest() {
+<span class="fc" id="L196">		String expectedResult = &quot;the quick brown fox jumps over the lazy dog&quot;;</span>
+<span class="fc" id="L197">		assertEquals(expectedResult, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;4-10&quot;, &quot;:&quot;, &quot;the quick brown fox jumps over the lazy dog&quot;));</span>
+<span class="fc" id="L198">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimStartToCharTest() throws IOException {
+<span class="fc" id="L202">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L203">		sb.append(&quot;foo:bar:baz\n&quot;);</span>
+<span class="fc" id="L204">		sb.append(&quot;one:two:three\n&quot;);</span>
+<span class="fc" id="L205">		sb.append(&quot;alpha:beta:gamma\n&quot;);</span>
+<span class="fc" id="L206">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L207">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L208">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;-3&quot;, &quot;:&quot;, readFile(testFile)));</span>
+<span class="fc" id="L209">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimCharToEndTest() throws IOException {
+<span class="fc" id="L213">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L214">		sb.append(&quot;\n&quot;);</span>
+<span class="fc" id="L215">		sb.append(&quot;six:seven\n&quot;);</span>
+<span class="fc" id="L216">		sb.append(&quot;zeta:eta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L217">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L218">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L219">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;6-&quot;, &quot;:&quot;, readFile(testFile)));</span>
+
+<span class="fc" id="L221">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimManyRangesTest() throws IOException {
+<span class="fc" id="L225">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L226">		sb.append(&quot;foo:bar:qux:quux\n&quot;);</span>
+<span class="fc" id="L227">		sb.append(&quot;one:two:four:five\n&quot;);</span>
+<span class="fc" id="L228">		sb.append(&quot;alpha:beta:delta:epsilon:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L229">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L230">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L231">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;-2,9-,4-5,8&quot;, &quot;:&quot;, readFile(testFile)));</span>
+<span class="fc" id="L232">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimOverlappingRangesTest() throws IOException {
+<span class="fc" id="L236">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L237">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L238">		sb.append(&quot;one:two:three:four:five:six\n&quot;);</span>
+<span class="fc" id="L239">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L240">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L241">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L242">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;-5,9-,4-6,8&quot;, &quot;:&quot;, readFile(testFile)));</span>
+<span class="fc" id="L243">	}</span>
+
+	@Test
+	public void cutSpecfiedCharDelimEmptyDelimTest() throws IOException {
+<span class="fc" id="L247">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L248">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L249">		sb.append(&quot;one:two:three:four:five:six:seven\n&quot;);</span>
+<span class="fc" id="L250">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L251">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+<span class="fc" id="L252">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L253">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;-5,9-,4-6,8&quot;, null, readFile(testFile)));</span>
+<span class="fc" id="L254">		assertEquals(expectedOutput, cuttool.cutSpecifiedCharactersUseDelimiter(&quot;-5,9-,4-6,8&quot;, &quot;&quot;, readFile(testFile)));</span>
+<span class="fc" id="L255">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeCRangeTest() throws IOException {
+<span class="fc" id="L262">		cuttool = new CutTool(new String[] { &quot;-c&quot;, &quot;4-10,20-25&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L263">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L264">		sb.append(&quot;:bar:bax\n&quot;);</span>
+<span class="fc" id="L265">		sb.append(&quot;:two:thfive:s\n&quot;);</span>
+<span class="fc" id="L266">		sb.append(&quot;ha:betalta:ep\n&quot;);</span>
+<span class="fc" id="L267">		sb.append(&quot; quick  jumps\n&quot;);</span>
+<span class="fc" id="L268">		String expectedOutput = sb.toString();</span>
+		//assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-c 4-10,20-25 test.txt&quot;));
+<span class="fc" id="L270">		assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-c 4-10,20-25 test.txt&quot;));</span>
+<span class="fc" id="L271">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeFRangeWithDTest() throws IOException {
+<span class="fc" id="L278">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L279">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L280">		sb.append(&quot;one:two:three:four:five:six\n&quot;);</span>
+<span class="fc" id="L281">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L282">		sb.append(&quot;the quick brown fox jumps over the lazy dog&quot;);</span>
+		//String expectedOutput = sb.toString();
+<span class="fc" id="L284">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;\&quot;:\&quot;&quot;, &quot;test.txt&quot; });</span>
+		//assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -d \&quot;:\&quot; test.txt&quot;));
+<span class="fc" id="L286">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot; });</span>
+		//assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -d : test.txt&quot;));
+<span class="fc" id="L288">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeFRangeWithoutDTest() throws IOException {
+<span class="fc" id="L295">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;test.txt&quot; });</span>
+
+<span class="fc" id="L297">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L298">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L299">		sb.append(&quot;one:two:three:four:five:six:seven\n&quot;);</span>
+<span class="fc" id="L300">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L301">		sb.append(&quot;the quick brown fox jumps over the lazy dog\n&quot;);</span>
+<span class="fc" id="L302">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L303">		assertEquals(expectedOutput, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L304">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeCAndFRangeTest() throws IOException {
+<span class="fc" id="L311">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-c&quot;, &quot;4,5,6&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L312">		assertEquals(&quot;Error: only one type of list may be specified\n&quot;, cuttool.execute(testDir, null));</span>
+		//assertEquals(&quot;Error: only one type of list may be specified&quot;, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -c 4,5,6 test.txt&quot;));
+<span class="fc" id="L314">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L315">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeNoRangeListTest() throws IOException {
+<span class="fc" id="L322">		cuttool = new CutTool(new String[] { &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot; });</span>
+		//assertEquals(&quot;Error: you must specify a list of bytes, characters, or fields&quot;, cuttool.execute(testDir, &quot;-d \&quot;:\&quot; test.txt&quot;));
+<span class="fc" id="L324">		assertEquals(&quot;Error: you must specify a list of bytes, characters, or fields\n&quot;, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L325">		cuttool = new CutTool(new String[] { &quot;test.txt&quot; });</span>
+		//assertEquals(&quot;Error: you must specify a list of bytes, characters, or fields&quot;, cuttool.execute(testDir, &quot;test.txt&quot;));
+<span class="fc" id="L327">		assertEquals(&quot;Error: you must specify a list of bytes, characters, or fields\n&quot;, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L328">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L329">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeCAndDTest() throws IOException {
+<span class="fc" id="L336">		cuttool = new CutTool(new String[] { &quot;-c&quot;, &quot;4,5,6&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L337">		assertEquals(&quot;Error: an input delimiter may be specified only when operating on fields\n&quot;, cuttool.execute(testDir, &quot;&quot;));</span>
+		//assertEquals(&quot;Error: an input delimiter may be specified only when operating on fields&quot;, cuttool.execute(testDir, &quot;-c 4,5,6 -d \&quot;:\&quot; test.txt&quot;));
+<span class="fc" id="L339">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L340">	}</span>
+
+	/*
+	 * @CORRECTED wrong error msg
+	 * should show error when use -f with -c, not until -d
+	 * wrong use of stdin
+	 */
+	@Test
+	public void executeCDFTest() throws IOException {
+<span class="fc" id="L349">		String[] args = { &quot;-c&quot;, &quot;4,5,6&quot;, &quot;-f&quot;, &quot;3,4&quot;, &quot;-d&quot;, &quot;\&quot;:\&quot;&quot;, &quot;test.txt&quot; };</span>
+<span class="fc" id="L350">		cuttool = new CutTool(args);</span>
+
+<span class="fc" id="L352">		assertEquals(&quot;Error: only one type of list may be specified\n&quot;</span>
+<span class="fc" id="L353">				, cuttool.execute(testDir, null));</span>
+		//assertEquals(&quot;Error: an input delimiter may be specified only when operating on fields&quot;
+		//		, cuttool.execute(testDir, &quot;-c 4,5,6 -f 3,4 -d \&quot;:\&quot; test.txt&quot;));
+<span class="fc" id="L356">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L357">	}</span>
+
+	@Test
+	public void executeInvalidRangeTest() throws IOException {
+<span class="fc" id="L361">		cuttool = new CutTool(new String[] { &quot;-c&quot;, &quot;5-3,10&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L362">		assertEquals(&quot;Error: invalid list argument for -c\n&quot;, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L363">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L364">		cuttool = new CutTool(new String[] { &quot;-c&quot;, &quot;abc&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L365">		assertEquals(&quot;Error: invalid list argument for -c\n&quot;, cuttool.execute(testDir, &quot;-c abc test.txt&quot;));</span>
+<span class="fc" id="L366">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L367">		cuttool = new CutTool(new String[] { &quot;-c&quot;, &quot;5--3&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L368">		assertEquals(&quot;Error: invalid list argument for -c\n&quot;, cuttool.execute(testDir, &quot;-c 5--3 test.txt&quot;));</span>
+<span class="fc" id="L369">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L370">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;5-3,10&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L371">		assertEquals(&quot;Error: invalid list argument for -f\n&quot;, cuttool.execute(testDir, &quot;-f 5-3,10 -d : test.txt&quot;));</span>
+<span class="fc" id="L372">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L373">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;abc&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L374">		assertEquals(&quot;Error: invalid list argument for -f\n&quot;, cuttool.execute(testDir, &quot;-f abc -d : test.txt&quot;));</span>
+<span class="fc" id="L375">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L376">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;5--3,10&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L377">		assertEquals(&quot;Error: invalid list argument for -f\n&quot;, cuttool.execute(testDir, &quot;-f 5--3 -d : test.txt&quot;));</span>
+<span class="fc" id="L378">		assertEquals(1, cuttool.getStatusCode());</span>
+<span class="fc" id="L379">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeNoFileOptionTest() throws IOException {
+<span class="fc" id="L386">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;:&quot; });</span>
+<span class="fc" id="L387">		assertEquals(&quot;Error: you must specify a file name\n&quot;, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L388">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeFileDoesNotExistTest() throws IOException {
+<span class="fc" id="L395">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test1.txt&quot; });</span>
+<span class="fc" id="L396">		assertEquals(&quot;Error: cannot read from file test1.txt\n&quot;, cuttool.execute(testDir, null));</span>
+		//assertEquals(&quot;Error: file test1.txt doesn't exist&quot;, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -d : test1.txt&quot;));
+<span class="fc" id="L398">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeManyFilesTest() throws IOException {
+<span class="fc" id="L405">		cuttool = new CutTool(new String[] { &quot;-c&quot;, &quot;4-10,20-25&quot;, &quot;test.txt&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L406">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L407">		sb.append(&quot;:bar:bax\n&quot;);</span>
+<span class="fc" id="L408">		sb.append(&quot;:two:thfive:s\n&quot;);</span>
+<span class="fc" id="L409">		sb.append(&quot;ha:betalta:ep\n&quot;);</span>
+<span class="fc" id="L410">		sb.append(&quot; quick  jumps\n&quot;);</span>
+<span class="fc" id="L411">		sb.append(&quot;:bar:bax\n&quot;);</span>
+<span class="fc" id="L412">		sb.append(&quot;:two:thfive:s\n&quot;);</span>
+<span class="fc" id="L413">		sb.append(&quot;ha:betalta:ep\n&quot;);</span>
+<span class="fc" id="L414">		sb.append(&quot; quick  jumps\n&quot;);</span>
+<span class="fc" id="L415">		String expectedOutput = sb.toString();</span>
+		//assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-c 4-10,20-25 test.txt test.txt&quot;));
+<span class="fc" id="L417">		assertEquals(expectedOutput, cuttool.execute(testDir, null));</span>
+
+		//assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -d \&quot;:\&quot; test.txt test.txt&quot;));
+<span class="fc" id="L420">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test.txt&quot;, &quot;test.txt&quot; });</span>
+<span class="fc" id="L421">		sb = new StringBuilder();</span>
+<span class="fc" id="L422">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L423">		sb.append(&quot;one:two:three:four:five:six\n&quot;);</span>
+<span class="fc" id="L424">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L425">		sb.append(&quot;the quick brown fox jumps over the lazy dog\n&quot;);</span>
+<span class="fc" id="L426">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L427">		sb.append(&quot;one:two:three:four:five:six\n&quot;);</span>
+<span class="fc" id="L428">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L429">		sb.append(&quot;the quick brown fox jumps over the lazy dog\n&quot;);</span>
+<span class="fc" id="L430">		expectedOutput = sb.toString();</span>
+		//assertEquals(expectedOutput, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -d \&quot;:\&quot; test.txt test.txt&quot;));
+<span class="fc" id="L432">		assertEquals(expectedOutput, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L433">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED wrong use of stdin
+	 * On a side note, quotes should be handled by the shell, 
+	 * this test case handles cases that are not for cuttool
+	 * 
+	 */
+	public void executeFileWithSpace() throws IOException {
+		// create new file with text
+<span class="fc" id="L444">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test with space.txt&quot; });</span>
+
+<span class="fc" id="L446">		File test = new File(testDir, &quot;test with space.txt&quot;);</span>
+<span class="fc" id="L447">		test.createNewFile();</span>
+<span class="fc" id="L448">		FileWriter fw = new FileWriter(test.getAbsoluteFile());</span>
+<span class="fc" id="L449">		BufferedWriter bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L450">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L451">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L452">		sb.append(&quot;one:two:three:four:five:six:seven\n&quot;);</span>
+<span class="fc" id="L453">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:eta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L454">		sb.append(&quot;the quick brown fox jumps over the lazy dog\n&quot;);</span>
+<span class="fc" id="L455">		bw.write(sb.toString());</span>
+<span class="fc" id="L456">		bw.close();</span>
+
+<span class="fc" id="L458">		sb = new StringBuilder();</span>
+<span class="fc" id="L459">		sb.append(&quot;foo:bar:baz:qux:quux\n&quot;);</span>
+<span class="fc" id="L460">		sb.append(&quot;one:two:three:four:five:six\n&quot;);</span>
+<span class="fc" id="L461">		sb.append(&quot;alpha:beta:gamma:delta:epsilon:zeta:teta:iota:kappa:lambda:mu\n&quot;);</span>
+<span class="fc" id="L462">		sb.append(&quot;the quick brown fox jumps over the lazy dog\n&quot;);</span>
+<span class="fc" id="L463">		String expectedOutput = sb.toString();</span>
+<span class="fc" id="L464">		assertEquals(expectedOutput, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L465">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void executeFileWithSpaceNotExist() throws IOException {
+<span class="fc" id="L472">		cuttool = new CutTool(new String[] { &quot;-f&quot;, &quot;-5,9-,4-6,8&quot;, &quot;-d&quot;, &quot;:&quot;, &quot;test wrong file name.txt&quot; });</span>
+		//assertEquals(&quot;Error: file test wrong file name.txt doesn't exist&quot;, cuttool.execute(testDir, &quot;-f -5,9-,4-6,8 -d : \&quot;test wrong file name.txt\&quot;&quot;));
+<span class="fc" id="L474">		assertEquals(&quot;Error: cannot read from file test wrong file name.txt\n&quot;, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L475">	}</span>
+
+	@Test
+	/*
+	 * @CORRECTED
+	 */
+	public void getHelpTest() {
+<span class="fc" id="L482">		String helpText = cuttool.getHelp();</span>
+<span class="fc" id="L483">		cuttool = new CutTool(new String[] { &quot;-help&quot; });</span>
+<span class="fc" id="L484">		assertEquals(helpText, cuttool.execute(testDir, null));</span>
+		//assertEquals(helpText, cuttool.execute(testDir, &quot;-help&quot;));
+<span class="fc" id="L486">		cuttool = new CutTool(new String[] { &quot;-help&quot;, &quot;abcde&quot; });</span>
+		//assertEquals(helpText, cuttool.execute(testDir, &quot;-help abcde&quot;));
+<span class="fc" id="L488">		assertEquals(helpText, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L489">		cuttool = new CutTool(new String[] { &quot;-c 2,3,4&quot;, &quot;-help&quot;, &quot;abcde&quot; });</span>
+		//assertEquals(helpText, cuttool.execute(testDir, &quot;-c 2,3,4 -help abcde&quot;));
+<span class="fc" id="L491">		assertEquals(helpText, cuttool.execute(testDir, null));</span>
+<span class="fc" id="L492">	}</span>
+
+	private String readFile(File file) throws IOException {
+<span class="fc" id="L495">		byte[] encoded = Files.readAllBytes(file.toPath());</span>
+<span class="fc" id="L496">		return StandardCharsets.UTF_8.decode(ByteBuffer.wrap(encoded)).toString();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

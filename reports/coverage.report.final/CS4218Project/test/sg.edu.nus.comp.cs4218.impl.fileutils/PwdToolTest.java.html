@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PwdToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">PwdToolTest.java</span></div><h1>PwdToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.IPwdTool;
+
+<span class="fc" id="L14">public class PwdToolTest {</span>
+	private IPwdTool pwdtool;
+
+	@Before
+	public void before() {
+<span class="fc" id="L19">		pwdtool = new PwdTool(new String[0]);</span>
+<span class="fc" id="L20">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L24">		pwdtool = null;</span>
+<span class="fc" id="L25">	}</span>
+
+	/**
+	 * MUT: getStringForDirectory()
+	 * Checks that MUT returns system canonical path.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForDirectoryTest() throws IOException {
+		//Test expected behavior
+		//Create a tmp-file and get (existing) parent directory
+<span class="fc" id="L36">		String existsDirString = File.createTempFile(&quot;exists&quot;, &quot;tmp&quot;).getParent();</span>
+<span class="fc" id="L37">		File existsDir = new File(existsDirString);</span>
+<span class="fc" id="L38">		String dirString = pwdtool.getStringForDirectory(existsDir);</span>
+<span class="fc" id="L39">		assertTrue(dirString.equals(existsDir.getCanonicalPath()));</span>
+<span class="fc" id="L40">		assertEquals(pwdtool.getStatusCode(), 0);</span>
+<span class="fc" id="L41">	}</span>
+
+	/**
+	 * MUT: getStringForDirectory()
+	 * Program should not crash when attempting to print non-existent directory.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForNonExistingDirectoryTest() throws IOException {
+		//Test error-handling 1
+		//Reference non-existing file
+<span class="fc" id="L52">		File notExistsDir = new File(&quot;notexists&quot;);</span>
+<span class="fc" id="L53">		pwdtool.getStringForDirectory(notExistsDir);</span>
+<span class="fc" id="L54">		assertNotEquals(pwdtool.getStatusCode(), 0);</span>
+<span class="fc" id="L55">	}</span>
+
+	/**
+	 * MUT: getStringForDirectory()
+	 * Program should not crash when null File is supplied.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForNullDirectoryTest() throws IOException {
+		//Test error-handling 2
+<span class="fc" id="L65">		pwdtool.getStringForDirectory(null);</span>
+<span class="fc" id="L66">		assertNotEquals(pwdtool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L68">	}</span>
+
+	/**
+	 * MUT: getStringForDirectory()
+	 * Directory for &quot;.&quot; should be the current working directory.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForCurrentDirectoryTest() throws IOException {
+<span class="fc" id="L77">		String path = &quot;.&quot;;</span>
+<span class="fc" id="L78">		String result = pwdtool.getStringForDirectory(new File(path));</span>
+<span class="fc" id="L79">		String expected = new File(System.getProperty(&quot;user.dir&quot;)).getCanonicalPath();</span>
+<span class="fc" id="L80">		assertEquals(result, expected);</span>
+<span class="fc" id="L81">		assertEquals(pwdtool.getStatusCode(), 0);</span>
+<span class="fc" id="L82">	}</span>
+
+	/**
+	 * MUT: getStringForDirectory()
+	 * Program should not crash when the supplied directory is a file.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForFileTest() throws IOException {
+<span class="fc" id="L91">		File f = new File(&quot;file.txt&quot;);</span>
+<span class="fc" id="L92">		pwdtool.getStringForDirectory(f);</span>
+<span class="fc" id="L93">		assertNotEquals(pwdtool.getStatusCode(), 0);</span>
+<span class="fc" id="L94">		f.delete();</span>
+<span class="fc" id="L95">	}</span>
+
+	/**
+	 * MUT: getStringForDirectory()
+	 * Program should not crash when an invalid path is supplied.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForInvalidPathTest() throws IOException {
+<span class="fc" id="L104">		File f = new File(&quot;!nvali$d.p}th\\&quot;);</span>
+<span class="fc" id="L105">		String result = pwdtool.getStringForDirectory(f);</span>
+<span class="fc" id="L106">		assertNull(result);</span>
+<span class="fc" id="L107">		assertNotEquals(pwdtool.getStatusCode(), 0);</span>
+<span class="fc" id="L108">	}</span>
+
+	/**
+	 * MUT: execute()
+	 * @throws IOException
+	 */
+	@Test
+	public void toolExecute() throws IOException {
+<span class="fc" id="L116">		File path = new File(&quot;.&quot;);</span>
+<span class="fc" id="L117">		PwdTool tool = new PwdTool(new String[0]);</span>
+<span class="fc" id="L118">		String result = tool.execute(path, &quot;&quot;);</span>
+<span class="fc" id="L119">		String expected = new File(System.getProperty(&quot;user.dir&quot;)).getCanonicalPath() + &quot;\n&quot;;</span>
+<span class="fc" id="L120">		assertEquals(expected, result);</span>
+<span class="fc" id="L121">		assertEquals(tool.getStatusCode(), 0);</span>
+<span class="fc" id="L122">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

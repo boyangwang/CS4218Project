@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DeleteToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">DeleteToolTest.java</span></div><h1>DeleteToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.IDeleteTool;
+
+import java.io.*;
+
+import static org.junit.Assert.*;
+
+<span class="fc" id="L13">public class DeleteToolTest {</span>
+	IDeleteTool deleteTool;
+
+	@Before
+	public void before() {
+<span class="fc" id="L18">		deleteTool = new DeleteTool(new String[0]);</span>
+<span class="fc" id="L19">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L23">		deleteTool = null;</span>
+<span class="fc" id="L24">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Program should not crash on null argument.
+	 */
+	@Test
+	public void nullArg() {
+<span class="fc" id="L32">		boolean result = deleteTool.delete(null);</span>
+<span class="fc" id="L33">		assertFalse(result);</span>
+<span class="fc" id="L34">		assertNotEquals(deleteTool.getStatusCode(), 0);</span>
+<span class="fc" id="L35">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Program should not crash on non-existent file.
+	 */
+	@Test
+	public void nonexistent() {
+<span class="fc" id="L43">		File f = new File(&quot;nonexistent&quot;);</span>
+<span class="fc" id="L44">		boolean result = deleteTool.delete(f);</span>
+<span class="fc" id="L45">		assertFalse(result);</span>
+<span class="fc" id="L46">		assertNotEquals(deleteTool.getStatusCode(), 0);</span>
+<span class="fc" id="L47">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Program should not crash when attempting to delete non-writable file.
+	 * @throws IOException
+	 */
+	@Test
+	public void nonwritable() throws IOException {
+<span class="fc" id="L56">		File f = new File(&quot;testFile&quot;);</span>
+<span class="fc" id="L57">		f.createNewFile();</span>
+<span class="fc" id="L58">		f.setWritable(false);</span>
+
+<span class="fc" id="L60">		boolean result = deleteTool.delete(f);</span>
+<span class="fc" id="L61">		assertTrue(f.exists());</span>
+<span class="fc" id="L62">		assertFalse(result);</span>
+<span class="fc" id="L63">		assertNotEquals(deleteTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L65">		f.setWritable(true);</span>
+<span class="fc" id="L66">		f.delete();</span>
+<span class="fc" id="L67">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Deletion of non-readable file should succeed.
+	 * @throws IOException
+	 */
+	@Test
+	public void nonreadable() throws IOException {
+<span class="fc" id="L76">		File f = new File(&quot;testFile&quot;);</span>
+<span class="fc" id="L77">		f.createNewFile();</span>
+<span class="fc" id="L78">		f.setReadable(false);</span>
+
+<span class="fc" id="L80">		boolean result = deleteTool.delete(f);</span>
+<span class="fc" id="L81">		assertFalse(f.exists());</span>
+<span class="fc" id="L82">		assertTrue(result);</span>
+<span class="fc" id="L83">		assertEquals(deleteTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L85">		f.delete();</span>
+<span class="fc" id="L86">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Deletion of empty directory should succeed.
+	 * @throws IOException
+	 */
+	@Test
+	public void directory() throws IOException {
+<span class="fc" id="L95">		File dir = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L96">		dir.mkdir();</span>
+
+<span class="fc" id="L98">		boolean result = deleteTool.delete(dir);</span>
+<span class="fc" id="L99">		assertFalse(dir.exists());</span>
+<span class="fc" id="L100">		assertTrue(result);</span>
+<span class="fc" id="L101">		assertEquals(deleteTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L103">		dir.delete();</span>
+<span class="fc" id="L104">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Deletion of directory containing files should succeed.
+	 * @throws IOException
+	 */
+	@Test
+	public void directoryWithFiles() throws IOException {
+<span class="fc" id="L113">		File dir = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L114">		dir.mkdir();</span>
+
+<span class="fc" id="L116">		File f = new File(&quot;testDir&quot; + File.separator + &quot;testFile&quot;);</span>
+<span class="fc" id="L117">		f.createNewFile();</span>
+
+<span class="fc" id="L119">		boolean result = deleteTool.delete(dir);</span>
+<span class="fc" id="L120">		assertFalse(f.exists());</span>
+<span class="fc" id="L121">		assertFalse(dir.exists());</span>
+<span class="fc" id="L122">		assertTrue(result);</span>
+<span class="fc" id="L123">		assertEquals(deleteTool.getStatusCode(), 0);</span>
+
+<span class="fc" id="L125">		dir.delete();</span>
+<span class="fc" id="L126">	}</span>
+
+	/**
+	 * MUT: delete()
+	 * Deletion of directory containing non-writable file should fail.
+	 * Note: What happens to other writable files in that directory is left undefined.
+	 *
+	 * Issue: This test fails, even though deletion of non-writable file passes.
+	 *
+	 * @throws IOException
+	 */
+	//    @Test
+	//    public void directoryWithNonWritable() throws IOException {
+	//        File dir = new File(&quot;testDir&quot;);
+	//        dir.mkdir();
+	//
+	//        File f = new File(&quot;testDir&quot; + File.separator + &quot;testFile&quot;);
+	//        f.createNewFile();
+	//        f.setWritable(false);
+	//
+	//        boolean result = deleteTool.delete(dir);
+	//        assertTrue(f.exists());
+	//        assertTrue(dir.exists());
+	//        assertFalse(result);
+	//        assertNotEquals(deleteTool.getStatusCode(), 0);
+	//
+	//        f.setExecutable(true);
+	//        dir.delete();
+	//    }
+
+	@Test
+	public void toolExecute() {
+<span class="fc" id="L158">		File dir = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L159">		dir.mkdir();</span>
+
+<span class="fc" id="L161">		DeleteTool tool = new DeleteTool(new String[] { &quot;testDir&quot; });</span>
+<span class="fc" id="L162">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+
+<span class="fc" id="L164">		assertFalse(dir.exists());</span>
+<span class="fc" id="L165">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L166">		assertEquals(0, tool.getStatusCode());</span>
+
+<span class="fc" id="L168">		dir.delete();</span>
+<span class="fc" id="L169">	}</span>
+
+	@Test
+	public void toolExecuteInvalidArgs() {
+<span class="fc" id="L173">		DeleteTool tool = new DeleteTool(new String[] {});</span>
+<span class="fc" id="L174">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+
+<span class="fc" id="L176">		assertEquals(&quot;Invalid arguments.&quot;, result);</span>
+<span class="fc" id="L177">		assertNotEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L178">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

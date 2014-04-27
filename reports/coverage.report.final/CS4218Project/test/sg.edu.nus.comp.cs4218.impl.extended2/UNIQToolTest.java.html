@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UNIQToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">UNIQToolTest.java</span></div><h1>UNIQToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+
+<span class="fc" id="L14">public class UNIQToolTest {</span>
+	private UniqTool uniqtool;
+
+	/**
+	 * @CORRECTED
+	 * @throws Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		// Nothing here.
+<span class="fc" id="L24">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L28">		uniqtool = null;</span>
+<span class="fc" id="L29">	}</span>
+
+	private UniqTool defaultTool() {
+<span class="fc" id="L32">		return new UniqTool(new String[0]);</span>
+	}
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void testGetHelpTest() {
+<span class="fc" id="L40">		String result = defaultTool().getHelp();</span>
+<span class="fc" id="L41">		assertTrue(result.startsWith(&quot;NAME\n\nuniq - report or omit repeated lines\n&quot;));</span>
+<span class="fc" id="L42">		assertTrue(result.contains(&quot;-f NUM\tSkips NUM fields on each line before checking for uniqueness&quot;));</span>
+<span class="fc" id="L43">		assertTrue(result.contains(&quot;separated from each other by at least one space or&quot;));</span>
+<span class="fc" id="L44">		assertTrue(result.endsWith(&quot;-help\tBrief information about supported options.\n&quot;));</span>
+<span class="fc" id="L45">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueOneLineTest() {
+<span class="fc" id="L52">		uniqtool = defaultTool();</span>
+<span class="fc" id="L53">		String input = &quot;hello world\n&quot;;</span>
+<span class="fc" id="L54">		String result = uniqtool.getUnique(true, input);</span>
+<span class="fc" id="L55">		assertEquals(result.compareTo(&quot;hello world\n&quot;), 0);</span>
+<span class="fc" id="L56">		result = uniqtool.getUnique(false, input);</span>
+<span class="fc" id="L57">		assertEquals(result.compareTo(&quot;hello world\n&quot;), 0);</span>
+<span class="fc" id="L58">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueDifferentCaseTest() {
+<span class="fc" id="L65">		uniqtool = defaultTool();</span>
+<span class="fc" id="L66">		String input = &quot;hello world\nHELLo WOrld&quot;;</span>
+<span class="fc" id="L67">		String result = uniqtool.getUnique(true, input);</span>
+<span class="fc" id="L68">		assertTrue(result.equals(&quot;hello world\nHELLo WOrld\n&quot;));</span>
+<span class="fc" id="L69">		result = uniqtool.getUnique(false, input);</span>
+<span class="fc" id="L70">		assertTrue(result.equals(&quot;hello world\n&quot;));</span>
+<span class="fc" id="L71">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueManySameLineTest() {
+<span class="fc" id="L78">		uniqtool = defaultTool();</span>
+<span class="fc" id="L79">		String input = &quot;test1\nhello\nhello\nhello\nHello\ntest1&quot;;</span>
+<span class="fc" id="L80">		String result = uniqtool.getUnique(true, input);</span>
+<span class="fc" id="L81">		assertEquals(result.compareTo(&quot;test1\nhello\nHello\ntest1\n&quot;), 0);</span>
+<span class="fc" id="L82">		result = uniqtool.getUnique(false, input);</span>
+<span class="fc" id="L83">		assertEquals(result.compareTo(&quot;test1\nhello\ntest1\n&quot;), 0);</span>
+<span class="fc" id="L84">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSpecialCharacterTest() {
+<span class="fc" id="L91">		uniqtool = defaultTool();</span>
+<span class="fc" id="L92">		String input = &quot;test1\nhello\nHello\\n好\n&quot;;</span>
+<span class="fc" id="L93">		String result = uniqtool.getUnique(true, input);</span>
+
+		// Original assert was wrong.
+		//        assertEquals(result.compareTo(&quot;test1\nhello\nHello\\n好\n&quot;), 0);
+
+<span class="fc" id="L98">		assertTrue(result.equals(&quot;test1\nhello\nHello\\n好\n&quot;));</span>
+<span class="fc" id="L99">		result = uniqtool.getUnique(false, input);</span>
+		// Original assert was wrong.
+		//        assertEquals(result.compareTo(&quot;test1\nhello\n好\n&quot;), 0);
+<span class="fc" id="L102">		assertTrue(result.equals(&quot;test1\nhello\nHello\\n好\n&quot;));</span>
+<span class="fc" id="L103">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSkipNumOneLineTest() {
+<span class="fc" id="L110">		uniqtool = defaultTool();</span>
+<span class="fc" id="L111">		String input = &quot;hello world\n&quot;;</span>
+<span class="fc" id="L112">		String result = uniqtool.getUniqueSkipNum(1, true, input);</span>
+<span class="fc" id="L113">		assertEquals(result.compareTo(&quot;hello world\n&quot;), 0);</span>
+<span class="fc" id="L114">		result = uniqtool.getUniqueSkipNum(12, false, input);</span>
+<span class="fc" id="L115">		assertEquals(result.compareTo(&quot;hello world\n&quot;), 0);</span>
+<span class="fc" id="L116">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSkipNumDifferentCaseTest() {
+<span class="fc" id="L123">		uniqtool = defaultTool();</span>
+<span class="fc" id="L124">		String input = &quot;hello world\nhello world\nHELLo WorlD&quot;;</span>
+<span class="fc" id="L125">		String result = uniqtool.getUniqueSkipNum(5, true, input);</span>
+
+		// Original assert does not conform to project specifications.
+		//        assertEquals(result.compareTo(&quot;hello world\nHELLo WorlD\n&quot;),0);
+
+<span class="fc" id="L130">		assertTrue(result.equals(&quot;hello world\n&quot;));</span>
+<span class="fc" id="L131">		result = uniqtool.getUniqueSkipNum(5, false, input);</span>
+
+		// Original assert does not conform to project specifications.
+		//        assertEquals(result.compareTo(&quot;hello world\n&quot;), 0);
+
+<span class="fc" id="L136">		assertTrue(result.equals(&quot;hello world\n&quot;));</span>
+<span class="fc" id="L137">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSkipNumManySameLineTest() {
+<span class="fc" id="L144">		uniqtool = defaultTool();</span>
+<span class="fc" id="L145">		String input = &quot;test1\nhello\nhello\nhello\nHello\ntest1&quot;;</span>
+<span class="fc" id="L146">		String result = uniqtool.getUniqueSkipNum(2, true, input);</span>
+
+		// Original assert does not conform to project specifications.
+		//		assertEquals(result.compareTo(&quot;test1\nhello\ntest1\n&quot;), 0);
+
+<span class="fc" id="L151">		assertTrue(result.equals(&quot;test1\n&quot;));</span>
+<span class="fc" id="L152">		result = uniqtool.getUniqueSkipNum(2, false, input);</span>
+
+		// Original assert does not conform to project specifications.
+		//        assertEquals(result.compareTo(&quot;test1\nhello\ntest1\n&quot;), 0);
+
+<span class="fc" id="L157">		assertTrue(result.equals(&quot;test1\n&quot;));</span>
+<span class="fc" id="L158">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSkipNumSpecialCharacterTest() {
+<span class="fc" id="L165">		uniqtool = defaultTool();</span>
+<span class="fc" id="L166">		String input = &quot;test1\nhello\nHello\n叉烧包\n&quot;;</span>
+<span class="fc" id="L167">		String result = uniqtool.getUniqueSkipNum(2, false, input);</span>
+
+		// Original assert does not conform to project specifications.
+		//		assertEquals(result.compareTo(&quot;test1\nhello\n叉烧包\n&quot;), 0);
+
+<span class="fc" id="L172">		assertTrue(result.equals(&quot;test1\n&quot;));</span>
+<span class="fc" id="L173">		result = uniqtool.getUniqueSkipNum(2, true, input);</span>
+
+		// Original assert does not conform to project specifications.
+		//		assertEquals(result.compareTo(&quot;test1\nhello\n叉烧包\n&quot;), 0);
+
+<span class="fc" id="L178">		assertTrue(result.equals(&quot;test1\n&quot;));</span>
+<span class="fc" id="L179">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSkipNumMinNumTest() {
+<span class="fc" id="L186">		uniqtool = defaultTool();</span>
+<span class="fc" id="L187">		String input = &quot;test1\nhello\nHello\n叉烧包\n豆沙包\n&quot;;</span>
+<span class="fc" id="L188">		String result = uniqtool.getUniqueSkipNum(0, false, input);</span>
+<span class="fc" id="L189">		assertEquals(result.compareTo(&quot;test1\nhello\n叉烧包\n豆沙包\n&quot;), 0);</span>
+<span class="fc" id="L190">		result = uniqtool.getUniqueSkipNum(0, true, input);</span>
+<span class="fc" id="L191">		assertEquals(result.compareTo(&quot;test1\nhello\nHello\n叉烧包\n豆沙包\n&quot;), 0);</span>
+<span class="fc" id="L192">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void getUniqueSkipNumMaxNumTest() {
+<span class="fc" id="L199">		uniqtool = defaultTool();</span>
+<span class="fc" id="L200">		String input = &quot;test1\nhello\nHello\n叉烧包\n豆沙�?&quot;;</span>
+<span class="fc" id="L201">		String result = uniqtool.getUniqueSkipNum(20, false, input);</span>
+<span class="fc" id="L202">		assertEquals(result.compareTo(&quot;test1\n&quot;), 0);</span>
+<span class="fc" id="L203">		result = uniqtool.getUniqueSkipNum(20, true, input);</span>
+<span class="fc" id="L204">		assertEquals(result.compareTo(&quot;test1\n&quot;), 0);</span>
+<span class="fc" id="L205">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void executeNonNumTest() {
+<span class="fc" id="L212">		String[] args = new String[] { &quot;-i&quot;, &quot;-f&quot;, &quot;a&quot;, &quot;text.txt&quot; };</span>
+<span class="fc" id="L213">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L214">		String result = uniqtool.execute(new File(System.getProperty(&quot;java.io.tmpdir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L215">		assertTrue(result.equals(&quot;Error: NUM has to be a positive number.&quot;));</span>
+<span class="fc" id="L216">		assertEquals(uniqtool.getStatusCode(), 1);</span>
+<span class="fc" id="L217">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void executeNegNumTest() {
+<span class="fc" id="L224">		String[] args = new String[] { &quot;-i&quot;, &quot;-f&quot;, &quot;-2&quot;, &quot;text.txt&quot; };</span>
+<span class="fc" id="L225">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L226">		String result = uniqtool.execute(new File(System.getProperty(&quot;java.io.tmpdir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L227">		assertTrue(result.equals(&quot;Error: NUM has to be a positive number.&quot;));</span>
+<span class="fc" id="L228">		assertEquals(uniqtool.getStatusCode(), 1);</span>
+<span class="fc" id="L229">	}</span>
+
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeGetUniqueSkipNumMultipleSameOptionTest() throws IOException {
+<span class="fc" id="L237">		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L238">		String fileContents = &quot; \nHello World\nhello World\nTest\ntest\njest\nBEST&quot;;</span>
+<span class="fc" id="L239">		Files.write(file.toPath(), fileContents.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L240">		String[] args = new String[] { &quot;-f&quot;, &quot;2&quot;, &quot;-f&quot;, &quot;3&quot;, &quot;-f&quot;, &quot;1&quot;, file.getName() };</span>
+<span class="fc" id="L241">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L242">		String result = uniqtool.execute(file.getParentFile(), &quot;&quot;);</span>
+
+		// Original assert makes no sense for any interpretation of input arguments.
+		//		assertEquals(result.compareTo(&quot;Hello World\nTest\nBEST\n&quot;), 0);
+
+		// The last specified parameter is sticky.
+<span class="fc" id="L248">		assertTrue(result.equals(&quot; \nHello World\nTest\n&quot;));</span>
+
+<span class="fc" id="L250">		Files.delete(file.toPath());</span>
+<span class="fc" id="L251">	}</span>
+
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeGetUniqueSkipNumMultipleSameOptionIgnoreCaseTest() throws IOException {
+<span class="fc" id="L259">		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L260">		String fileContents = &quot; \nHello World\nhello World\nTEST\ntest\njest\nBEST&quot;;</span>
+<span class="fc" id="L261">		Files.write(file.toPath(), fileContents.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L262">		String[] args = new String[] { &quot;-f&quot;, &quot;2&quot;, &quot;-i&quot;, &quot;-f&quot;, &quot;3&quot;, &quot;-f&quot;, &quot;1&quot;, file.getName() };</span>
+<span class="fc" id="L263">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L264">		String result = uniqtool.execute(file.getParentFile(), &quot;&quot;);</span>
+
+		// Original assert makes no sense for any interpretation of input arguments.
+		//		assertEquals(result.compareTo(&quot;Hello World\nTEST\n&quot;), 0);
+
+		// The last specified parameter is sticky.
+<span class="fc" id="L270">		assertTrue(result.equals(&quot; \nHello World\nTEST\n&quot;));</span>
+<span class="fc" id="L271">		Files.delete(file.toPath());</span>
+<span class="fc" id="L272">	}</span>
+
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeGetUniqueTest() throws IOException {
+<span class="fc" id="L280">		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L281">		String fileContents = &quot; \nHello World\nhello World\nTest\ntest&quot;;</span>
+<span class="fc" id="L282">		Files.write(file.toPath(), fileContents.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L283">		String[] args = new String[] { file.getName() };</span>
+<span class="fc" id="L284">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L285">		String result = uniqtool.execute(file.getParentFile(), &quot;&quot;);</span>
+<span class="fc" id="L286">		assertEquals(result.compareTo(&quot; \nHello World\nhello World\nTest\ntest\n&quot;), 0);</span>
+<span class="fc" id="L287">		Files.delete(file.toPath());</span>
+<span class="fc" id="L288">	}</span>
+
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeGetUniqueIgnoreCaseTest() throws IOException {
+<span class="fc" id="L296">		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L297">		String input = &quot; \nHello World\nhello World\nTEST\ntest&quot;;</span>
+<span class="fc" id="L298">		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);</span>
+<span class="fc" id="L299">		String[] args = new String[] { &quot;-i&quot;, file.getName() };</span>
+<span class="fc" id="L300">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L301">		String result = uniqtool.execute(file.getParentFile(), &quot;&quot;);</span>
+<span class="fc" id="L302">		assertEquals(result.compareTo(&quot; \nHello World\nTEST\n&quot;), 0);</span>
+<span class="fc" id="L303">		Files.delete(file.toPath());</span>
+<span class="fc" id="L304">	}</span>
+
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeEmptyFileTest() throws IOException {
+<span class="fc" id="L312">		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L313">		String[] args = new String[] { &quot;-f&quot;, &quot;2&quot;, &quot;-i&quot;, &quot;-f&quot;, &quot;3&quot;, &quot;-f&quot;, &quot;1&quot;, file.getName() };</span>
+<span class="fc" id="L314">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L315">		String result = uniqtool.execute(file.getParentFile(), &quot;&quot;);</span>
+<span class="fc" id="L316">		assertEquals(&quot;\n&quot;, result);</span>
+<span class="fc" id="L317">		Files.delete(file.toPath());</span>
+<span class="fc" id="L318">	}</span>
+
+	/**
+	 * @CORRECTED
+	 * @throws IOException
+	 */
+	@Test
+	public void executeInvalidOptionTest() throws IOException {
+<span class="fc" id="L326">		String[] args = new String[] { &quot;-f&quot;, &quot;2&quot;, &quot;-i&quot;, &quot;-f&quot;, &quot;3&quot;, &quot;-f&quot;, &quot;1&quot;, &quot;-a&quot;, &quot;temp.txt&quot; };</span>
+<span class="fc" id="L327">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L328">		String result = uniqtool.execute(new File(System.getProperty(&quot;java.io.tmpdir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L329">		assertEquals(&quot;Error: Invalid option.&quot;, result);</span>
+<span class="fc" id="L330">		assertEquals(uniqtool.getStatusCode(), 1);</span>
+<span class="fc" id="L331">	}</span>
+
+	/**
+	 * @CORRECTED
+	 */
+	@Test
+	public void executeInvalidFileNameTest() {
+<span class="fc" id="L338">		String[] args = new String[] { &quot;-f&quot;, &quot;2&quot;, &quot;-i&quot;, &quot;-f&quot;, &quot;3&quot;, &quot;-f&quot;, &quot;1&quot;, &quot;temp.txt&quot; };</span>
+<span class="fc" id="L339">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L340">		String result = uniqtool.execute(new File(System.getProperty(&quot;java.io.tmpdir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L341">		assertEquals(&quot;Error: FILE is not found.&quot;, result);</span>
+<span class="fc" id="L342">		assertEquals(uniqtool.getStatusCode(), 1);</span>
+<span class="fc" id="L343">	}</span>
+
+	// The following nonsensical tests have been removed.
+
+	//	@Test
+	//	public void executeFileStdinWithOptionTest() throws IOException {
+	//		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();
+	//		String input = &quot; \nHello World\nhello World\nTest\ntest&quot;;
+	//		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);
+	//		input = &quot;-i &quot; + file.getName() + &quot; -&quot;;
+	//		String result = uniqtool.execute(file.getParentFile(),input);
+	//		assertEquals(&quot;Hello World\nTest\n&quot;, result);
+	//		Files.delete(file.toPath());
+	//	}
+	//
+	//	@Test
+	//	public void executeFileStdinNoOptionTest() throws IOException {
+	//		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();
+	//		String input = &quot; \nHello World\nhello World\nTest\ntest&quot;;
+	//		Files.write(file.toPath(), input.getBytes(), StandardOpenOption.CREATE);
+	//		input = &quot; &quot; + file.getName() + &quot; -&quot;;
+	//		String result = uniqtool.execute(file.getParentFile(),input);
+	//		assertEquals(&quot;Hello World\nhello World\nTest\ntest\n&quot;, result);
+	//		Files.delete(file.toPath());
+	//	}
+	//
+	//	@Test
+	//	public void executeFolderTest() throws IOException{
+	//		File dir = Files.createTempDirectory(&quot;temp dir&quot;).toFile();
+	//		String result = uniqtool.execute(dir.getParentFile(), dir.getName());
+	//		assertEquals(result,&quot;Error: FILE is not found&quot;);
+	//		assertEquals(uniqtool.getStatusCode(),1);
+	//		Files.delete(dir.toPath());
+	//	}
+
+	// These are our own tests.
+
+	private File tempDir() {
+<span class="fc" id="L381">		return new File(System.getProperty(&quot;java.io.tmpdir&quot;));</span>
+	}
+
+	/**
+	 * Tool should accept data from stdin.
+	 */
+	@Test
+	public void accpetsDataFromStdin() {
+<span class="fc" id="L389">		String[] args = new String[] {};</span>
+<span class="fc" id="L390">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L391">		String result = uniqtool.execute(tempDir(), &quot;test&quot;);</span>
+
+<span class="fc" id="L393">		assertTrue(result.equals(&quot;test\n&quot;));</span>
+<span class="fc" id="L394">		assertEquals(uniqtool.getStatusCode(), 0);</span>
+<span class="fc" id="L395">	}</span>
+
+	/**
+	 * Tool should prefer data from file when both inputs are given.
+	 * Data from stdin is ignored.
+	 * @throws IOException
+	 */
+	@Test
+	public void prefersDataFromFile() throws IOException {
+		// Temp file.
+<span class="fc" id="L405">		String fileData = &quot;file&quot;;</span>
+<span class="fc" id="L406">		File file = Files.createTempFile(&quot;tempFile&quot;, &quot;.tmp&quot;).toFile();</span>
+<span class="fc" id="L407">		Files.write(file.toPath(), fileData.getBytes(), StandardOpenOption.CREATE);</span>
+
+<span class="fc" id="L409">		String[] args = new String[] { file.getName() };</span>
+<span class="fc" id="L410">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L411">		String result = uniqtool.execute(file.getParentFile(), &quot;stdin&quot;);</span>
+
+<span class="fc" id="L413">		assertTrue(result.equals(&quot;file\n&quot;));</span>
+<span class="fc" id="L414">		assertEquals(uniqtool.getStatusCode(), 0);</span>
+<span class="fc" id="L415">	}</span>
+
+	@Test
+	public void stdinSupportsArguments() {
+<span class="fc" id="L419">		String[] args = new String[] { &quot;-i&quot;, &quot;-f&quot;, &quot;1&quot; };</span>
+<span class="fc" id="L420">		uniqtool = new UniqTool(args);</span>
+<span class="fc" id="L421">		String result = uniqtool.execute(tempDir(), &quot;i hello\nb Hello\ntest\nc world&quot;);</span>
+
+<span class="fc" id="L423">		assertTrue(result.equals(&quot;i hello\ntest\nc world\n&quot;));</span>
+<span class="fc" id="L424">		assertEquals(uniqtool.getStatusCode(), 0);</span>
+<span class="fc" id="L425">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

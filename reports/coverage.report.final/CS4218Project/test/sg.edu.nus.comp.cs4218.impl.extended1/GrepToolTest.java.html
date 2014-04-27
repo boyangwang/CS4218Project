@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GrepToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended1</a> &gt; <span class="el_source">GrepToolTest.java</span></div><h1>GrepToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended1;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import sg.edu.nus.comp.cs4218.extended1.IGrepTool;
+
+<span class="fc" id="L17">public class GrepToolTest {</span>
+	@Rule
+<span class="fc" id="L19">	public TemporaryFolder folder = new TemporaryFolder();</span>
+
+	private IGrepTool grepTool;
+
+	@Before
+	public void before() throws IOException {
+<span class="fc" id="L25">		grepTool = new GrepTool(new String[0]);</span>
+<span class="fc" id="L26">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L30">		grepTool = null;</span>
+<span class="fc" id="L31">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getCountOfMatchingLines(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getCountOfMatchingLinesTest() {
+		// Test null
+<span class="fc" id="L39">		assertEquals(grepTool.getCountOfMatchingLines(null, null), -1);</span>
+<span class="fc" id="L40">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L43">		assertEquals(grepTool.getCountOfMatchingLines(&quot;&quot;, &quot;&quot;), 0);</span>
+<span class="fc" id="L44">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L47">		assertEquals(grepTool.getCountOfMatchingLines(&quot;&quot;, System.lineSeparator()), 1);</span>
+<span class="fc" id="L48">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L51">		assertEquals(grepTool.getCountOfMatchingLines(&quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), 2);</span>
+<span class="fc" id="L52">		assertEquals(0, grepTool.getStatusCode());</span>
+		
+		// Test null input
+<span class="fc" id="L55">		assertEquals(grepTool.getCountOfMatchingLines(&quot;12345&quot;, null), -1);</span>
+<span class="fc" id="L56">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L57">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getOnlyMatchingLines(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getOnlyMatchingLinesTest() {
+		// Test null
+<span class="fc" id="L65">		assertEquals(grepTool.getOnlyMatchingLines(null, null), &quot;&quot;);</span>
+<span class="fc" id="L66">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L69">		assertEquals(grepTool.getOnlyMatchingLines(&quot;&quot;, &quot;&quot;), &quot;&quot;);</span>
+<span class="fc" id="L70">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L73">		assertEquals(grepTool.getOnlyMatchingLines(&quot;&quot;, System.lineSeparator()), System.lineSeparator());</span>
+<span class="fc" id="L74">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L77">		assertEquals(grepTool.getOnlyMatchingLines(&quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), String.format(&quot;ab%nac%n&quot;));</span>
+<span class="fc" id="L78">		assertEquals(0, grepTool.getStatusCode());</span>
+		
+		// Test null input
+<span class="fc" id="L81">		assertEquals(grepTool.getOnlyMatchingLines(&quot;12345&quot;, null), &quot;&quot;);</span>
+<span class="fc" id="L82">		assertEquals(1, grepTool.getStatusCode());</span>
+<span class="fc" id="L83">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesWithTrailingContext(int, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getMatchingLinesWithTrailingContextTest() {
+		// Test null
+<span class="fc" id="L91">		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, null, null), &quot;&quot;);</span>
+<span class="fc" id="L92">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L95">		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, &quot;&quot;, &quot;&quot;), &quot;&quot;);</span>
+<span class="fc" id="L96">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L99">		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, &quot;&quot;, System.lineSeparator()), System.lineSeparator());</span>
+<span class="fc" id="L100">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L103">		assertEquals(grepTool.getMatchingLinesWithTrailingContext(1, &quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), String.format(&quot;ab%nbc%nac%n&quot;));</span>
+<span class="fc" id="L104">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L105">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesWithLeadingContext(int, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getMatchingLinesWithLeadingContextTest() {
+		// Test null
+<span class="fc" id="L113">		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, null, null), &quot;&quot;);</span>
+<span class="fc" id="L114">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L117">		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, &quot;&quot;, &quot;&quot;), &quot;&quot;);</span>
+<span class="fc" id="L118">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L121">		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, &quot;&quot;, System.lineSeparator()), System.lineSeparator());</span>
+<span class="fc" id="L122">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L125">		assertEquals(grepTool.getMatchingLinesWithLeadingContext(1, &quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), String.format(&quot;ab%nbc%nac%n&quot;));</span>
+<span class="fc" id="L126">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L127">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesWithOutputContext(int, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getMatchingLinesWithOutputContextTest() {
+		// Test null
+<span class="fc" id="L135">		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, null, null), &quot;&quot;);</span>
+<span class="fc" id="L136">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L139">		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, &quot;&quot;, &quot;&quot;), &quot;&quot;);</span>
+<span class="fc" id="L140">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L143">		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, &quot;&quot;, System.lineSeparator()), System.lineSeparator());</span>
+<span class="fc" id="L144">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L147">		assertEquals(grepTool.getMatchingLinesWithOutputContext(1, &quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), String.format(&quot;ab%nbc%nac%n&quot;));</span>
+<span class="fc" id="L148">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L149">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getMatchingLinesOnlyMatchingPart(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getMatchingLinesOnlyMatchingPartTest() {
+		// Test null
+<span class="fc" id="L157">		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart(null, null), &quot;&quot;);</span>
+<span class="fc" id="L158">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L161">		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart(&quot;&quot;, &quot;&quot;), &quot;&quot;);</span>
+<span class="fc" id="L162">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L165">		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart(&quot;&quot;, System.lineSeparator()), System.lineSeparator());</span>
+<span class="fc" id="L166">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L169">		assertEquals(grepTool.getMatchingLinesOnlyMatchingPart(&quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), String.format(&quot;ab%nac%n&quot;));</span>
+<span class="fc" id="L170">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L171">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getNonMatchingLines(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void getNonMatchingLinesTest() {
+		// Test null
+<span class="fc" id="L179">		assertEquals(grepTool.getNonMatchingLines(null, null), &quot;&quot;);</span>
+<span class="fc" id="L180">		assertEquals(1, grepTool.getStatusCode());</span>
+
+		// Test empty file
+<span class="fc" id="L183">		assertEquals(grepTool.getNonMatchingLines(&quot;&quot;, &quot;&quot;), &quot;&quot;);</span>
+<span class="fc" id="L184">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test file with one line separator
+<span class="fc" id="L187">		assertEquals(grepTool.getNonMatchingLines(&quot;&quot;, System.lineSeparator()), &quot;&quot;);</span>
+<span class="fc" id="L188">		assertEquals(0, grepTool.getStatusCode());</span>
+
+		// Test regex
+<span class="fc" id="L191">		assertEquals(grepTool.getNonMatchingLines(&quot;a[bc]&quot;, String.format(&quot;ab%nbc%nac%n&quot;)), String.format(&quot;bc%n&quot;));</span>
+<span class="fc" id="L192">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L193">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#getHelp()}.
+	 */
+	@Test
+	public void getHelpTest() {
+<span class="fc" id="L200">		assertEquals(grepTool.getHelp(), String.format(&quot;grep [-cov] [-A num] [-B num] [-C num] [pattern] [file ...]%n&quot;));</span>
+<span class="fc" id="L201">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L202">	}</span>
+
+	/**
+	 * Test method for {@link sg.edu.nus.comp.cs4218.impl.extended1.GrepTool#execute(java.io.File, java.lang.string)}.
+	 */
+	@Test
+	public void combinedBeforeAfterExecuteTest() throws IOException {
+<span class="fc" id="L209">		File file = folder.newFile();</span>
+<span class="fc" id="L210">		Files.write(file.toPath(), &quot;1\n2\n3\n4\n\5\n&quot;.getBytes());</span>
+<span class="fc" id="L211">		grepTool = new GrepTool(new String[] { &quot;-A&quot;, &quot;2&quot;, &quot;-B&quot;, &quot;1&quot;, &quot;2&quot;, file.getName() });</span>
+<span class="fc" id="L212">		assertEquals(&quot;1\n2\n3\n4\n&quot;, grepTool.execute(folder.getRoot(), null));</span>
+<span class="fc" id="L213">		assertEquals(0, grepTool.getStatusCode());</span>
+<span class="fc" id="L214">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LsToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">LsToolTest.java</span></div><h1>LsToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.ILsTool;
+
+<span class="fc" id="L18">public class LsToolTest {</span>
+	private ILsTool lsTool;
+
+	@Before
+	public void before() {
+<span class="fc" id="L23">		lsTool = new LsTool(new String[0]);</span>
+<span class="fc" id="L24">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L28">		lsTool = null;</span>
+<span class="fc" id="L29">	}</span>
+
+	/**
+	 * MUT: getStringForFiles()
+	 * Should print file followed by newline.
+	 */
+	@Test
+	public void getStringForFilesTest() {
+<span class="fc" id="L37">		List&lt;File&gt; files = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L38">		files.add(new File(&quot;.test&quot;));</span>
+<span class="fc" id="L39">		String expected = String.format(&quot;%s\n&quot;, &quot;.test&quot;);</span>
+<span class="fc" id="L40">		String result = lsTool.getStringForFiles(files);</span>
+<span class="fc" id="L41">		assertEquals(result, expected);</span>
+<span class="fc" id="L42">	}</span>
+
+	/**
+	 * MUT: getStringForFiles()
+	 * Should print newline.
+	 */
+	@Test
+	public void getStringForNothingTest() {
+<span class="fc" id="L50">		List&lt;File&gt; files = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L51">		String expected = &quot;\n&quot;;</span>
+<span class="fc" id="L52">		String result = lsTool.getStringForFiles(files);</span>
+<span class="fc" id="L53">		assertEquals(result, expected);</span>
+<span class="fc" id="L54">	}</span>
+
+	/**
+	 * MUT: getStringForFiles()
+	 * Program should not crash with null parameter.
+	 */
+	@Test
+	public void getStringForNull() {
+<span class="fc" id="L62">		String result = lsTool.getStringForFiles(null);</span>
+<span class="fc" id="L63">		assertNull(result);</span>
+<span class="fc" id="L64">	}</span>
+
+	/**
+	 * MUT: getFiles()
+	 * Program should not crash with null parameter.
+	 */
+	@Test
+	public void getNull() {
+<span class="fc" id="L72">		List&lt;File&gt; result = lsTool.getFiles(null);</span>
+<span class="fc" id="L73">		assertNull(result);</span>
+<span class="fc" id="L74">	}</span>
+
+	/**
+	 * MUT: getFiles()
+	 * Program should not crash when a non-existent file is specified.
+	 * @throws IOException
+	 */
+	@Test
+	public void getNonexistent() throws IOException {
+<span class="fc" id="L83">		List&lt;File&gt; result = lsTool.getFiles(new File(&quot;nonexistent&quot;));</span>
+<span class="fc" id="L84">		assertNull(result);</span>
+<span class="fc" id="L85">		assertNotEquals(lsTool.getStatusCode(), 0);</span>
+<span class="fc" id="L86">	}</span>
+
+	/**
+	 * MUT: getFiles()
+	 * Program should not crash when a non-readable file is specified.
+	 * @throws IOException
+	 */
+	@Test
+	public void getStringForNonReadable() throws IOException {
+<span class="fc" id="L95">		File f = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L96">		f.mkdir();</span>
+<span class="fc" id="L97">		f.setReadable(false);</span>
+<span class="fc" id="L98">		List&lt;File&gt; result = lsTool.getFiles(f);</span>
+<span class="fc" id="L99">		assertNull(result);</span>
+<span class="fc" id="L100">		assertNotEquals(lsTool.getStatusCode(), 0);</span>
+<span class="fc" id="L101">		f.delete();</span>
+<span class="fc" id="L102">	}</span>
+
+	/**
+	 * MUT: getFiles()
+	 * Program should not crash when file is specified.
+	 */
+	@Test
+	public void cdFile() throws IOException {
+<span class="fc" id="L110">		File f = new File(&quot;test.txt&quot;);</span>
+<span class="fc" id="L111">		f.createNewFile();</span>
+<span class="fc" id="L112">		List&lt;File&gt; result = lsTool.getFiles(f);</span>
+<span class="fc" id="L113">		assertNull(result);</span>
+<span class="fc" id="L114">		assertNotEquals(lsTool.getStatusCode(), 0);</span>
+<span class="fc" id="L115">		f.delete();</span>
+<span class="fc" id="L116">	}</span>
+
+	@Test
+	public void toolExecuteListFiles() throws IOException {
+<span class="fc" id="L120">		String[] files = new String[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot; };</span>
+<span class="fc" id="L121">		StringBuilder expected = new StringBuilder();</span>
+
+<span class="fc" id="L123">		File dir = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L124">		dir.mkdir();</span>
+<span class="fc" id="L125">		dir.setReadable(true);</span>
+<span class="fc" id="L126">		dir.setExecutable(true);</span>
+<span class="fc" id="L127">		dir.setWritable(true);</span>
+
+<span class="fc bfc" id="L129" title="All 2 branches covered.">		for (String name : files) {</span>
+<span class="fc" id="L130">			File f = new File(String.format(&quot;%s%s%s&quot;, &quot;testDir&quot;, File.separator, name));</span>
+<span class="fc" id="L131">			f.createNewFile();</span>
+<span class="fc" id="L132">			expected.append(String.format(&quot;%s\n&quot;, name));</span>
+		}
+
+<span class="fc" id="L135">		LsTool tool = new LsTool(new String[] { &quot;testDir&quot; });</span>
+<span class="fc" id="L136">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+
+<span class="fc" id="L138">		assertEquals(expected.toString(), result);</span>
+<span class="fc" id="L139">		assertEquals(0, tool.getStatusCode());</span>
+
+<span class="fc bfc" id="L141" title="All 2 branches covered.">		for (String name : files) {</span>
+<span class="fc" id="L142">			File f = new File(String.format(&quot;%s%s%s&quot;, &quot;testDir&quot;, File.separator, name));</span>
+<span class="fc" id="L143">			f.delete();</span>
+		}
+<span class="fc" id="L145">		dir.delete();</span>
+<span class="fc" id="L146">	}</span>
+
+	@Test
+	public void listDirectoryNull() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException,
+			InvocationTargetException {
+<span class="fc" id="L151">		Method listDir = lsTool.getClass().getDeclaredMethod(&quot;listDirectory&quot;, new Class[] { File.class });</span>
+<span class="fc" id="L152">		listDir.setAccessible(true);</span>
+
+<span class="fc" id="L154">		String result = (String) listDir.invoke(lsTool, (Object) null);</span>
+
+<span class="fc" id="L156">		assertNull(result);</span>
+<span class="fc" id="L157">	}</span>
+
+	@Test
+	public void executeNoArgumentsCwd() throws IOException {
+<span class="fc" id="L161">		String[] files = new String[] { &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot; };</span>
+<span class="fc" id="L162">		StringBuilder expected = new StringBuilder();</span>
+
+<span class="fc" id="L164">		File dir = new File(&quot;testDir&quot;);</span>
+<span class="fc" id="L165">		dir.mkdir();</span>
+
+<span class="fc" id="L167">		dir.setReadable(true);</span>
+<span class="fc" id="L168">		dir.setExecutable(true);</span>
+<span class="fc" id="L169">		dir.setWritable(true);</span>
+
+<span class="fc bfc" id="L171" title="All 2 branches covered.">		for (String name : files) {</span>
+<span class="fc" id="L172">			File f = new File(String.format(&quot;%s%s%s&quot;, &quot;testDir&quot;, File.separator, name));</span>
+<span class="fc" id="L173">			f.createNewFile();</span>
+<span class="fc" id="L174">			expected.append(String.format(&quot;%s\n&quot;, name));</span>
+		}
+
+<span class="fc" id="L177">		LsTool tool = new LsTool(new String[0]);</span>
+<span class="fc" id="L178">		String result = tool.execute(dir, &quot;&quot;);</span>
+
+<span class="fc" id="L180">		assertEquals(expected.toString(), result);</span>
+<span class="fc" id="L181">		assertEquals(0, tool.getStatusCode());</span>
+
+<span class="fc bfc" id="L183" title="All 2 branches covered.">		for (String name : files) {</span>
+<span class="fc" id="L184">			File f = new File(String.format(&quot;%s%s%s&quot;, &quot;testDir&quot;, File.separator, name));</span>
+<span class="fc" id="L185">			f.delete();</span>
+		}
+<span class="fc" id="L187">		dir.delete();</span>
+<span class="fc" id="L188">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

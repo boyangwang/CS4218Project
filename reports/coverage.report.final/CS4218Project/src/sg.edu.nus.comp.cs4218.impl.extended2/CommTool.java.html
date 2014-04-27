@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CommTool.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.extended2</a> &gt; <span class="el_source">CommTool.java</span></div><h1>CommTool.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.extended2;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import sg.edu.nus.comp.cs4218.extended2.ICommTool;
+import sg.edu.nus.comp.cs4218.impl.ATool;
+
+public class CommTool extends ATool implements ICommTool {
+	private final static int BUF_SIZE = 4096;
+	private final static int CHECK_DEFAULT = 0;
+	private final static int CHECK_ORDER = 1;
+	private final static int NOCHECK_ORDER = 2;
+
+<span class="fc" id="L22">	private boolean isFile1UnsortedFlagged = false;</span>
+<span class="fc" id="L23">	private boolean isFile2UnsortedFlagged = false;</span>
+
+<span class="fc" id="L25">	private int idx1 = 0, idx2 = 0;</span>
+
+	public CommTool(String[] arguments) {
+<span class="fc" id="L28">		super(arguments);</span>
+<span class="fc" id="L29">	}</span>
+
+	@Override
+	public String execute(File workingDir, String stdin) {
+<span class="fc" id="L33">		statusError();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		if (args.length == 0) {</span>
+<span class="fc" id="L35">			return &quot;Invalid arguments.\nTry 'comm -help' for more information.&quot; + System.lineSeparator();</span>
+		}
+<span class="fc" id="L37">		boolean isCheckOrder = false;</span>
+<span class="fc" id="L38">		boolean isNoCheckOrder = false;</span>
+
+<span class="fc" id="L40">		String fileName1 = null, fileName2 = null;</span>
+<span class="fc" id="L41">		ArrayList&lt;String&gt; fileArgs = new ArrayList&lt;String&gt;();</span>
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		for (String arg : args) {</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">			if (arg.equals(&quot;-c&quot;)) {</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">				if (!isNoCheckOrder) {</span>
+<span class="fc" id="L46">					isCheckOrder = true;</span>
+				}
+<span class="fc" id="L48">			}</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">			else if (arg.equals(&quot;-d&quot;)) {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">				if (!isCheckOrder) {</span>
+<span class="fc" id="L51">					isNoCheckOrder = true;</span>
+				}
+<span class="fc" id="L53">			}</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			else if (arg.equals(&quot;-help&quot;)) {</span>
+<span class="fc" id="L55">				return getHelp();</span>
+			}
+			else { // must be file name
+<span class="fc" id="L58">				fileArgs.add(arg);</span>
+			}
+		}
+
+		// Unpack filenames.
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		if (fileArgs.size() != 2) {</span>
+<span class="fc" id="L64">			return &quot;Incorrect number of arguments passed to 'comm'.\nTry 'comm -help' for more information.&quot; + System.lineSeparator();</span>
+		} else {
+<span class="fc" id="L66">			fileName1 = fileArgs.get(0);</span>
+<span class="fc" id="L67">			fileName2 = fileArgs.get(1);</span>
+		}
+
+		File file1, file2;
+<span class="fc" id="L71">		Path path1 = null, path2 = null;</span>
+		String fileContent1, fileContent2;
+
+		try {
+<span class="fc" id="L75">			path1 = workingDir.toPath().resolve(fileName1);</span>
+<span class="fc" id="L76">			path2 = workingDir.toPath().resolve(fileName2);</span>
+<span class="fc" id="L77">			file1 = path1.toFile();</span>
+<span class="fc" id="L78">			fileContent1 = readContentsOfFile(file1);</span>
+<span class="fc" id="L79">			file2 = path2.toFile();</span>
+<span class="fc" id="L80">			fileContent2 = readContentsOfFile(file2);</span>
+
+<span class="fc bfc" id="L82" title="All 4 branches covered.">			if (!isCheckOrder &amp;&amp; !isNoCheckOrder) {</span>
+<span class="fc" id="L83">				return compareFiles(fileContent1, fileContent2);</span>
+			}
+<span class="fc bfc" id="L85" title="All 2 branches covered.">			else if (isCheckOrder) {</span>
+<span class="fc" id="L86">				return compareFilesCheckSortStatus(fileContent1, fileContent2);</span>
+			}
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">			else if (isNoCheckOrder) {</span>
+<span class="fc" id="L89">				return compareFilesDoNotCheckSortStatus(fileContent1, fileContent2);</span>
+			}
+			else { // should be unreachable
+<span class="nc" id="L92">				return &quot;Invalid arguments. -d and -c flags cannot be both present&quot; + System.lineSeparator();</span>
+			}
+<span class="nc" id="L94">		} catch (InvalidPathException e) {</span>
+<span class="nc" id="L95">			return &quot;File invalid.&quot; + System.lineSeparator();</span>
+<span class="nc" id="L96">		} catch (FileNotFoundException ex) {</span>
+<span class="nc" id="L97">			return &quot;File not found.&quot; + System.lineSeparator();</span>
+<span class="nc" id="L98">		} catch (IOException e) {</span>
+<span class="nc" id="L99">			return &quot;An error occurred processing this path.&quot; + System.lineSeparator();</span>
+<span class="nc" id="L100">		} catch (Exception e) {</span>
+<span class="nc" id="L101">			e.printStackTrace();</span>
+<span class="nc" id="L102">			return &quot;An unexpected error has occured.&quot; + System.lineSeparator();</span>
+		}
+
+	}
+
+	@Override
+	public String compareFiles(String input1, String input2) {
+
+<span class="fc" id="L110">		return compareFilesHelper(input1, input2, CHECK_DEFAULT);</span>
+	}
+
+	@Override
+	public String compareFilesCheckSortStatus(String input1, String input2) {
+
+<span class="fc" id="L116">		return compareFilesHelper(input1, input2, CHECK_ORDER);</span>
+	}
+
+	@Override
+	public String compareFilesDoNotCheckSortStatus(String input1, String input2) {
+
+<span class="fc" id="L122">		return compareFilesHelper(input1, input2, NOCHECK_ORDER);</span>
+	}
+
+	private int handleUnsortFound(int type, int filenumber, ArrayList&lt;String&gt; col,
+			StringBuilder res) {
+<span class="fc bfc" id="L127" title="All 3 branches covered.">		switch (type) {</span>
+		case CHECK_DEFAULT:
+<span class="fc" id="L129">			col.add(&quot;comm: file &quot; + filenumber + &quot; is not in sorted order&quot;</span>
+<span class="fc" id="L130">					+ &quot;\n&quot;);</span>
+<span class="fc" id="L131">			break;</span>
+		case CHECK_ORDER:
+<span class="fc" id="L133">			col.add(&quot;comm: file &quot; + filenumber + &quot; is not in sorted order&quot;</span>
+<span class="fc" id="L134">					+ &quot;\n&quot;);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">			for (String str : col) {</span>
+<span class="fc" id="L136">				res.append(str);</span>
+			}
+<span class="fc" id="L138">			return 1;</span>
+		case NOCHECK_ORDER:
+			break;
+		}
+
+<span class="fc" id="L143">		return 0;</span>
+	}
+
+	private int isEitherBiggerOrEqualLength(int type,
+			String[] inArr1, String[] inArr2, ArrayList&lt;String&gt; col, StringBuilder res) {
+		// do not enter this if block
+<span class="fc bfc" id="L149" title="All 4 branches covered.">		if (!(idx1 &gt;= inArr1.length) &amp;&amp; !(idx2 &gt;= inArr2.length)) {</span>
+<span class="fc" id="L150">			return 0;</span>
+		}
+		// either one of the block below executed
+<span class="fc bfc" id="L153" title="All 2 branches covered.">		else if (idx1 &gt;= inArr1.length) {</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">			if (idx2 != 0) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">				if (!(inArr2[idx2].compareTo(inArr2[idx2 - 1]) &gt;= 0)</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">						&amp;&amp; !isFile2UnsortedFlagged) {</span>
+<span class="fc" id="L157">					isFile2UnsortedFlagged = true;</span>
+<span class="fc" id="L158">					int action = handleUnsortFound(type, 2, col, res);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">					if (action == 1)</span>
+<span class="fc" id="L160">						return -1;</span>
+				}
+			}
+<span class="fc" id="L163">			col.add(&quot;\t\t&quot; + inArr2[idx2] + &quot;\n&quot;);</span>
+<span class="fc" id="L164">			idx2++;</span>
+<span class="fc" id="L165">		}</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">		else if (idx2 &gt;= inArr2.length) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">			if (idx1 != 0) {</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">				if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) &gt;= 0)</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">						&amp;&amp; !isFile1UnsortedFlagged) {</span>
+<span class="fc" id="L170">					isFile1UnsortedFlagged = true;</span>
+<span class="fc" id="L171">					int action = handleUnsortFound(type, 1, col, res);</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">					if (action == 1)</span>
+<span class="nc" id="L173">						return -1;</span>
+				}
+			}
+<span class="fc" id="L176">			col.add(inArr1[idx1] + &quot;\n&quot;);</span>
+<span class="fc" id="L177">			idx1++;</span>
+		}
+<span class="fc" id="L179">		return 1;</span>
+	}
+
+	private void getCompareResult(int type, ArrayList&lt;String&gt; col,
+			StringBuilder res, String[] inArr1, String[] inArr2) {
+
+<span class="fc" id="L185">		while (true) {</span>
+<span class="fc" id="L186">			int isEitherBiggerOrEqualLength = 0;</span>
+
+<span class="fc bfc" id="L188" title="All 4 branches covered.">			if (idx1 &gt;= inArr1.length &amp;&amp; idx2 &gt;= inArr2.length)</span>
+<span class="fc" id="L189">				break;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">			else if ((isEitherBiggerOrEqualLength = isEitherBiggerOrEqualLength(type, inArr1, inArr2, col, res)) != 0) {</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">				if (isEitherBiggerOrEqualLength == -1)</span>
+<span class="fc" id="L192">					return;</span>
+			}
+<span class="fc bfc" id="L194" title="All 2 branches covered.">			else if (inArr1[idx1].compareTo(inArr2[idx2]) == 0) {</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">				if (idx1 != 0) {</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">					if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) &gt;= 0)</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">							&amp;&amp; !isFile1UnsortedFlagged) {</span>
+<span class="fc" id="L198">						isFile1UnsortedFlagged = true;</span>
+<span class="fc" id="L199">						int action = handleUnsortFound(type, 1, col, res);</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">						if (action == 1)</span>
+<span class="fc" id="L201">							return;</span>
+					}
+				}
+<span class="fc bfc" id="L204" title="All 2 branches covered.">				if (idx2 != 0) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">					if (!(inArr2[idx2].compareTo(inArr2[idx2 - 1]) &gt;= 0)</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">							&amp;&amp; !isFile2UnsortedFlagged) {</span>
+<span class="fc" id="L207">						isFile2UnsortedFlagged = true;</span>
+<span class="fc" id="L208">						int action = handleUnsortFound(type, 2, col, res);</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">						if (action == 1)</span>
+<span class="nc" id="L210">							return;</span>
+					}
+				}
+<span class="fc" id="L213">				col.add(&quot;\t\t\t\t&quot; + inArr1[idx1] + &quot;\n&quot;);</span>
+<span class="fc" id="L214">				idx1++;</span>
+<span class="fc" id="L215">				idx2++;</span>
+<span class="fc" id="L216">			}</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">			else if (inArr1[idx1].compareTo(inArr2[idx2]) &lt; 0) {</span>
+
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">				if (idx1 != 0) {</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">					if (!(inArr1[idx1].compareTo(inArr1[idx1 - 1]) &gt;= 0)</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">							&amp;&amp; !isFile1UnsortedFlagged) {</span>
+<span class="nc" id="L222">						isFile1UnsortedFlagged = true;</span>
+<span class="nc" id="L223">						int action = handleUnsortFound(type, 1, col, res);</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">						if (action == 1)</span>
+<span class="nc" id="L225">							return;</span>
+					}
+				}
+<span class="fc" id="L228">				col.add(inArr1[idx1] + &quot;\n&quot;);</span>
+<span class="fc" id="L229">				idx1++;</span>
+<span class="fc" id="L230">			}</span>
+			else {
+<span class="fc bfc" id="L232" title="All 2 branches covered.">				if (idx2 != 0) {</span>
+<span class="fc" id="L233">					isFile2UnsortedFlagged = true;</span>
+<span class="fc" id="L234">					int action = handleUnsortFound(type, 2, col, res);</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">					if (action == 1)</span>
+<span class="fc" id="L236">						return;</span>
+				}
+<span class="fc" id="L238">				col.add(&quot;\t\t&quot; + inArr2[idx2] + &quot;\n&quot;);</span>
+<span class="fc" id="L239">				idx2++;</span>
+			}
+		}
+
+<span class="fc bfc" id="L243" title="All 2 branches covered.">		for (String str : col) {</span>
+<span class="fc" id="L244">			res.append(str);</span>
+		}
+<span class="fc" id="L246">		return;</span>
+	}
+
+	private String compareFilesHelper(String input1, String input2, int type) {
+<span class="pc bpc" id="L250" title="1 of 4 branches missed.">		if (input1 == null || input2 == null) {</span>
+<span class="fc" id="L251">			return &quot;Internal NullPointerError.\n&quot;;</span>
+		}
+<span class="fc bfc" id="L253" title="All 4 branches covered.">		if (input1.equals(&quot;&quot;) &amp;&amp; input2.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L254">			return &quot;&quot;;</span>
+		}
+
+<span class="fc bfc" id="L257" title="All 2 branches covered.">		if (type == NOCHECK_ORDER) {</span>
+<span class="fc" id="L258">			isFile1UnsortedFlagged = true;</span>
+<span class="fc" id="L259">			isFile2UnsortedFlagged = true;</span>
+		}
+<span class="fc" id="L261">		ArrayList&lt;String&gt; col = new ArrayList&lt;String&gt;();</span>
+<span class="fc" id="L262">		StringBuilder res = new StringBuilder();</span>
+<span class="fc" id="L263">		input1.replaceAll(&quot;\r\n&quot;, &quot;\n&quot;);</span>
+<span class="fc" id="L264">		input2.replaceAll(&quot;\r\n&quot;, &quot;\n&quot;);</span>
+
+<span class="fc" id="L266">		String[] inArr1 = null, inArr2 = null;</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">		if (input1.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L268">			inArr1 = new String[0];</span>
+<span class="fc" id="L269">		}</span>
+		else {
+<span class="fc" id="L271">			inArr1 = input1.split(&quot;\n&quot;);</span>
+		}
+<span class="fc bfc" id="L273" title="All 2 branches covered.">		if (input2.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L274">			inArr2 = new String[0];</span>
+<span class="fc" id="L275">		}</span>
+		else {
+<span class="fc" id="L277">			inArr2 = input2.split(&quot;\n&quot;);</span>
+		}
+
+<span class="fc" id="L280">		getCompareResult(type, col, res, inArr1, inArr2);</span>
+
+<span class="fc" id="L282">		return res.toString();</span>
+	}
+
+	private String readContentsOfFile(File file) throws IOException, FileNotFoundException, NullPointerException {
+		FileInputStream is;
+<span class="fc" id="L287">		is = new FileInputStream(file);</span>
+
+<span class="fc" id="L289">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L290">		byte buf[] = new byte[BUF_SIZE];</span>
+<span class="fc" id="L291">		int read = 0;</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">		while ((read = is.read(buf)) != -1) {</span>
+<span class="fc" id="L293">			sb.append(new String(Arrays.copyOf(buf, read), StandardCharsets.UTF_8));</span>
+		}
+<span class="fc" id="L295">		is.close();</span>
+<span class="fc" id="L296">		return sb.toString();</span>
+	}
+
+	@Override
+	public String getHelp() {
+
+<span class="fc" id="L302">		return &quot;comm : Compares two sorted files line by line. With no options, produce three-column output. Column one\n&quot;</span>
+				+ &quot;contains lines unique to FILE1, column two contains lines unique to FILE2, and column three contains lines\n&quot;
+				+ &quot;common to both files.\n\n&quot;
+				+ &quot;Command Format - comm [OPTIONS] FILE1 FILE2\n&quot;
+				+ &quot;FILE1 - Name of the file 1\n&quot;
+				+ &quot;FILE2 - Name of the file 2\n&quot;
+				+ &quot;-c : check that the input is correctly sorted, even if all input lines are pairable\n&quot;
+				+ &quot;-d : do not check that the input is correctly sorted\n&quot;
+				+ &quot;-help : Brief information about supported options\n&quot;;
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

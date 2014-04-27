@@ -128,26 +128,9 @@ public class CommToolAddedTest {
 	}
 
 	@Test
-	public void testCompareFilesNormal() {
-		ct = (ICommTool) CommandParser.parse("comm -help", null);
-		String result = ct.compareFiles("4\nd\nb\n2\n", "3\nc\na\n1\n");
-		String expected = "\t\t3\n4\n\t\tc\ncomm: file 2 is not in sorted order\n"
-				+ "\t\ta\n\t\t1\nd\ncomm: file 1 is not in sorted order\nb\n2\n";
-		assertEquals(expected, result);
-	}
-
-	@Test
 	public void testCompareFilesNocheckNormal() {
 		ct = (ICommTool) CommandParser.parse("comm -help", null);
 		String result = ct.compareFilesDoNotCheckSortStatus("4\nd\n", "3\nc\n");
-		String expected = "\t\t3\n4\n\t\tc\nd\n";
-		assertEquals(expected, result);
-	}
-
-	@Test
-	public void testCompareFilesCheckNormal() {
-		ct = (ICommTool) CommandParser.parse("comm -help", null);
-		String result = ct.compareFilesCheckSortStatus("4\nd\n", "3\nc\n");
 		String expected = "\t\t3\n4\n\t\tc\nd\n";
 		assertEquals(expected, result);
 	}

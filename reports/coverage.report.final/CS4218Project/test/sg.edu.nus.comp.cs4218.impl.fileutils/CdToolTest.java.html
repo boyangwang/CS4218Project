@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CdToolTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.fileutils</a> &gt; <span class="el_source">CdToolTest.java</span></div><h1>CdToolTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.fileutils;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.fileutils.ICdTool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+<span class="fc" id="L15">public class CdToolTest {</span>
+	private ICdTool cdTool;
+
+	/**
+	 * CdTool is integral to the shell, and cannot be tested otherwise.
+	 */
+	@Before
+	public void before() {
+<span class="fc" id="L23">		Shell shell = new Shell(System.in, System.out);</span>
+<span class="fc" id="L24">		cdTool = new CdTool(new String[0], shell);</span>
+<span class="fc" id="L25">	}</span>
+
+	@After
+	public void after() {
+<span class="fc" id="L29">		cdTool = null;</span>
+<span class="fc" id="L30">	}</span>
+
+	/**
+	 * MUT: changeDirectory()
+	 * Program should not crash on null parameter.
+	 */
+	@Test
+	public void cdNull() {
+<span class="fc" id="L38">		File result = cdTool.changeDirectory(null);</span>
+<span class="fc" id="L39">		assertNull(result);</span>
+<span class="fc" id="L40">		assertNotEquals(cdTool.getStatusCode(), 0);</span>
+<span class="fc" id="L41">	}</span>
+
+	/**
+	 * MUT: changeDirectory()
+	 * Program should not crash on non-existent directory.
+	 */
+	@Test
+	public void cdNonExistent() {
+<span class="fc" id="L49">		File result = cdTool.changeDirectory(&quot;nonexistent&quot;);</span>
+<span class="fc" id="L50">		assertNull(result);</span>
+<span class="fc" id="L51">		assertNotEquals(cdTool.getStatusCode(), 0);</span>
+<span class="fc" id="L52">	}</span>
+
+	// Commented out because this test is platform specific
+	/**
+	 * MUT: changeDirectory()
+	 * Program should not crash on unreadable file.
+	 */
+	//    @Test
+	//    public void cdNotReadable() throws IOException {
+	//        File f = new File(&quot;testDir&quot;);
+	//        f.mkdir();
+	//        f.setReadable(false);
+	//        File result = cdTool.changeDirectory(f.getCanonicalPath());
+	//        assertNull(result);
+	//        assertNotEquals(cdTool.getStatusCode(), 0);
+	//        f.delete();
+	//    }
+
+	/**
+	 * MUT: changeDirectory()
+	 * Utility should not switch directory to a file.
+	 */
+	@Test
+	public void cdFile() throws IOException {
+<span class="fc" id="L76">		File f = new File(&quot;test.txt&quot;);</span>
+<span class="fc" id="L77">		f.createNewFile();</span>
+<span class="fc" id="L78">		File result = cdTool.changeDirectory(f.getCanonicalPath());</span>
+<span class="fc" id="L79">		assertNull(result);</span>
+<span class="fc" id="L80">		assertNotEquals(cdTool.getStatusCode(), 0);</span>
+<span class="fc" id="L81">		f.delete();</span>
+<span class="fc" id="L82">	}</span>
+
+	/**
+	 * MUT: changeDirectory()
+	 * Program should not crash when bad path supplied.
+	 */
+	@Test
+	public void cdBadPath() throws IOException {
+<span class="fc" id="L90">		File result = cdTool.changeDirectory(&quot;!nvali$d.p}th\\/&quot;);</span>
+<span class="fc" id="L91">		assertNull(result);</span>
+<span class="fc" id="L92">		assertNotEquals(cdTool.getStatusCode(), 0);</span>
+<span class="fc" id="L93">	}</span>
+
+	// Commented out because this test is platform specific
+	/**
+	 * MUT: changeDirectory()
+	 * Utility should not allow changing directories beyond root.
+	 */
+	//    @Test
+	//    public void cdUpwardsMultiple() throws IOException {
+	//        String upwards = &quot;..&quot; + File.separator;
+	//        StringBuilder path = new StringBuilder();
+	//        for (int i = 0; i &lt; 1024; i++) {
+	//            path.append(upwards);
+	//        }
+	//        File result = cdTool.changeDirectory(path.toString());
+	//        assertNull(result);
+	//        assertNotEquals(cdTool.getStatusCode(), 0);
+	//    }
+
+	// Commented out because this test is platform specific
+	/**
+	 * MUT: changeDirectory()
+	 * Utility should support changing directories upwards with &quot;../&quot;, up to &quot;/&quot;
+	 */
+	//    @Test
+	//    public void cdUpwardsRoot() throws IOException {
+	//        File wd = new File(System.getProperty(&quot;user.dir&quot;));
+	//        int i = 0;
+	//        while ((wd = wd.getParentFile()) != null) {
+	//            i++;
+	//        }
+	//        String upwards = &quot;..&quot; + File.separator;
+	//        StringBuilder path = new StringBuilder();
+	//        while (i-- &gt; 0) {
+	//            path.append(upwards);
+	//        }
+	//
+	//        // Note: may be UNIX specific.
+	//        File homeDirectory = FileSystemView.getFileSystemView().getRoots()[0];
+	//        String expected = homeDirectory.getCanonicalPath();
+	//
+	//        File result = cdTool.changeDirectory(path.toString());
+	//        assertEquals(result.getCanonicalPath(), expected);
+	//        assertEquals(cdTool.getStatusCode(), 0);
+	//    }
+
+	/**
+	 * MUT: changeDirectory()
+	 * Changing directory to &quot;.&quot; should not have side effects.
+	 */
+	@Test
+	public void cdCurrent() throws IOException {
+<span class="fc" id="L145">		String expected = System.getProperty(&quot;user.dir&quot;);</span>
+<span class="fc" id="L146">		File result = cdTool.changeDirectory(&quot;.&quot;);</span>
+<span class="fc" id="L147">		assertEquals(result.getCanonicalPath(), expected);</span>
+<span class="fc" id="L148">		assertEquals(cdTool.getStatusCode(), 0);</span>
+<span class="fc" id="L149">	}</span>
+
+	@Test
+	public void toolExecute() throws IOException {
+<span class="fc" id="L153">		CdTool tool = new CdTool(new String[] { &quot;.&quot; }, new Shell(System.in, System.out));</span>
+<span class="fc" id="L154">		String result = tool.execute(new File(System.getProperty(&quot;user.dir&quot;)), &quot;&quot;);</span>
+<span class="fc" id="L155">		assertEquals(&quot;&quot;, result);</span>
+<span class="fc" id="L156">		assertEquals(0, tool.getStatusCode());</span>
+<span class="fc" id="L157">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

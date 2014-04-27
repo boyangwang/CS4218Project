@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CatIntegrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">CatIntegrationTest.java</span></div><h1>CatIntegrationTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.Assert.assertEquals;
+
+<span class="fc" id="L14">public class CatIntegrationTest {</span>
+	// Used to abstract Shell testing. You'll need these in a new suite.
+	private ByteArrayInputStream simIn;
+	private ByteArrayOutputStream simOut;
+	private Shell shell;
+
+	// Used only in this test suite.
+<span class="fc" id="L21">	private final String TEST_INPUT_FILE = &quot;cat-test-in.txt&quot;;</span>
+<span class="fc" id="L22">	private final String TEST_OUTPUT_FILE = &quot;cat-test-output.txt&quot;;</span>
+	private File fin;
+	private File fout;
+
+	// You need this method.
+	private String getStringFromOutput() {
+<span class="fc" id="L28">		String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L29">		out = out.substring(out.indexOf(&quot;&gt; &quot;) + 2).trim();</span>
+<span class="fc" id="L30">		out = out.substring(0, out.lastIndexOf(&quot;\n&quot;));</span>
+<span class="fc" id="L31">		return out;</span>
+	}
+
+	// You need this method.
+	private void setupShellWithInput(String in) {
+<span class="fc" id="L36">		String input = in;</span>
+
+		// Terminate at the end of this command.
+<span class="fc" id="L39">		input += &quot;\r\nctrl-c\r\n&quot;;</span>
+
+<span class="fc" id="L41">		simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L42">		shell = new Shell(simIn, simOut);</span>
+<span class="fc" id="L43">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+		// You need this line.
+<span class="fc" id="L51">		simOut = new ByteArrayOutputStream();</span>
+
+		// Only for this test suite/
+<span class="fc" id="L54">		fin = new File(TEST_INPUT_FILE);</span>
+<span class="fc" id="L55">		fout = new File(TEST_OUTPUT_FILE);</span>
+<span class="fc" id="L56">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+		// Only for this test suite.
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">		if (fin.exists()) {</span>
+<span class="fc" id="L65">			fin.delete();</span>
+		}
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		if (fout.exists()) {</span>
+<span class="nc" id="L68">			fout.delete();</span>
+		}
+<span class="fc" id="L70">	}</span>
+
+	/**
+	 * cat | grep
+	 */
+	@Test
+	public void catGrep() throws IOException {
+		// Setup the test case.
+<span class="fc" id="L78">		String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L79">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L80">		fw.write(input);</span>
+<span class="fc" id="L81">		fw.close();</span>
+
+		// Call and run the shell like this.
+<span class="fc" id="L84">		setupShellWithInput(String.format(&quot;cat %s | grep hello&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L85">		shell.run();</span>
+<span class="fc" id="L86">		String result = getStringFromOutput();</span>
+
+		// Do your asserts.
+<span class="fc" id="L89">		String expected = &quot;hello\nhello&quot;;</span>
+<span class="fc" id="L90">		assertEquals(expected, result);</span>
+<span class="fc" id="L91">	}</span>
+
+	/**
+	 * grep | cat
+	 */
+	@Test
+	public void grepCat() throws IOException {
+		// Setup the test case.
+<span class="fc" id="L99">		String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L100">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L101">		fw.write(input);</span>
+<span class="fc" id="L102">		fw.close();</span>
+
+		// Call and run the shell like this.
+<span class="fc" id="L105">		setupShellWithInput(String.format(&quot;grep hello %s | cat&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L106">		shell.run();</span>
+<span class="fc" id="L107">		String result = getStringFromOutput();</span>
+
+		// Do your asserts.
+<span class="fc" id="L110">		String expected = &quot;hello\nhello&quot;;</span>
+<span class="fc" id="L111">		assertEquals(expected, result);</span>
+<span class="fc" id="L112">	}</span>
+
+	/**
+	 * grep | cat | grep | grep | cat | cat
+	 */
+	@Test
+	public void grepCatGrepGrepCatCat() throws IOException {
+		// Setup the test case.
+<span class="fc" id="L120">		String input = &quot;hello\nhello\nworld\ncat\ndog&quot;;</span>
+<span class="fc" id="L121">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L122">		fw.write(input);</span>
+<span class="fc" id="L123">		fw.close();</span>
+
+		// Call and run the shell like this.
+<span class="fc" id="L126">		setupShellWithInput(String.format(&quot;grep hello %s | cat | grep h | grep e | cat | cat&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L127">		shell.run();</span>
+<span class="fc" id="L128">		String result = getStringFromOutput();</span>
+
+		// Do your asserts.
+<span class="fc" id="L131">		String expected = &quot;hello\nhello&quot;;</span>
+<span class="fc" id="L132">		assertEquals(expected, result);</span>
+<span class="fc" id="L133">	}</span>
+
+	/**
+	 * cat | grep | cat | sort
+	 */
+	@Test
+	public void catGrepCatSort() throws IOException {
+		// Setup the test case.
+<span class="fc" id="L141">		String input = &quot;hello\nhello\nworld\ncat\ndog\nHello&quot;;</span>
+<span class="fc" id="L142">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L143">		fw.write(input);</span>
+<span class="fc" id="L144">		fw.close();</span>
+
+		// Call and run the shell like this.
+<span class="fc" id="L147">		setupShellWithInput(String.format(&quot;cat %s | grep l | cat | sort&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L148">		shell.run();</span>
+<span class="fc" id="L149">		String result = getStringFromOutput();</span>
+
+		// Do your asserts.
+<span class="fc" id="L152">		String expected = &quot;Hello\nhello\nhello\nworld&quot;;</span>
+<span class="fc" id="L153">		assertEquals(expected, result);</span>
+<span class="fc" id="L154">	}</span>
+
+	/**
+	 * cat | grep | cat | sort | wc
+	 */
+	@Test
+	public void catGrepCatSortWc() throws IOException {
+		// Setup the test case.
+<span class="fc" id="L162">		String input = &quot;hello\nhello\nworld\ncat\ndog\nHello&quot;;</span>
+<span class="fc" id="L163">		FileWriter fw = new FileWriter(fin);</span>
+<span class="fc" id="L164">		fw.write(input);</span>
+<span class="fc" id="L165">		fw.close();</span>
+
+		// Call and run the shell like this.
+<span class="fc" id="L168">		setupShellWithInput(String.format(&quot;cat %s | grep l | cat | sort | wc&quot;, TEST_INPUT_FILE));</span>
+<span class="fc" id="L169">		shell.run();</span>
+<span class="fc" id="L170">		String result = getStringFromOutput();</span>
+
+		// Do your asserts.
+<span class="fc" id="L173">		String expected = &quot;4\t4\t24\t&quot;;</span>
+<span class="fc" id="L174">		assertEquals(expected, result);</span>
+<span class="fc" id="L175">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

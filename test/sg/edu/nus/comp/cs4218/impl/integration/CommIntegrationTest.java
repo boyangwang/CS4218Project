@@ -94,54 +94,6 @@ public class CommIntegrationTest {
 	}
 
 	/**
-	 * comm | paste
-	 */
-	@Test
-	public void commPaste() throws Exception {
-		// Setup the test case.
-		String input = "a\nb\n";
-		FileWriter fw = new FileWriter(fin1);
-		fw.write(input);
-		fw.close();
-		input = "b\nc\n";
-		fw = new FileWriter(fin2);
-		fw.write(input);
-		fw.close();
-
-		setupShellWithInput(String.format("comm %s %s | paste -", TEST_INPUT_FILE_1, TEST_INPUT_FILE_2));
-		shell.run();
-		String output = getStringFromOutput();
-
-		String expected = "a\n\t\t\t\tb\n\t\tc";
-
-		assertEquals(expected, output);
-	}
-
-	/**
-	 * comm | uniq
-	 */
-	@Test
-	public void commUniq() throws Exception {
-		// Setup the test case.
-		String input = "a\nb\n";
-		FileWriter fw = new FileWriter(fin1);
-		fw.write(input);
-		fw.close();
-		input = "b\nc\n";
-		fw = new FileWriter(fin2);
-		fw.write(input);
-		fw.close();
-
-		setupShellWithInput(String.format("comm %s %s | uniq -", TEST_INPUT_FILE_1, TEST_INPUT_FILE_2));
-		shell.run();
-		String output = getStringFromOutput();
-
-		String expected = "a\n\t\t\t\tb\n\t\tc";
-
-		assertEquals(expected, output);
-	}
-
-	/**
 	 * comm | wc
 	 */
 	@Test

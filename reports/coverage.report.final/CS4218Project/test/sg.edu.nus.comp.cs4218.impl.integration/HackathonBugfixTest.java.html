@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>HackathonBugfixTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">HackathonBugfixTest.java</span></div><h1>HackathonBugfixTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import static org.junit.Assert.*;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.ITool;
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+<span class="fc" id="L24">public class HackathonBugfixTest {</span>
+	Shell sh;
+
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L29">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L33">		sh = null;</span>
+<span class="fc" id="L34">	}</span>
+
+	@BeforeClass
+	public static void initialize() throws IOException {
+
+<span class="fc" id="L39">		File myFile1 = new File(&quot;emptyFile&quot;);</span>
+<span class="fc" id="L40">		myFile1.createNewFile();</span>
+
+<span class="fc" id="L42">		File myFile2 = new File(&quot;fileName has space&quot;);</span>
+<span class="fc" id="L43">		myFile2.createNewFile();</span>
+<span class="fc" id="L44">		writeFile(&quot;fileName has space&quot;, &quot;content1\nconten2&quot;);</span>
+
+<span class="fc" id="L46">		File myFile3 = new File(&quot;normalFile&quot;);</span>
+<span class="fc" id="L47">		myFile3.createNewFile();</span>
+<span class="fc" id="L48">		writeFile(&quot;normalFile&quot;, &quot;content1\ncontent2&quot;);</span>
+
+<span class="fc" id="L50">		File myFile4 = new File(&quot;copyFile&quot;);</span>
+<span class="fc" id="L51">		myFile4.createNewFile();</span>
+<span class="fc" id="L52">		writeFile(&quot;copyFile&quot;, &quot;content1\ncontent2&quot;);</span>
+<span class="fc" id="L53">	}</span>
+
+	@AfterClass
+	public static void method() {
+
+<span class="fc" id="L58">		File file1 = new File(&quot;emptyFile.txt&quot;);</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">		if (file1.exists()) {</span>
+<span class="nc" id="L60">			file1.delete();</span>
+		}
+
+<span class="fc" id="L63">		File file2 = new File(&quot;fileName has space.txt&quot;);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">		if (file2.exists()) {</span>
+<span class="nc" id="L65">			file2.delete();</span>
+		}
+
+<span class="fc" id="L68">		File file3 = new File(&quot;normalFile&quot;);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">		if (file3.exists()) {</span>
+<span class="fc" id="L70">			file3.delete();</span>
+		}
+
+<span class="fc" id="L73">		File file4 = new File(&quot;copyFile&quot;);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">		if (file4.exists()) {</span>
+<span class="fc" id="L75">			file4.delete();</span>
+		}
+<span class="fc" id="L77">	}</span>
+
+	public static void writeFile(String fileName, String s) throws IOException {
+<span class="fc" id="L80">		BufferedWriter out = new BufferedWriter(new FileWriter(fileName));</span>
+<span class="fc" id="L81">		out.write(s);</span>
+<span class="fc" id="L82">		out.close();</span>
+
+<span class="fc" id="L84">	}</span>
+
+	public static void hold() {
+
+		try {
+<span class="fc" id="L89">			TimeUnit.MILLISECONDS.sleep(50);</span>
+<span class="pc" id="L90">		} catch (InterruptedException e) {</span>
+			//do nth
+		}
+<span class="fc" id="L93">	}</span>
+
+	/**
+	 * BUG_ID #4
+	 * 
+	 * reading from user input does not work in pipe tool
+	 * 
+	 *  Shell.java:201
+	 */
+	@Test
+	public void testStdinInPipe() {
+
+<span class="fc" id="L105">		String ctrld = &quot;123456789\n987654321\nctrl-d&quot;;</span>
+<span class="fc" id="L106">		byte[] b = ctrld.getBytes();</span>
+<span class="fc" id="L107">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L108">		ByteArrayInputStream is = new ByteArrayInputStream(b);</span>
+<span class="fc" id="L109">		sh = new Shell(is, os);</span>
+<span class="fc" id="L110">		String cmd = &quot;paste - | cut -c1-5 -&quot;;</span>
+<span class="fc" id="L111">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L112">		sh.execute(result);</span>
+<span class="fc" id="L113">		hold();</span>
+		try {
+<span class="fc" id="L115">			String out = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="fc" id="L116">			assertTrue(out.contains(&quot;12345\n98765\n&quot;));</span>
+<span class="pc" id="L117">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L118">			e.printStackTrace();</span>
+		}
+
+
+
+<span class="fc" id="L123">	}</span>
+
+	/**
+	 * BUG_ID #16
+	 * 
+	 * Throw exception on tool thread, unable to catch here as the thread is create 
+	 * and execute inside method execute() in shell
+	 * 
+	 *  PasteTool.java:178
+	 */
+	@Test
+	public void testPasteEmptyFile() {
+<span class="fc" id="L135">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L136">		sh = new Shell(System.in, os);</span>
+<span class="fc" id="L137">		String cmd = &quot;paste emptyFile&quot;;</span>
+<span class="fc" id="L138">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L139">		hold();</span>
+		try {
+<span class="fc" id="L141">			sh.execute(result);</span>
+<span class="fc" id="L142">			String out = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="pc" id="L143">		} catch (Exception e) {</span>
+<span class="nc" id="L144">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L146">	}</span>
+
+	/*
+	 * BUG_ID #13
+	 */
+	@Test
+	public void testCtrlZWhenNoToolRunning() {
+
+<span class="fc" id="L154">		String ctrld = &quot;ctrl-z\nctrl-c\n&quot;;</span>
+<span class="fc" id="L155">		byte[] b = ctrld.getBytes();</span>
+<span class="fc" id="L156">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L157">		ByteArrayInputStream is = new ByteArrayInputStream(b);</span>
+<span class="fc" id="L158">		sh = new Shell(is, os);</span>
+<span class="fc" id="L159">		sh.run();</span>
+<span class="fc" id="L160">		hold();</span>
+		try {
+<span class="fc" id="L162">			String out = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">			assertTrue(out.length()&gt;0);</span>
+<span class="pc" id="L164">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L165">			e.printStackTrace();</span>
+		}
+
+<span class="fc" id="L168">		hold();</span>
+		try {
+<span class="fc" id="L170">			String out = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">			assertTrue(out.length() &gt; 0); // shd have prompt user for next command but nothing in the output</span>
+<span class="pc" id="L172">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L173">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L175">	}</span>
+
+	/*
+	 * BUG_ID #3
+	 * 
+	 * UniqTool.java:18,23,73-76
+	 */
+	@Test
+	public void testUniqWithStdin() {
+<span class="fc" id="L184">		String ctrlz = &quot;line \nline\nctrl-d&quot;;</span>
+<span class="fc" id="L185">		byte[] b = ctrlz.getBytes();</span>
+<span class="fc" id="L186">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L187">		ByteArrayInputStream is = new ByteArrayInputStream(b);</span>
+<span class="fc" id="L188">		sh = new Shell(is, os);</span>
+<span class="fc" id="L189">		String cmd = &quot;uniq -&quot;;</span>
+<span class="fc" id="L190">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L191">		sh.execute(result);</span>
+<span class="fc" id="L192">		hold();</span>
+		try {
+<span class="fc" id="L194">			String out = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="fc" id="L195">			assertTrue(out.contains(&quot;line&quot;)); // shd have prompt user for next command but nothing in the output</span>
+<span class="pc" id="L196">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L197">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L199">	}</span>
+
+	/*
+	 * BUG_ID #18
+	 */
+	@Test
+	public void testPipeWithStdin() {
+<span class="fc" id="L206">		String ctrlz = &quot;line \nline\nctrl-d&quot;;</span>
+<span class="fc" id="L207">		byte[] b = ctrlz.getBytes();</span>
+<span class="fc" id="L208">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L209">		ByteArrayInputStream is = new ByteArrayInputStream(b);</span>
+<span class="fc" id="L210">		sh = new Shell(is, os);</span>
+<span class="fc" id="L211">		String cmd = &quot;paste - | cut -c 1-5 -&quot;;</span>
+<span class="fc" id="L212">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L213">		sh.execute(result);</span>
+<span class="fc" id="L214">		hold();</span>
+		try {
+<span class="fc" id="L216">			String out = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="fc" id="L217">			assertTrue(out.contains(&quot;line \nline&quot;)); // no user input was taken in</span>
+<span class="pc" id="L218">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L219">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L221">	}</span>
+
+	/*
+	 * BUG_ID #21
+	 * 
+	 * CopyTool.java:41-44
+	 */
+	@Test
+	public void testCopyToSameFile() throws IOException {
+<span class="fc" id="L230">		File file = new File(&quot;copyFile&quot;);</span>
+<span class="fc" id="L231">		String contentBefore = new String(Files.readAllBytes(file.toPath()));</span>
+<span class="fc" id="L232">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L233">		sh = new Shell(System.in, os);</span>
+<span class="fc" id="L234">		String cmd = &quot;copy copyFile copyFile&quot;;</span>
+<span class="fc" id="L235">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L236">		sh.execute(result);</span>
+<span class="fc" id="L237">		hold();</span>
+		try {
+<span class="fc" id="L239">			file = new File(&quot;copyFile&quot;);</span>
+<span class="fc" id="L240">			String contentAfter = new String(Files.readAllBytes(file.toPath()));</span>
+<span class="fc" id="L241">			assertEquals(contentBefore, contentAfter);</span>
+<span class="pc" id="L242">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L243">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L245">	}</span>
+
+	/*
+	 * BUG_ID #7
+	 * 
+	 * GrepTool.java:219
+	 */
+	@Test
+	public void testGrepWithDouble() {
+<span class="fc" id="L254">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L255">		sh = new Shell(System.in, os);</span>
+<span class="fc" id="L256">		String cmd = &quot;grep -A 1.2 normalFile&quot;;</span>
+<span class="fc" id="L257">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L258">		sh.execute(result);</span>
+<span class="fc" id="L259">		hold();</span>
+<span class="fc" id="L260">	}</span>
+
+	/*
+	 * BUG_ID #15
+	 * 
+	 * GrepTool.java:198-199
+	 */
+	@Test
+	public void testGrepHelp() {
+<span class="fc" id="L269">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L270">		sh = new Shell(System.in, os);</span>
+<span class="fc" id="L271">		String cmd = &quot;grep -help&quot;;</span>
+<span class="fc" id="L272">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L273">		sh.execute(result);</span>
+<span class="fc" id="L274">		hold();</span>
+		try {
+<span class="fc" id="L276">			String output = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="fc" id="L277">			assertFalse(output.contains(&quot;Illegal argument&quot;));</span>
+<span class="pc" id="L278">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L279">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L281">	}</span>
+
+	/*
+	 * BUG_ID #11
+	 */
+	@Test
+	public void testCommMissingFile() {
+<span class="fc" id="L288">		ByteArrayOutputStream os = new ByteArrayOutputStream();</span>
+<span class="fc" id="L289">		sh = new Shell(System.in, os);</span>
+<span class="fc" id="L290">		String cmd = &quot;comm -c normalFile&quot;;</span>
+<span class="fc" id="L291">		ITool result = sh.parse(cmd);</span>
+<span class="fc" id="L292">		sh.execute(result);</span>
+<span class="fc" id="L293">		hold();</span>
+		try {
+<span class="fc" id="L295">			String output = new String(os.toByteArray(), &quot;UTF-8&quot;);</span>
+<span class="fc" id="L296">			assertFalse(output.contains(&quot;java.lang.NullPointerException&quot;));</span>
+<span class="pc" id="L297">		} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L298">			e.printStackTrace();</span>
+		}
+<span class="fc" id="L300">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>

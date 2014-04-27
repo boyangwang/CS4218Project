@@ -40,20 +40,20 @@ public class CutTool extends ATool implements ICutTool {
 	static final String ERROR_NO_FILE = "Error: you must specify a file name\n";
 	static final String ERROR_DECREASING_RANGE = "Error: you must specify a file name\n";
 
+	boolean isDelimMode = false;
+	boolean isCutMode = false;
+	boolean isFirstStdin = true;
+	String delimChar = "\t";
+	String cutList = null;
+	String fieldList = null;
+	ArrayList<String> filesContent = new ArrayList<String>();
+	String out = "";
+
 	public CutTool(String[] args) {
 		super(args);
 	}
 
-	@Override
-	public String execute(File workingDir, String stdin) {
-		boolean isDelimMode = false;
-		boolean isCutMode = false;
-		boolean isFirstStdin = true;
-		String delimChar = "\t";
-		String cutList = null;
-		String fieldList = null;
-		ArrayList<String> filesContent = new ArrayList<String>();
-		String out = "";
+	private String extractArgs(File workingDir, String stdin){
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			if (arg.startsWith("-")) {
@@ -133,6 +133,13 @@ public class CutTool extends ATool implements ICutTool {
 				}
 			}
 		}
+		return null;
+	}
+	@Override
+	public String execute(File workingDir, String stdin) {
+		String err = extractArgs(workingDir, stdin);
+		if (err!=null) return err;
+
 		if (filesContent.size() == 0) {
 			if (stdin != null) {
 				filesContent.add(stdin);
@@ -145,6 +152,7 @@ public class CutTool extends ATool implements ICutTool {
 			statusError();
 			return ERROR_NO_FILE;
 		}
+
 		boolean isFirstFile = true;
 		if (isCutMode) {
 			for (int j = 0; j < filesContent.size(); j++) {

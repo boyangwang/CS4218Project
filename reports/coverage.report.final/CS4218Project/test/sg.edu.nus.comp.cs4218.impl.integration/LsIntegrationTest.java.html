@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LsIntegrationTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">CS4218Project (Apr 27, 2014 10:41:54 PM)</a> &gt; <a href="../../index.html" class="el_group">CS4218Project</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">sg.edu.nus.comp.cs4218.impl.integration</a> &gt; <span class="el_source">LsIntegrationTest.java</span></div><h1>LsIntegrationTest.java</h1><pre class="source lang-java linenums">package sg.edu.nus.comp.cs4218.impl.integration;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sg.edu.nus.comp.cs4218.impl.Shell;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+
+import static org.junit.Assert.assertEquals;
+
+<span class="fc" id="L14">public class LsIntegrationTest {</span>
+<span class="fc" id="L15">	private final String TEST_INPUT_FILE = &quot;uniq-test-in.txt&quot;;</span>
+<span class="fc" id="L16">	private final String TEST_OUTPUT_FILE = &quot;uniq-test-output.txt&quot;;</span>
+
+	private ByteArrayInputStream simIn;
+	private ByteArrayOutputStream simOut;
+	private Shell shell;
+	private File fin;
+	private File fout;
+
+	private File testDir;
+	private File testFile1;
+	private File testFile2;
+	private File testFile3;
+
+	private String getStringFromOutput() {
+<span class="fc" id="L30">		String out = new String(simOut.toByteArray(), StandardCharsets.UTF_8);</span>
+<span class="fc" id="L31">		out = out.substring(out.indexOf(&quot;&gt; &quot;) + 2).trim();</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">		if (out.lastIndexOf(&quot;\n&quot;) &gt; -1) {</span>
+<span class="fc" id="L33">			out = out.substring(0, out.lastIndexOf(&quot;\n&quot;));</span>
+<span class="fc" id="L34">		} else {</span>
+<span class="fc" id="L35">			out = &quot;&quot;;</span>
+		}
+<span class="fc" id="L37">		return out;</span>
+	}
+
+	private void setupShellWithInput(String in) {
+<span class="fc" id="L41">		String input = in;</span>
+
+		// Terminate at the end of this command.
+<span class="fc" id="L44">		input += &quot;\r\nctrl-c\r\n&quot;;</span>
+
+<span class="fc" id="L46">		simIn = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));</span>
+<span class="fc" id="L47">		shell = new Shell(simIn, simOut);</span>
+<span class="fc" id="L48">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L55">		simOut = new ByteArrayOutputStream();</span>
+
+<span class="fc" id="L57">		fin = new File(TEST_INPUT_FILE);</span>
+<span class="fc" id="L58">		fout = new File(TEST_OUTPUT_FILE);</span>
+
+<span class="fc" id="L60">		testDir = new File(&quot;inteTestLsFold&quot;);</span>
+<span class="fc" id="L61">		testDir.mkdir();</span>
+		//create new file with text
+<span class="fc" id="L63">		testFile1 = new File(testDir, &quot;ls1&quot;);</span>
+<span class="fc" id="L64">		testFile1.createNewFile();</span>
+<span class="fc" id="L65">		FileWriter fw = new FileWriter(testFile1.getAbsoluteFile());</span>
+<span class="fc" id="L66">		BufferedWriter bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L67">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L68">		sb.append(&quot;Mark Smith\n&quot;);</span>
+<span class="fc" id="L69">		sb.append(&quot;Bobby Brown\n&quot;);</span>
+<span class="fc" id="L70">		sb.append(&quot;Sue Miller\n&quot;);</span>
+<span class="fc" id="L71">		sb.append(&quot;Jenny Igotit&quot;);</span>
+<span class="fc" id="L72">		bw.write(sb.toString());</span>
+<span class="fc" id="L73">		bw.close();</span>
+
+<span class="fc" id="L75">		testFile2 = new File(testDir, &quot;ls2&quot;);</span>
+<span class="fc" id="L76">		testFile2.createNewFile();</span>
+<span class="fc" id="L77">		fw = new FileWriter(testFile2.getAbsoluteFile());</span>
+<span class="fc" id="L78">		bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L79">		sb = new StringBuilder();</span>
+<span class="fc" id="L80">		sb.append(&quot;555-1234\n&quot;);</span>
+<span class="fc" id="L81">		sb.append(&quot;555-9876\n&quot;);</span>
+<span class="fc" id="L82">		sb.append(&quot;555-6743\n&quot;);</span>
+<span class="fc" id="L83">		sb.append(&quot;867-5309&quot;);</span>
+<span class="fc" id="L84">		bw.write(sb.toString());</span>
+<span class="fc" id="L85">		bw.close();</span>
+
+		// create new file with text
+<span class="fc" id="L88">		testFile3 = new File(testDir, &quot;ls3&quot;);</span>
+<span class="fc" id="L89">		testFile3.createNewFile();</span>
+<span class="fc" id="L90">		fw = new FileWriter(testFile3.getAbsoluteFile());</span>
+<span class="fc" id="L91">		bw = new BufferedWriter(fw);</span>
+<span class="fc" id="L92">		sb = new StringBuilder();</span>
+<span class="fc" id="L93">		sb.append(&quot;Mark Smith\n&quot;);</span>
+<span class="fc" id="L94">		sb.append(&quot;Bobby Brown\n&quot;);</span>
+<span class="fc" id="L95">		sb.append(&quot;Sue Miller\n&quot;);</span>
+<span class="fc" id="L96">		bw.write(sb.toString());</span>
+<span class="fc" id="L97">		bw.close();</span>
+<span class="fc" id="L98">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	public void tearDown() throws Exception {
+
+<span class="fc" id="L106">		File[] fileList = testDir.listFiles();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">		for (int i = 0; i &lt; fileList.length; i++) {</span>
+<span class="fc" id="L108">			File file = fileList[i];</span>
+<span class="fc" id="L109">			file.delete();</span>
+		}
+		// delete directory
+<span class="fc" id="L112">		testDir.delete();</span>
+
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">		if (fin.exists()) {</span>
+<span class="nc" id="L115">			fin.delete();</span>
+		}
+
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">		if (fout.exists()) {</span>
+<span class="nc" id="L119">			fout.delete();</span>
+		}
+<span class="fc" id="L121">	}</span>
+
+	/**
+	 * ls | grep
+	 */
+	@Test
+	public void lsPipeGrep() throws IOException {
+
+<span class="fc" id="L129">		setupShellWithInput(&quot;ls inteTestLsFold | grep ls | sort &quot;);</span>
+<span class="fc" id="L130">		shell.run();</span>
+<span class="fc" id="L131">		String result = getStringFromOutput();</span>
+
+<span class="fc" id="L133">		String expected = &quot;ls1\nls2\nls3&quot;;</span>
+<span class="fc" id="L134">		assertEquals(expected, result);</span>
+<span class="fc" id="L135">	}</span>
+
+	/**
+	 * ls | grep
+	 */
+	@Test
+	public void lsPipeGrepNonExistent() throws IOException {
+
+<span class="fc" id="L143">		setupShellWithInput(&quot;ls inteTestLsFold | grep nonexist&quot;);</span>
+<span class="fc" id="L144">		shell.run();</span>
+<span class="fc" id="L145">		String result = getStringFromOutput();</span>
+
+<span class="fc" id="L147">		String expected = &quot;&quot;;</span>
+<span class="fc" id="L148">		assertEquals(expected, result);</span>
+<span class="fc" id="L149">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span>CS4218Project (Apr 27, 2014 10:41:54 PM)</div></body></html>
